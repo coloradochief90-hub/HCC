@@ -763,6 +763,23 @@ body {
 .scroll-locked .topbar,
 .scroll-locked .overlay,
 .scroll-locked .sidebar { pointer-events: all; }
+
+/* ── DESKTOP — sidebar always visible ── */
+@media (min-width: 768px) {
+  .sidebar {
+    transform: translateX(0) !important;
+    position: fixed;
+  }
+  .main {
+    margin-left: var(--sidebar-w);
+  }
+  .menu-btn {
+    display: none;
+  }
+  .overlay {
+    display: none !important;
+  }
+}
 </style>
 </head>
 <body>
