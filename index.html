@@ -7,1446 +7,543 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="HCC">
-<link rel="manifest" href="#" id="manifest-link">
+<link rel="manifest" id="manifest-link" href="#">
 <title>Hendry Command Center</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
-:root {
-  /* Core */
-  --bg: #080c08;
-  --surface: #0f140f;
-  --surface2: #141a13;
-  --surface3: #1a2218;
-  --border: #1e2a1c;
-  --border2: #263824;
+:root{--bg:#080c08;--surface:#0f140f;--surface2:#141a13;--surface3:#1a2218;--border:#1e2a1c;--border2:#263824;--text:#e8f0e0;--text-muted:#5a7055;--text-dim:#2a3828;--green:#2d6b28;--green-mid:#3d8a36;--green-light:#5ab84e;--green-bright:#72d464;--green-pale:#a8e09a;--green-glow:rgba(90,184,78,0.12);--gold:#b8920a;--gold-light:#d4b030;--gold-bright:#f0cc50;--gold-glow:rgba(240,204,80,0.1);--amber:#c06820;--amber-light:#e08840;--red:#8a2020;--red-light:#c84040;--red-bright:#e06060;--blue:#1a4a6a;--blue-light:#3a7aaa;--blue-bright:#58a6ff;--purple:#4a2880;--purple-light:#7a50c0;--sidebar-w:265px;--topbar-h:52px;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;font-size:14px;line-height:1.6;overflow-x:hidden;}
 
-  /* Text */
-  --text: #e8f0e0;
-  --text-muted: #5a7055;
-  --text-dim: #2a3828;
+/* SIDEBAR */
+.sidebar{width:var(--sidebar-w);min-height:100vh;background:var(--surface);border-right:1px solid var(--border2);display:flex;flex-direction:column;position:fixed;top:0;left:0;z-index:300;overflow-y:auto;transform:translateX(-100%);transition:transform 0.28s cubic-bezier(0.4,0,0.2,1);}
+.sidebar.open{transform:translateX(0);}
+.sidebar-logo{padding:22px 20px 16px;border-bottom:1px solid var(--border2);background:linear-gradient(180deg,#0e180c 0%,var(--surface) 100%);}
+.sidebar-logo .mark{font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:3px;color:var(--green-bright);line-height:1;text-shadow:0 0 16px rgba(90,184,78,0.4);}
+.sidebar-logo .sub{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--text-muted);letter-spacing:2px;margin-top:3px;text-transform:uppercase;}
+.nav-section{padding:10px 0 2px;}
+.nav-label{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-dim);padding:0 18px 5px;}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 18px;color:var(--text-muted);font-size:13px;cursor:pointer;border-left:2px solid transparent;transition:all 0.15s;user-select:none;}
+.nav-item:hover{color:var(--text);background:rgba(90,184,78,0.04);}
+.nav-item.active{color:var(--green-bright);border-left-color:var(--green-bright);background:var(--green-glow);font-weight:500;}
+.nav-item.active-gold{color:var(--gold-bright);border-left-color:var(--gold-bright);background:var(--gold-glow);font-weight:500;}
+.nav-item.domain-parent{font-weight:500;color:var(--text);}
+.nav-sub{display:none;flex-direction:column;}
+.nav-sub.open{display:flex;}
+.nav-sub .nav-item{padding:7px 18px 7px 36px;font-size:12px;}
+.nav-dot{width:6px;height:6px;border-radius:50%;background:var(--text-dim);flex-shrink:0;}
+.nav-item.active .nav-dot{background:var(--green-bright);}
+.nav-item.active-gold .nav-dot{background:var(--gold-bright);}
+.dot-green{background:var(--green-bright)!important;}.dot-gold{background:var(--gold-bright)!important;}.dot-blue{background:var(--blue-bright)!important;}.dot-red{background:var(--red-bright)!important;}.dot-amber{background:var(--amber-light)!important;}.dot-purple{background:var(--purple-light)!important;}
+.chevron{margin-left:auto;font-size:10px;color:var(--text-dim);transition:transform 0.2s;}
+.chevron.open{transform:rotate(90deg);}
+.sidebar-footer{margin-top:auto;padding:12px 18px;border-top:1px solid var(--border);display:flex;gap:8px;}
+.ai-btn{flex:1;padding:8px 6px;border-radius:7px;border:1px solid var(--border2);background:var(--surface2);color:var(--text-muted);font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:1px;cursor:pointer;text-align:center;text-decoration:none;display:flex;flex-direction:column;align-items:center;gap:3px;transition:all 0.15s;}
+.ai-btn:hover{border-color:var(--green-mid);color:var(--green-bright);}
+.ai-btn.gemini:hover{border-color:var(--blue-light);color:var(--blue-bright);}
+.ai-btn-icon{font-size:14px;}
 
-  /* Green system (personal / health) */
-  --green: #2d6b28;
-  --green-mid: #3d8a36;
-  --green-light: #5ab84e;
-  --green-bright: #72d464;
-  --green-pale: #a8e09a;
-  --green-glow: rgba(90,184,78,0.15);
+/* OVERLAY */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.65);z-index:250;}
+.overlay.visible{display:block;}
 
-  /* Gold system (trading) */
-  --gold: #b8920a;
-  --gold-light: #d4b030;
-  --gold-bright: #f0cc50;
-  --gold-glow: rgba(240,204,80,0.12);
+/* MAIN */
+.main{flex:1;min-height:100vh;}
 
-  /* Status */
-  --amber: #c06820;
-  --amber-light: #e08840;
-  --red: #8a2020;
-  --red-light: #c84040;
-  --red-bright: #e06060;
-  --blue: #1a4a6a;
-  --blue-light: #3a7aaa;
-  --blue-bright: #58a6ff;
-  --purple: #4a2880;
-  --purple-light: #7a50c0;
+/* TOPBAR */
+.topbar{position:sticky;top:0;height:var(--topbar-h);background:linear-gradient(180deg,#0e180c 0%,var(--surface) 100%);border-bottom:1px solid var(--border2);padding:0 16px;display:flex;align-items:center;gap:12px;z-index:100;box-shadow:0 2px 16px rgba(0,0,0,0.4);}
+.menu-btn{background:none;border:1px solid var(--border2);color:var(--text-muted);width:34px;height:34px;border-radius:7px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;transition:all 0.15s;flex-shrink:0;}
+.menu-btn:hover{border-color:var(--green-mid);color:var(--green-bright);}
+.topbar-title{font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:2px;color:var(--green-bright);}
+.topbar-title.gold{color:var(--gold-bright);}
+.topbar-date{margin-left:auto;font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text-dim);}
 
-  --sidebar-w: 265px;
-  --topbar-h: 52px;
-}
+/* PAGES */
+.page{display:none;}
+.page.active{display:block;}
 
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
+/* DESKTOP */
+@media(min-width:768px){.sidebar{transform:translateX(0)!important;position:fixed;}.main{margin-left:var(--sidebar-w);}.menu-btn{display:none;}.overlay{display:none!important;}}
 
-body {
-  font-family: 'DM Sans', sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  min-height: 100vh;
-  display: flex;
-  font-size: 14px;
-  line-height: 1.6;
-  overflow-x: hidden;
-}
+/* QUOTE */
+.quote-section{background:linear-gradient(180deg,#0a120a 0%,var(--bg) 100%);border-bottom:1px solid var(--border2);padding:20px 16px 16px;text-align:center;}
+.quote-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--text-dim);margin-bottom:8px;}
+.quote-text{font-size:14px;font-weight:300;color:var(--green-pale);line-height:1.7;font-style:italic;max-width:360px;margin:0 auto 6px;}
+.quote-attr{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text-muted);letter-spacing:1px;}
 
-/* ── SIDEBAR ── */
-.sidebar {
-  width: var(--sidebar-w);
-  min-height: 100vh;
-  background: var(--surface);
-  border-right: 1px solid var(--border2);
-  display: flex;
-  flex-direction: column;
-  position: fixed;
-  top: 0; left: 0;
-  z-index: 300;
-  overflow-y: auto;
-  transform: translateX(-100%);
-  transition: transform 0.28s cubic-bezier(0.4,0,0.2,1);
-}
-.sidebar.open { transform: translateX(0); }
+/* SECTION HELPERS */
+.briefing-section{padding:14px 16px 0;}
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
+.section-title{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--text-muted);}
+.section-badge{font-family:'IBM Plex Mono',monospace;font-size:9px;padding:2px 8px;border-radius:10px;letter-spacing:1px;}
+.badge-green{background:rgba(90,184,78,0.1);color:var(--green-bright);border:1px solid rgba(90,184,78,0.2);}
+.badge-gold{background:rgba(240,204,80,0.1);color:var(--gold-bright);border:1px solid rgba(240,204,80,0.2);}
+.badge-red{background:rgba(200,64,64,0.1);color:var(--red-bright);border:1px solid rgba(200,64,64,0.2);}
+.badge-blue{background:rgba(58,122,170,0.1);color:var(--blue-bright);border:1px solid rgba(58,122,170,0.2);}
 
-.sidebar-logo {
-  padding: 22px 20px 16px;
-  border-bottom: 1px solid var(--border2);
-  background: linear-gradient(180deg, #0e180c 0%, var(--surface) 100%);
-}
-.sidebar-logo .mark {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 19px;
-  letter-spacing: 3px;
-  color: var(--green-bright);
-  line-height: 1;
-  text-shadow: 0 0 16px rgba(90,184,78,0.4);
-}
-.sidebar-logo .sub {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 9px;
-  color: var(--text-muted);
-  letter-spacing: 2px;
-  margin-top: 3px;
-  text-transform: uppercase;
-}
+/* PERSONAL STREAKS */
+.streak-grid{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--border2);border-radius:10px;overflow:hidden;background:var(--surface);margin-bottom:10px;}
+.streak-block{padding:10px 4px;text-align:center;border-right:1px solid var(--border);}
+.streak-block:last-child{border-right:none;}
+.streak-label{font-family:'IBM Plex Mono',monospace;font-size:7px;letter-spacing:1px;text-transform:uppercase;color:var(--text-muted);margin-bottom:3px;white-space:nowrap;}
+.streak-val{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:1px;line-height:1;}
+.streak-val.green{color:var(--green-bright);text-shadow:0 0 12px rgba(90,184,78,0.4);}
+.streak-val.gold{color:var(--gold-bright);}
+.streak-val.red{color:var(--red-bright);}
+.streak-val.blue{color:var(--blue-bright);}
+.streak-sub{font-size:8px;color:var(--text-dim);margin-top:1px;}
 
-.nav-section { padding: 12px 0 2px; }
-.nav-label {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 9px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--text-dim);
-  padding: 0 18px 6px;
-}
-.nav-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 18px;
-  color: var(--text-muted);
-  font-size: 13px;
-  cursor: pointer;
-  border-left: 2px solid transparent;
-  transition: all 0.15s;
-  user-select: none;
-}
-.nav-item:hover { color: var(--text); background: rgba(90,184,78,0.04); }
-.nav-item.active {
-  color: var(--green-bright);
-  border-left-color: var(--green-bright);
-  background: var(--green-glow);
-  font-weight: 500;
-}
-.nav-item.active-gold {
-  color: var(--gold-bright);
-  border-left-color: var(--gold-bright);
-  background: var(--gold-glow);
-  font-weight: 500;
-}
-.nav-dot {
-  width: 6px; height: 6px;
-  border-radius: 50%;
-  background: var(--text-dim);
-  flex-shrink: 0;
-}
-.nav-item.active .nav-dot { background: var(--green-bright); }
-.nav-item.active-gold .nav-dot { background: var(--gold-bright); }
+/* TRADING SNAPSHOT */
+.trading-snapshot{background:var(--surface);border:1px solid var(--border2);border-radius:10px;overflow:hidden;margin-bottom:10px;}
+.snapshot-header{padding:10px 14px 8px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.snapshot-label{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-dim);}
+.condition-pill{font-family:'IBM Plex Mono',monospace;font-size:9px;padding:2px 8px;border-radius:10px;letter-spacing:1px;}
+.pill-bear{background:rgba(200,64,64,0.12);color:var(--red-bright);border:1px solid rgba(200,64,64,0.2);}
+.pill-bull{background:rgba(90,184,78,0.12);color:var(--green-bright);border:1px solid rgba(90,184,78,0.2);}
+.snapshot-grid{display:grid;grid-template-columns:repeat(3,1fr);}
+.snap-block{padding:10px 6px;text-align:center;border-right:1px solid var(--border);border-bottom:1px solid var(--border);}
+.snap-block:nth-child(3n){border-right:none;}
+.snap-block:nth-child(4),.snap-block:nth-child(5),.snap-block:nth-child(6){border-bottom:none;}
+.snap-lbl{font-family:'IBM Plex Mono',monospace;font-size:7px;letter-spacing:1px;text-transform:uppercase;color:var(--text-muted);margin-bottom:3px;}
+.snap-val{font-family:'Bebas Neue',sans-serif;font-size:20px;line-height:1;}
+.snap-val.green{color:var(--green-bright);}.snap-val.gold{color:var(--gold-bright);}.snap-val.red{color:var(--red-bright);}.snap-val.blue{color:var(--blue-bright);}
 
-.dot-green { background: var(--green-bright) !important; }
-.dot-gold { background: var(--gold-bright) !important; }
-.dot-blue { background: var(--blue-bright) !important; }
-.dot-red { background: var(--red-bright) !important; }
-.dot-amber { background: var(--amber-light) !important; }
-.dot-purple { background: var(--purple-light) !important; }
+/* FAILURE TRACKER */
+.failure-card{background:var(--surface);border:1px solid rgba(200,64,64,0.2);border-radius:10px;overflow:hidden;margin-bottom:10px;}
+.failure-header{padding:9px 14px;border-bottom:1px solid var(--border);background:rgba(200,64,64,0.05);}
+.failure-header-label{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--red-bright);}
+.failure-row{padding:10px 14px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:10px;}
+.failure-row:last-child{border-bottom:none;}
+.failure-tag{font-family:'IBM Plex Mono',monospace;font-size:8px;padding:2px 6px;border-radius:3px;letter-spacing:1px;flex-shrink:0;margin-top:2px;white-space:nowrap;}
+.tag-longstanding{background:rgba(200,64,64,0.15);color:var(--red-bright);}
+.tag-week{background:rgba(192,104,32,0.15);color:var(--amber-light);}
+.tag-yesterday{background:rgba(240,204,80,0.1);color:var(--gold-bright);}
+.failure-text{font-size:12px;color:var(--text-muted);line-height:1.5;flex:1;}
 
-.sidebar-footer {
-  margin-top: auto;
-  padding: 14px 18px;
-  border-top: 1px solid var(--border);
-  display: flex;
-  gap: 8px;
-}
-.ai-btn {
-  flex: 1;
-  padding: 8px 6px;
-  border-radius: 7px;
-  border: 1px solid var(--border2);
-  background: var(--surface2);
-  color: var(--text-muted);
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 10px;
-  letter-spacing: 1px;
-  cursor: pointer;
-  text-align: center;
-  text-decoration: none;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 3px;
-  transition: all 0.15s;
-}
-.ai-btn:hover { border-color: var(--green-mid); color: var(--green-bright); }
-.ai-btn.gemini:hover { border-color: var(--blue-light); color: var(--blue-bright); }
-.ai-btn-icon { font-size: 14px; }
+/* DOMAIN CARDS */
+.domains-section{padding:0 16px 14px;}
+.domain-card{background:var(--surface);border:1px solid var(--border2);border-radius:10px;padding:12px 14px;margin-bottom:8px;cursor:pointer;transition:all 0.15s;}
+.domain-card:hover{border-color:var(--green-mid);background:var(--surface2);}
+.domain-card-top{display:flex;align-items:flex-start;gap:10px;margin-bottom:8px;}
+.domain-icon{font-size:18px;flex-shrink:0;margin-top:1px;}
+.domain-info{flex:1;min-width:0;}
+.domain-name{font-size:13px;font-weight:500;color:var(--text);margin-bottom:2px;}
+.domain-focus{font-size:11px;color:var(--text-muted);line-height:1.4;}
+.domain-status{flex-shrink:0;font-family:'IBM Plex Mono',monospace;font-size:8px;padding:2px 6px;border-radius:3px;letter-spacing:1px;margin-top:2px;}
+.status-active{background:rgba(90,184,78,0.1);color:var(--green-bright);}
+.status-hold{background:rgba(90,130,90,0.08);color:var(--text-muted);}
+.status-building{background:rgba(240,204,80,0.1);color:var(--gold-bright);}
+.status-phase{background:rgba(58,122,170,0.1);color:var(--blue-bright);}
+.domain-progress{display:flex;align-items:center;gap:8px;}
+.progress-track{flex:1;height:4px;background:var(--surface3);border-radius:2px;overflow:hidden;}
+.progress-fill{height:100%;border-radius:2px;background:var(--green-mid);transition:width 0.4s ease;}
+.progress-fraction{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--text-muted);white-space:nowrap;}
+.progress-pct{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--green-bright);white-space:nowrap;min-width:30px;text-align:right;}
 
-/* ── OVERLAY ── */
-.overlay {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.65);
-  z-index: 250;
-}
-.overlay.visible { display: block; }
+/* GATE */
+.gate-passed-banner{display:none;background:rgba(90,184,78,0.08);border:1px solid var(--green-mid);border-radius:8px;padding:10px 16px;font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--green-bright);letter-spacing:1px;text-align:center;margin:10px 16px;}
+.gate-section{padding:18px 16px 32px;text-align:center;border-top:1px solid var(--border2);background:linear-gradient(180deg,var(--bg) 0%,#0a120a 100%);}
+.gate-text{font-size:12px;color:var(--text-muted);margin-bottom:14px;line-height:1.6;}
+.gate-btn{background:var(--green);border:1px solid var(--green-mid);color:var(--green-bright);font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:3px;padding:14px 40px;border-radius:10px;cursor:pointer;width:100%;max-width:320px;transition:all 0.2s;box-shadow:0 0 20px rgba(45,107,40,0.4);}
+.gate-btn:hover{background:var(--green-mid);box-shadow:0 0 30px rgba(61,138,54,0.6);transform:translateY(-1px);}
+.gate-btn:disabled{opacity:0.7;cursor:default;transform:none;}
 
-/* ── MAIN ── */
-.main { flex: 1; min-height: 100vh; }
+/* DOMAIN INNER PAGES */
+.domain-page{padding:16px;}
+.domain-page-header{background:linear-gradient(135deg,var(--surface),var(--surface2));border:1px solid var(--border2);border-radius:10px;padding:16px;margin-bottom:14px;display:flex;align-items:center;gap:12px;}
+.domain-page-icon{font-size:28px;}
+.domain-page-title{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px;color:var(--green-bright);}
+.domain-page-title.gold{color:var(--gold-bright);}
+.domain-page-sub{font-size:11px;color:var(--text-muted);margin-top:2px;}
 
-/* ── TOPBAR ── */
-.topbar {
-  position: sticky;
-  top: 0;
-  height: var(--topbar-h);
-  background: linear-gradient(180deg, #0e180c 0%, var(--surface) 100%);
-  border-bottom: 1px solid var(--border2);
-  padding: 0 16px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  z-index: 100;
-  box-shadow: 0 2px 16px rgba(0,0,0,0.4);
-}
-.menu-btn {
-  background: none;
-  border: 1px solid var(--border2);
-  color: var(--text-muted);
-  width: 34px; height: 34px;
-  border-radius: 7px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 15px;
-  transition: all 0.15s;
-  flex-shrink: 0;
-}
-.menu-btn:hover { border-color: var(--green-mid); color: var(--green-bright); }
-.topbar-title {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 17px;
-  letter-spacing: 2px;
-  color: var(--green-bright);
-}
-.topbar-title.gold-title { color: var(--gold-bright); }
-.topbar-date {
-  margin-left: auto;
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 10px;
-  color: var(--text-dim);
-}
+/* STATS */
+.stat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:14px;}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px;}
+.stat-label{font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-dim);margin-bottom:5px;}
+.stat-value{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:1px;line-height:1;}
+.stat-value.gold{color:var(--gold-bright);}.stat-value.green{color:var(--green-bright);}.stat-value.red{color:var(--red-bright);}.stat-value.blue{color:var(--blue-bright);}
+.stat-sub{font-size:10px;color:var(--text-dim);margin-top:3px;}
 
-/* ── PAGES ── */
-.page { display: none; }
-.page.active { display: block; }
+/* CHECKLIST */
+.t-section-title{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-dim);margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid var(--border);}
+.checklist{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:14px;}
+.check-item{display:flex;align-items:center;gap:10px;padding:11px 14px;border-bottom:1px solid var(--border);cursor:pointer;transition:background 0.12s;}
+.check-item:last-child{border-bottom:none;}
+.check-item:hover{background:rgba(255,255,255,0.02);}
+.check-item.done{opacity:0.5;}
+.check-box{width:17px;height:17px;border-radius:4px;border:1.5px solid var(--border2);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:10px;transition:all 0.12s;}
+.check-item.done .check-box{background:var(--green-mid);border-color:var(--green-mid);color:#000;}
+.check-text{font-size:12px;color:var(--text);flex:1;}
+.check-item.done .check-text{text-decoration:line-through;color:var(--text-muted);}
+.check-tag{font-family:'IBM Plex Mono',monospace;font-size:8px;padding:2px 5px;border-radius:3px;letter-spacing:1px;}
+.tag-gemini{background:rgba(58,122,170,0.12);color:var(--blue-bright);}
+.tag-david{background:rgba(240,204,80,0.1);color:var(--gold-bright);}
+.reset-btn{background:none;border:1px solid var(--border);color:var(--text-dim);font-family:'IBM Plex Mono',monospace;font-size:9px;padding:4px 10px;border-radius:5px;cursor:pointer;transition:all 0.15s;letter-spacing:1px;margin-bottom:8px;display:block;margin-left:auto;}
+.reset-btn:hover{border-color:var(--gold);color:var(--gold-bright);}
 
-/* ══════════════════════════════
-   LANDING / DAILY BRIEFING
-══════════════════════════════ */
-.landing { padding: 0; }
+/* CHART */
+.chart-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:14px;}
+.chart-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.chart-title{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-dim);}
+.chart-badge{font-family:'IBM Plex Mono',monospace;font-size:10px;padding:2px 8px;border-radius:4px;background:rgba(90,184,78,0.1);color:var(--green-bright);}
 
-/* Gate overlay */
-.gate-overlay {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.0);
-  z-index: 50;
-  pointer-events: none;
-}
+/* LINK GRID */
+.link-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:14px;}
+.link-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px;cursor:pointer;transition:all 0.15s;}
+.link-card:hover{border-color:var(--gold);background:var(--gold-glow);}
+.link-icon{font-size:18px;margin-bottom:5px;}
+.link-title{font-size:12px;font-weight:500;color:var(--text);}
+.link-sub{font-size:10px;color:var(--text-dim);margin-top:1px;}
 
-/* Quote section */
-.quote-section {
-  background: linear-gradient(180deg, #0a120a 0%, var(--bg) 100%);
-  border-bottom: 1px solid var(--border2);
-  padding: 22px 18px 18px;
-  text-align: center;
-}
-.quote-eyebrow {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 9px;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  color: var(--text-dim);
-  margin-bottom: 10px;
-}
-.quote-text {
-  font-size: 15px;
-  font-weight: 300;
-  color: var(--green-pale);
-  line-height: 1.7;
-  font-style: italic;
-  max-width: 340px;
-  margin: 0 auto 8px;
-}
-.quote-attr {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 10px;
-  color: var(--text-muted);
-  letter-spacing: 1px;
-}
+/* STATS TABLE */
+.stats-table{width:100%;border-collapse:collapse;font-size:12px;}
+.stats-table th{font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:1px;text-transform:uppercase;color:var(--text-dim);text-align:left;padding:8px 12px;border-bottom:1px solid var(--border);}
+.stats-table td{padding:9px 12px;border-bottom:1px solid var(--border);color:var(--text-muted);}
+.stats-table tr:last-child td{border-bottom:none;}
+.stats-table td.green{color:var(--green-bright);}.stats-table td.red{color:var(--red-bright);}.stats-table td.gold{color:var(--gold-bright);}
 
-/* David section */
-.david-section {
-  padding: 16px;
-  background: var(--bg);
-}
-.section-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 10px;
-}
-.section-title {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 9px;
-  letter-spacing: 2.5px;
-  text-transform: uppercase;
-  color: var(--text-muted);
-}
-.section-badge {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 9px;
-  padding: 2px 8px;
-  border-radius: 10px;
-  letter-spacing: 1px;
-}
-.badge-green { background: rgba(90,184,78,0.1); color: var(--green-bright); border: 1px solid rgba(90,184,78,0.2); }
-.badge-red { background: rgba(200,64,64,0.1); color: var(--red-bright); border: 1px solid rgba(200,64,64,0.2); }
-.badge-gold { background: rgba(240,204,80,0.1); color: var(--gold-bright); border: 1px solid rgba(240,204,80,0.2); }
-
-/* Streak grid */
-.streak-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  border: 1px solid var(--border2);
-  border-radius: 10px;
-  overflow: hidden;
-  margin-bottom: 10px;
-  background: var(--surface);
-}
-.streak-block {
-  padding: 10px 6px;
-  text-align: center;
-  border-right: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
-}
-.streak-block:nth-child(3n) { border-right: none; }
-.streak-block:nth-child(4),
-.streak-block:nth-child(5),
-.streak-block:nth-child(6) { border-bottom: none; }
-.streak-label {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 8px;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  color: var(--text-muted);
-  margin-bottom: 3px;
-  white-space: nowrap;
-}
-.streak-val {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 26px;
-  letter-spacing: 1px;
-  line-height: 1;
-}
-.streak-val.green { color: var(--green-bright); text-shadow: 0 0 12px rgba(90,184,78,0.4); }
-.streak-val.gold { color: var(--gold-bright); text-shadow: 0 0 12px rgba(240,204,80,0.3); }
-.streak-val.red { color: var(--red-bright); }
-.streak-val.blue { color: var(--blue-bright); }
-.streak-sub { font-size: 9px; color: var(--text-dim); margin-top: 1px; }
-
-/* Mini stat row */
-.mini-stats {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
-  margin-bottom: 10px;
-}
-.mini-stat {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 10px 8px;
-  text-align: center;
-}
-.mini-val {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 20px;
-  color: var(--green-bright);
-  line-height: 1;
-}
-.mini-val.gold { color: var(--gold-bright); }
-.mini-val.red { color: var(--red-bright); }
-.mini-lbl { font-size: 9px; color: var(--text-dim); margin-top: 2px; line-height: 1.3; }
-
-/* Macro bar */
-.macro-bar {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 12px 14px;
-  margin-bottom: 10px;
-}
-.macro-title {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 9px;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  color: var(--text-dim);
-  margin-bottom: 10px;
-}
-.macro-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 7px;
-}
-.macro-row:last-child { margin-bottom: 0; }
-.macro-name { font-size: 11px; color: var(--text-muted); width: 58px; flex-shrink: 0; }
-.macro-track {
-  flex: 1;
-  height: 5px;
-  background: var(--surface3);
-  border-radius: 3px;
-  overflow: hidden;
-}
-.macro-fill { height: 100%; border-radius: 3px; transition: width 0.5s ease; }
-.macro-nums { font-family: 'IBM Plex Mono', monospace; font-size: 9px; color: var(--text-muted); width: 70px; text-align: right; flex-shrink: 0; }
-
-/* Domain cards */
-.domains-section { padding: 0 16px 16px; }
-.domain-card {
-  background: var(--surface);
-  border: 1px solid var(--border2);
-  border-radius: 10px;
-  padding: 14px;
-  margin-bottom: 8px;
-  cursor: pointer;
-  transition: all 0.15s;
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-}
-.domain-card:hover { border-color: var(--green-mid); background: var(--surface2); }
-.domain-card.trading-card:hover { border-color: var(--gold); }
-.domain-icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
-.domain-info { flex: 1; min-width: 0; }
-.domain-name {
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--text);
-  margin-bottom: 3px;
-}
-.domain-focus {
-  font-size: 11px;
-  color: var(--text-muted);
-  line-height: 1.4;
-}
-.domain-status {
-  flex-shrink: 0;
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 9px;
-  padding: 3px 7px;
-  border-radius: 4px;
-  letter-spacing: 1px;
-  margin-top: 2px;
-}
-.status-active { background: rgba(90,184,78,0.1); color: var(--green-bright); }
-.status-hold { background: rgba(90,130,90,0.1); color: var(--text-muted); }
-.status-building { background: rgba(240,204,80,0.1); color: var(--gold-bright); }
-.status-phase { background: rgba(58,122,170,0.1); color: var(--blue-bright); }
-
-/* Hard gate */
-.gate-section {
-  padding: 20px 16px 32px;
-  text-align: center;
-  border-top: 1px solid var(--border2);
-  background: linear-gradient(180deg, var(--bg) 0%, #0a120a 100%);
-}
-.gate-text {
-  font-size: 12px;
-  color: var(--text-muted);
-  margin-bottom: 16px;
-  line-height: 1.6;
-}
-.gate-btn {
-  background: var(--green);
-  border: 1px solid var(--green-mid);
-  color: var(--green-bright);
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 18px;
-  letter-spacing: 3px;
-  padding: 14px 40px;
-  border-radius: 10px;
-  cursor: pointer;
-  width: 100%;
-  max-width: 320px;
-  transition: all 0.2s;
-  box-shadow: 0 0 20px rgba(45,107,40,0.4);
-}
-.gate-btn:hover {
-  background: var(--green-mid);
-  box-shadow: 0 0 30px rgba(61,138,54,0.6);
-  transform: translateY(-1px);
-}
-.gate-btn:active { transform: translateY(0); }
-
-/* Gate passed indicator */
-.gate-passed {
-  display: none;
-  background: rgba(90,184,78,0.08);
-  border: 1px solid var(--green-mid);
-  border-radius: 8px;
-  padding: 10px 16px;
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 10px;
-  color: var(--green-bright);
-  letter-spacing: 1px;
-  text-align: center;
-  margin-bottom: 10px;
-}
-
-/* ══════════════════════════════
-   TRADING DOMAIN
-══════════════════════════════ */
-.trading-page { padding: 16px; }
-
-.condition-banner {
-  border-radius: 10px;
-  padding: 14px 16px;
-  margin-bottom: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 8px;
-  background: linear-gradient(135deg, #1a0a0a, #2d0f0f);
-  border: 1px solid #4a1515;
-}
-.condition-label {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 9px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--text-dim);
-  margin-bottom: 3px;
-}
-.condition-value {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 20px;
-  letter-spacing: 2px;
-  color: var(--red-bright);
-}
-.pill {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 9px;
-  letter-spacing: 1px;
-  padding: 3px 8px;
-  border-radius: 20px;
-  text-transform: uppercase;
-}
-.pill-bear { background: rgba(200,64,64,0.12); color: var(--red-bright); border: 1px solid rgba(200,64,64,0.25); }
-.pill-bull { background: rgba(90,184,78,0.12); color: var(--green-bright); border: 1px solid rgba(90,184,78,0.25); }
-
-.stat-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 8px;
-  margin-bottom: 14px;
-}
-.stat-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 12px;
-  transition: border-color 0.15s;
-}
-.stat-card:hover { border-color: var(--border2); }
-.stat-label {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 8px;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  color: var(--text-dim);
-  margin-bottom: 5px;
-}
-.stat-value {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 26px;
-  letter-spacing: 1px;
-  line-height: 1;
-}
-.stat-value.gold { color: var(--gold-bright); }
-.stat-value.green { color: var(--green-bright); }
-.stat-value.red { color: var(--red-bright); }
-.stat-value.blue { color: var(--blue-bright); }
-.stat-sub { font-size: 10px; color: var(--text-dim); margin-top: 3px; }
-
-.t-section-title {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 9px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--text-dim);
-  margin-bottom: 8px;
-  padding-bottom: 6px;
-  border-bottom: 1px solid var(--border);
-}
-
-/* Checklist */
-.checklist {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  overflow: hidden;
-  margin-bottom: 14px;
-}
-.check-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 11px 14px;
-  border-bottom: 1px solid var(--border);
-  cursor: pointer;
-  transition: background 0.12s;
-}
-.check-item:last-child { border-bottom: none; }
-.check-item:hover { background: rgba(255,255,255,0.02); }
-.check-item.done { opacity: 0.5; }
-.check-box {
-  width: 17px; height: 17px;
-  border-radius: 4px;
-  border: 1.5px solid var(--border2);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  font-size: 10px;
-  transition: all 0.12s;
-}
-.check-item.done .check-box { background: var(--green-mid); border-color: var(--green-mid); color: #000; }
-.check-text { font-size: 12px; color: var(--text); flex: 1; }
-.check-item.done .check-text { text-decoration: line-through; color: var(--text-muted); }
-.check-tag {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 8px;
-  padding: 2px 5px;
-  border-radius: 3px;
-  letter-spacing: 1px;
-}
-.tag-gemini { background: rgba(58,122,170,0.12); color: var(--blue-bright); }
-.tag-david { background: rgba(240,204,80,0.1); color: var(--gold-bright); }
-
-.reset-btn {
-  background: none;
-  border: 1px solid var(--border);
-  color: var(--text-dim);
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 9px;
-  padding: 4px 10px;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: all 0.15s;
-  letter-spacing: 1px;
-  margin-bottom: 8px;
-  display: block;
-  margin-left: auto;
-}
-.reset-btn:hover { border-color: var(--gold); color: var(--gold-bright); }
-
-/* Chart card */
-.chart-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 14px;
-  margin-bottom: 14px;
-}
-.chart-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 12px;
-}
-.chart-title {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 9px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--text-dim);
-}
-.chart-badge {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 10px;
-  padding: 2px 8px;
-  border-radius: 4px;
-  background: rgba(90,184,78,0.1);
-  color: var(--green-bright);
-}
-
-/* Quick links */
-.link-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 8px;
-  margin-bottom: 14px;
-}
-.link-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 12px;
-  cursor: pointer;
-  transition: all 0.15s;
-}
-.link-card:hover { border-color: var(--gold); background: var(--gold-glow); }
-.link-icon { font-size: 18px; margin-bottom: 5px; }
-.link-title { font-size: 12px; font-weight: 500; color: var(--text); }
-.link-sub { font-size: 10px; color: var(--text-dim); margin-top: 1px; }
-
-/* Stats table */
-.stats-table { width: 100%; border-collapse: collapse; font-size: 12px; }
-.stats-table th {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 8px;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  color: var(--text-dim);
-  text-align: left;
-  padding: 8px 12px;
-  border-bottom: 1px solid var(--border);
-}
-.stats-table td { padding: 9px 12px; border-bottom: 1px solid var(--border); color: var(--text-muted); }
-.stats-table tr:last-child td { border-bottom: none; }
-.stats-table td.green { color: var(--green-bright); }
-.stats-table td.red { color: var(--red-bright); }
-.stats-table td.gold { color: var(--gold-bright); }
-
-/* ── PLACEHOLDER ── */
-.placeholder {
-  text-align: center;
-  padding: 60px 20px;
-  color: var(--text-dim);
-}
-.placeholder-icon { font-size: 36px; margin-bottom: 14px; }
-.placeholder-title {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 20px;
-  letter-spacing: 2px;
-  color: var(--text-muted);
-  margin-bottom: 8px;
-}
-.placeholder-sub { font-size: 12px; line-height: 1.7; color: var(--text-dim); }
-.placeholder-phase {
-  display: inline-block;
-  margin-top: 14px;
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 9px;
-  letter-spacing: 2px;
-  padding: 4px 12px;
-  border-radius: 4px;
-  text-transform: uppercase;
-}
-
-/* ── SCROLL LOCK ── */
-.scroll-locked { overflow: hidden; pointer-events: none; }
-.scroll-locked .topbar,
-.scroll-locked .overlay,
-.scroll-locked .sidebar { pointer-events: all; }
-
-/* ── DESKTOP — sidebar always visible ── */
-@media (min-width: 768px) {
-  .sidebar {
-    transform: translateX(0) !important;
-    position: fixed;
-  }
-  .main {
-    margin-left: var(--sidebar-w);
-  }
-  .menu-btn {
-    display: none;
-  }
-  .overlay {
-    display: none !important;
-  }
-}
+/* PLACEHOLDER */
+.placeholder{text-align:center;padding:60px 20px;color:var(--text-dim);}
+.placeholder-icon{font-size:36px;margin-bottom:14px;}
+.placeholder-title{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:2px;color:var(--text-muted);margin-bottom:8px;}
+.placeholder-sub{font-size:12px;line-height:1.7;}
+.ph-phase{display:inline-block;margin-top:14px;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2px;padding:4px 12px;border-radius:4px;text-transform:uppercase;}
 </style>
 </head>
 <body>
 
-<!-- Sidebar -->
 <nav class="sidebar" id="sidebar">
   <div class="sidebar-logo">
     <div class="mark">HENDRY COMMAND CENTER</div>
     <div class="sub">Life Operating System</div>
   </div>
-
   <div class="nav-section">
-    <div class="nav-label">Daily</div>
-    <div class="nav-item active" onclick="showPage('briefing')" id="nav-briefing">
-      <span class="nav-dot dot-green"></span>
-      Daily Briefing
-    </div>
+    <div class="nav-label">Dashboard</div>
+    <div class="nav-item active" onclick="showPage('briefing')" id="nav-briefing"><span class="nav-dot dot-green"></span>Daily Briefing</div>
   </div>
-
-  <div class="nav-section">
-    <div class="nav-label">Trading</div>
-    <div class="nav-item" onclick="showPage('trading', true)" id="nav-trading">
-      <span class="nav-dot dot-gold"></span>
-      Command Center
-    </div>
-    <div class="nav-item" onclick="showPage('handbook')" id="nav-handbook">
-      <span class="nav-dot dot-green"></span>
-      Handbook
-    </div>
-    <div class="nav-item" onclick="showPage('performance')" id="nav-performance">
-      <span class="nav-dot dot-blue"></span>
-      Performance
-    </div>
-    <div class="nav-item" onclick="showPage('datalog')" id="nav-datalog">
-      <span class="nav-dot dot-purple"></span>
-      Data Log
-    </div>
-    <div class="nav-item" onclick="showPage('workflow')" id="nav-workflow">
-      <span class="nav-dot"></span>
-      Workflow & Protocols
-    </div>
-  </div>
-
   <div class="nav-section">
     <div class="nav-label">Domains</div>
-    <div class="nav-item" onclick="showPage('photography')" id="nav-photography">
-      <span class="nav-dot dot-red"></span>
-      Taylor Hendry Photography
+    <div class="nav-item domain-parent" onclick="toggleDomain('david-sub','chev-david')"><span class="nav-dot dot-green"></span>David<span class="chevron" id="chev-david">›</span></div>
+    <div class="nav-sub" id="david-sub">
+      <div class="nav-item" onclick="showPage('david')"><span class="nav-dot"></span>Overview</div>
+      <div class="nav-item" onclick="showPage('david-fitness')"><span class="nav-dot"></span>Fitness</div>
+      <div class="nav-item" onclick="showPage('david-diet')"><span class="nav-dot"></span>Diet & Nutrition</div>
+      <div class="nav-item" onclick="showPage('david-mental')"><span class="nav-dot"></span>Mental & Emotional</div>
     </div>
-    <div class="nav-item" onclick="showPage('finances')" id="nav-finances">
-      <span class="nav-dot dot-green"></span>
-      Finances
+    <div class="nav-item domain-parent" onclick="toggleDomain('family-sub','chev-family')"><span class="nav-dot dot-purple"></span>Family & Growth<span class="chevron" id="chev-family">›</span></div>
+    <div class="nav-sub" id="family-sub">
+      <div class="nav-item" onclick="showPage('family')"><span class="nav-dot"></span>Overview</div>
+      <div class="nav-item" onclick="showPage('family-taylor')"><span class="nav-dot"></span>Taylor</div>
+      <div class="nav-item" onclick="showPage('family-kids')"><span class="nav-dot"></span>Children</div>
     </div>
-    <div class="nav-item" onclick="showPage('family')" id="nav-family">
-      <span class="nav-dot dot-purple"></span>
-      Family & Growth
+    <div class="nav-item domain-parent" onclick="toggleDomain('trading-sub','chev-trading')"><span class="nav-dot dot-gold"></span>Trading<span class="chevron" id="chev-trading">›</span></div>
+    <div class="nav-sub" id="trading-sub">
+      <div class="nav-item" onclick="showPage('trading')"><span class="nav-dot dot-gold"></span>Command Center</div>
+      <div class="nav-item" onclick="showPage('handbook')"><span class="nav-dot"></span>Handbook</div>
+      <div class="nav-item" onclick="showPage('performance')"><span class="nav-dot"></span>Performance</div>
+      <div class="nav-item" onclick="showPage('datalog')"><span class="nav-dot"></span>Data Log</div>
+      <div class="nav-item" onclick="showPage('workflow')"><span class="nav-dot"></span>Workflow & Protocols</div>
     </div>
-    <div class="nav-item" onclick="showPage('lifegoals')" id="nav-lifegoals">
-      <span class="nav-dot dot-gold"></span>
-      Life Goals
+    <div class="nav-item domain-parent" onclick="toggleDomain('finances-sub','chev-finances')"><span class="nav-dot dot-green"></span>Finances<span class="chevron" id="chev-finances">›</span></div>
+    <div class="nav-sub" id="finances-sub">
+      <div class="nav-item" onclick="showPage('finances')"><span class="nav-dot"></span>Overview</div>
+      <div class="nav-item" onclick="showPage('finances-entity')"><span class="nav-dot"></span>Entity</div>
     </div>
-    <div class="nav-item" onclick="showPage('homebuild')" id="nav-homebuild">
-      <span class="nav-dot"></span>
-      Home / Build
+    <div class="nav-item domain-parent" onclick="toggleDomain('photo-sub','chev-photo')"><span class="nav-dot dot-red"></span>Taylor Hendry Photography<span class="chevron" id="chev-photo">›</span></div>
+    <div class="nav-sub" id="photo-sub">
+      <div class="nav-item" onclick="showPage('photography')"><span class="nav-dot"></span>Overview</div>
     </div>
-    <div class="nav-item" onclick="showPage('hrs')" id="nav-hrs">
-      <span class="nav-dot dot-blue"></span>
-      Hendry Residential
+    <div class="nav-item domain-parent" onclick="toggleDomain('home-sub','chev-home')"><span class="nav-dot"></span>Home / Build<span class="chevron" id="chev-home">›</span></div>
+    <div class="nav-sub" id="home-sub">
+      <div class="nav-item" onclick="showPage('homebuild')"><span class="nav-dot"></span>Overview</div>
     </div>
-    <div class="nav-item" onclick="showPage('dailyops')" id="nav-dailyops">
-      <span class="nav-dot dot-amber"></span>
-      Daily Operations
+    <div class="nav-item domain-parent" onclick="toggleDomain('ops-sub','chev-ops')"><span class="nav-dot dot-amber"></span>Daily Operations<span class="chevron" id="chev-ops">›</span></div>
+    <div class="nav-sub" id="ops-sub">
+      <div class="nav-item" onclick="showPage('dailyops')"><span class="nav-dot"></span>Overview</div>
     </div>
-    <div class="nav-item" onclick="showPage('roadmap')" id="nav-roadmap">
-      <span class="nav-dot dot-amber"></span>
-      Life Roadmap
+    <div class="nav-item domain-parent" onclick="toggleDomain('goals-sub','chev-goals')"><span class="nav-dot dot-gold"></span>Life Goals<span class="chevron" id="chev-goals">›</span></div>
+    <div class="nav-sub" id="goals-sub">
+      <div class="nav-item" onclick="showPage('lifegoals')"><span class="nav-dot"></span>Overview</div>
     </div>
+    <div class="nav-item" onclick="showPage('roadmap')" id="nav-roadmap"><span class="nav-dot dot-amber"></span>Life Roadmap</div>
   </div>
-
   <div class="sidebar-footer">
-    <a href="https://claude.ai" target="_blank" class="ai-btn">
-      <span class="ai-btn-icon">🤖</span>
-      CLAUDE
-    </a>
-    <a href="https://gemini.google.com" target="_blank" class="ai-btn gemini">
-      <span class="ai-btn-icon">✦</span>
-      GEMINI
-    </a>
+    <a href="https://claude.ai" target="_blank" class="ai-btn"><span class="ai-btn-icon">🤖</span>CLAUDE</a>
+    <a href="https://gemini.google.com" target="_blank" class="ai-btn gemini"><span class="ai-btn-icon">✦</span>GEMINI</a>
   </div>
 </nav>
 
-<!-- Overlay -->
 <div class="overlay" id="overlay" onclick="closeSidebar()"></div>
 
-<!-- Main -->
-<div class="main" id="main">
-
-  <!-- Topbar -->
+<div class="main">
   <div class="topbar">
     <button class="menu-btn" onclick="toggleSidebar()">☰</button>
     <span class="topbar-title" id="topbar-title">Daily Briefing</span>
     <span class="topbar-date" id="topbar-date"></span>
   </div>
 
-  <!-- ══ DAILY BRIEFING (LANDING) ══ -->
-  <div class="page active landing" id="page-briefing">
-
-    <!-- Gate passed banner (hidden until gate pressed) -->
-    <div class="gate-passed" id="gate-passed">✓ CLEARED FOR THE DAY — EXECUTE WITH DISCIPLINE</div>
-
-    <!-- Motivational Quote -->
+  <!-- DAILY BRIEFING -->
+  <div class="page active" id="page-briefing">
+    <div class="gate-passed-banner" id="gate-passed">✓ CLEARED FOR THE DAY — EXECUTE WITH DISCIPLINE</div>
     <div class="quote-section">
       <div class="quote-eyebrow">Today's Intention</div>
-      <div class="quote-text" id="daily-quote">"The process is the destination. Every rep, every trade, every moment with your kids — done with full presence — that's the life."</div>
+      <div class="quote-text">"The process is the destination. Every rep, every trade, every moment with your kids — done with full presence — that's the life."</div>
       <div class="quote-attr">— David Hendry</div>
     </div>
 
-    <!-- David's Personal Section -->
-    <div class="david-section">
-      <div class="section-header">
-        <div class="section-title">David — Personal State</div>
-        <span class="section-badge badge-green">Phase 1</span>
-      </div>
-
+    <!-- Personal -->
+    <div class="briefing-section">
+      <div class="section-header"><div class="section-title">David — Personal</div><span class="section-badge badge-green">Phase 1</span></div>
       <div class="streak-grid">
-        <div class="streak-block">
-          <div class="streak-label">Log Streak</div>
-          <div class="streak-val green">1</div>
-          <div class="streak-sub">consecutive</div>
-        </div>
-        <div class="streak-block">
-          <div class="streak-label">Fitness Streak</div>
-          <div class="streak-val green">1</div>
-          <div class="streak-sub">goals hit</div>
-        </div>
-        <div class="streak-block">
-          <div class="streak-label">Diet Streak</div>
-          <div class="streak-val gold">0</div>
-          <div class="streak-sub">goals hit</div>
-        </div>
-        <div class="streak-block">
-          <div class="streak-label">Best Streak</div>
-          <div class="streak-val blue">14</div>
-          <div class="streak-sub">all-time</div>
-        </div>
-        <div class="streak-block">
-          <div class="streak-label">Diet Miss</div>
-          <div class="streak-val red">1</div>
-          <div class="streak-sub">in a row</div>
-        </div>
-        <div class="streak-block">
-          <div class="streak-label">Avg Deficit</div>
-          <div class="streak-val green" style="font-size:18px;padding-top:4px;">838</div>
-          <div class="streak-sub">cal/day</div>
-        </div>
-      </div>
-
-      <div class="mini-stats">
-        <div class="mini-stat">
-          <div class="mini-val">~20</div>
-          <div class="mini-lbl">Days Logged</div>
-        </div>
-        <div class="mini-stat">
-          <div class="mini-val">1,862</div>
-          <div class="mini-lbl">Avg Cal Intake</div>
-        </div>
-        <div class="mini-stat">
-          <div class="mini-val gold">9/20</div>
-          <div class="mini-lbl">Diet Goals Hit</div>
-        </div>
-      </div>
-
-      <div class="macro-bar">
-        <div class="macro-title">Daily Macro Targets</div>
-        <div class="macro-row">
-          <div class="macro-name">Calories</div>
-          <div class="macro-track"><div class="macro-fill" style="width:72%;background:#3d8a36;"></div></div>
-          <div class="macro-nums">1,862 / 2,600</div>
-        </div>
-        <div class="macro-row">
-          <div class="macro-name">Protein</div>
-          <div class="macro-track"><div class="macro-fill" style="width:65%;background:#5ab84e;"></div></div>
-          <div class="macro-nums">117g / 180g</div>
-        </div>
-        <div class="macro-row">
-          <div class="macro-name">Carbs</div>
-          <div class="macro-track"><div class="macro-fill" style="width:80%;background:#b8920a;"></div></div>
-          <div class="macro-nums">160g / 200g</div>
-        </div>
-        <div class="macro-row">
-          <div class="macro-name">Fat</div>
-          <div class="macro-track"><div class="macro-fill" style="width:55%;background:#c06820;"></div></div>
-          <div class="macro-nums">49g / 90g</div>
-        </div>
+        <div class="streak-block"><div class="streak-label">Log Streak</div><div class="streak-val green">1</div><div class="streak-sub">days</div></div>
+        <div class="streak-block"><div class="streak-label">Fitness</div><div class="streak-val green">1</div><div class="streak-sub">goals hit</div></div>
+        <div class="streak-block"><div class="streak-label">Diet</div><div class="streak-val gold">0</div><div class="streak-sub">goals hit</div></div>
+        <div class="streak-block"><div class="streak-label">Best</div><div class="streak-val blue">14</div><div class="streak-sub">all-time</div></div>
       </div>
     </div>
 
-    <!-- Domain Focus Cards -->
+    <!-- Trading Snapshot -->
+    <div class="briefing-section" style="padding-bottom:0;">
+      <div class="section-header"><div class="section-title">Trading — Snapshot</div><span class="section-badge badge-red">🐻 Bear</span></div>
+    </div>
+    <div style="padding:0 16px 14px;">
+      <div class="trading-snapshot">
+        <div class="snapshot-header"><span class="snapshot-label">Market Condition</span><span class="condition-pill pill-bear">Bear / Starved Relief</span></div>
+        <div class="snapshot-grid">
+          <div class="snap-block"><div class="snap-lbl">Rules Broken</div><div class="snap-val red">4</div></div>
+          <div class="snap-block"><div class="snap-lbl">Prev Day W%</div><div class="snap-val green">75%</div></div>
+          <div class="snap-block"><div class="snap-lbl">Week W%</div><div class="snap-val green">68.8%</div></div>
+          <div class="snap-block"><div class="snap-lbl">Week P&L</div><div class="snap-val green" style="font-size:16px;padding-top:3px;">+$66</div></div>
+          <div class="snap-block"><div class="snap-lbl">Loss Limit</div><div class="snap-val gold" style="font-size:16px;padding-top:3px;">$41.81</div></div>
+          <div class="snap-block"><div class="snap-lbl">Focus</div><div class="snap-val gold" style="font-size:16px;padding-top:3px;">R1/R2</div></div>
+        </div>
+      </div>
+      <div class="failure-card">
+        <div class="failure-header"><div class="failure-header-label">Trading Focus — Current Failures</div></div>
+        <div class="failure-row"><span class="failure-tag tag-longstanding">Long Standing</span><span class="failure-text">Emotional re-entry after stop hit — entering distribution without running Stop-and-Reset protocol</span></div>
+        <div class="failure-row"><span class="failure-tag tag-week">This Week</span><span class="failure-text">MACD not confirmed on entry — entering on momentum alone without indicator confirmation</span></div>
+        <div class="failure-row"><span class="failure-tag tag-yesterday">Yesterday</span><span class="failure-text">Open spike phase entry — entered before 9:45 AM EDT, too early before price established direction</span></div>
+      </div>
+    </div>
+
+    <!-- Domain Cards -->
     <div class="domains-section">
-      <div class="section-header" style="padding:0 0 10px;">
-        <div class="section-title">Domain Focus</div>
-      </div>
+      <div class="section-header" style="padding:0 0 10px;"><div class="section-title">Domain Focus</div></div>
 
-      <div class="domain-card trading-card" onclick="requireGate('trading')">
-        <div class="domain-icon">📈</div>
-        <div class="domain-info">
-          <div class="domain-name">Trading</div>
-          <div class="domain-focus">Bear / Starved Relief Rally — Phase 1 execution accuracy. Loss limit $41.81. Focus: eliminate repeat errors.</div>
-        </div>
-        <div class="domain-status status-active">Active</div>
-      </div>
-
-      <div class="domain-card" onclick="requireGate('photography')">
-        <div class="domain-icon">📷</div>
-        <div class="domain-info">
-          <div class="domain-name">Taylor Hendry Photography</div>
-          <div class="domain-focus">Business restructure in progress. Phase 3 build begins after trading system complete.</div>
-        </div>
-        <div class="domain-status status-building">Building</div>
-      </div>
-
-      <div class="domain-card" onclick="requireGate('finances')">
-        <div class="domain-icon">💰</div>
-        <div class="domain-info">
-          <div class="domain-name">Finances</div>
-          <div class="domain-focus">Trading P&L tracking active. Entity planning on horizon pending trading milestones.</div>
-        </div>
-        <div class="domain-status status-phase">Phase 4</div>
+      <div class="domain-card" onclick="requireGate('david')">
+        <div class="domain-card-top"><div class="domain-icon">🧠</div><div class="domain-info"><div class="domain-name">David</div><div class="domain-focus">Phase 1 — Building daily consistency in fitness and diet. Logging streak active.</div></div><div class="domain-status status-active">Active</div></div>
+        <div class="domain-progress"><div class="progress-track"><div class="progress-fill" style="width:15%"></div></div><div class="progress-fraction">3 / 20</div><div class="progress-pct">15%</div></div>
       </div>
 
       <div class="domain-card" onclick="requireGate('family')">
-        <div class="domain-icon">👨‍👩‍👧‍👦</div>
-        <div class="domain-info">
-          <div class="domain-name">Family & Growth</div>
-          <div class="domain-focus">Kids development checklists pending. Son's medical schedule maintained. Present time is the goal.</div>
-        </div>
-        <div class="domain-status status-active">Active</div>
+        <div class="domain-card-top"><div class="domain-icon">👨‍👩‍👧‍👦</div><div class="domain-info"><div class="domain-name">Family & Growth</div><div class="domain-focus">Kids development checklists pending. Son's medical schedule maintained.</div></div><div class="domain-status status-active">Active</div></div>
+        <div class="domain-progress"><div class="progress-track"><div class="progress-fill" style="width:10%"></div></div><div class="progress-fraction">2 / 20</div><div class="progress-pct">10%</div></div>
+      </div>
+
+      <div class="domain-card" onclick="requireGate('trading')">
+        <div class="domain-card-top"><div class="domain-icon">📈</div><div class="domain-info"><div class="domain-name">Trading</div><div class="domain-focus">Phase 1 — Execution accuracy. Eliminating repeat errors. Bear market conditions.</div></div><div class="domain-status status-active">Active</div></div>
+        <div class="domain-progress"><div class="progress-track"><div class="progress-fill" style="width:20%;background:var(--gold-light);"></div></div><div class="progress-fraction">4 / 20</div><div class="progress-pct" style="color:var(--gold-bright);">20%</div></div>
+      </div>
+
+      <div class="domain-card" onclick="requireGate('finances')">
+        <div class="domain-card-top"><div class="domain-icon">💰</div><div class="domain-info"><div class="domain-name">Finances</div><div class="domain-focus">Trading P&L tracking active. Entity planning on horizon.</div></div><div class="domain-status status-phase">Phase 4</div></div>
+        <div class="domain-progress"><div class="progress-track"><div class="progress-fill" style="width:5%"></div></div><div class="progress-fraction">1 / 20</div><div class="progress-pct">5%</div></div>
+      </div>
+
+      <div class="domain-card" onclick="requireGate('photography')">
+        <div class="domain-card-top"><div class="domain-icon">📷</div><div class="domain-info"><div class="domain-name">Taylor Hendry Photography</div><div class="domain-focus">Business restructure in progress. Phase 3 begins after trading complete.</div></div><div class="domain-status status-building">Building</div></div>
+        <div class="domain-progress"><div class="progress-track"><div class="progress-fill" style="width:5%"></div></div><div class="progress-fraction">1 / 20</div><div class="progress-pct">5%</div></div>
       </div>
 
       <div class="domain-card" onclick="requireGate('homebuild')">
-        <div class="domain-icon">🏡</div>
-        <div class="domain-info">
-          <div class="domain-name">Home / Build</div>
-          <div class="domain-focus">On hold — door opens when trading milestones unlock financial capacity.</div>
-        </div>
-        <div class="domain-status status-hold">On Hold</div>
-      </div>
-
-      <div class="domain-card" onclick="requireGate('hrs')">
-        <div class="domain-icon">🔧</div>
-        <div class="domain-info">
-          <div class="domain-name">Hendry Residential Services</div>
-          <div class="domain-focus">Sidelined. Maintained for reactivation when conditions align.</div>
-        </div>
-        <div class="domain-status status-hold">Sidelined</div>
+        <div class="domain-card-top"><div class="domain-icon">🏡</div><div class="domain-info"><div class="domain-name">Home / Build</div><div class="domain-focus">On hold — door opens when trading milestones unlock financial capacity.</div></div><div class="domain-status status-hold">On Hold</div></div>
+        <div class="domain-progress"><div class="progress-track"><div class="progress-fill" style="width:0%"></div></div><div class="progress-fraction">0 / 20</div><div class="progress-pct">0%</div></div>
       </div>
 
       <div class="domain-card" onclick="requireGate('roadmap')">
-        <div class="domain-icon">🗺️</div>
-        <div class="domain-info">
-          <div class="domain-name">Life Roadmap</div>
-          <div class="domain-focus">Built last. Awaiting domain completion to map cross-domain milestones.</div>
-        </div>
-        <div class="domain-status status-hold">Pending</div>
+        <div class="domain-card-top"><div class="domain-icon">🗺️</div><div class="domain-info"><div class="domain-name">Life Roadmap</div><div class="domain-focus">Built last — awaiting domain completions to map cross-domain milestones.</div></div><div class="domain-status status-hold">Pending</div></div>
+        <div class="domain-progress"><div class="progress-track"><div class="progress-fill" style="width:0%"></div></div><div class="progress-fraction">0 / 20</div><div class="progress-pct">0%</div></div>
       </div>
     </div>
 
-    <!-- Hard Gate -->
+    <!-- Gate -->
     <div class="gate-section" id="gate-section">
-      <div class="gate-text">You have reviewed your personal state and your domains.<br>Trade with discipline. Be present with your family.<br>Execute the process.</div>
+      <div class="gate-text">You've reviewed your state and your world.<br>Trade with discipline. Be present with your family.<br>Execute the process.</div>
       <button class="gate-btn" id="gate-btn" onclick="passGate()">I'M READY — ENTER</button>
     </div>
+  </div>
 
-  </div><!-- /briefing -->
-
-  <!-- ══ TRADING COMMAND CENTER ══ -->
+  <!-- TRADING -->
   <div class="page" id="page-trading">
-    <div class="trading-page">
-
-      <div class="condition-banner">
-        <div>
-          <div class="condition-label">Market Condition</div>
-          <div class="condition-value">🐻 Bear / Starved Relief</div>
-        </div>
-        <span class="pill pill-bear">● Bear Active</span>
+    <div class="domain-page">
+      <div class="domain-page-header"><div class="domain-page-icon">📈</div><div><div class="domain-page-title gold">Trading</div><div class="domain-page-sub">Command Center — Phase 1 Execution Accuracy</div></div></div>
+      <div style="background:linear-gradient(135deg,#1a0a0a,#2d0f0f);border:1px solid #4a1515;border-radius:10px;padding:14px 16px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+        <div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-dim);margin-bottom:3px;">Market Condition</div><div style="font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:2px;color:var(--red-bright);">🐻 Bear / Starved Relief</div></div>
+        <span class="condition-pill pill-bear">● Bear Active</span>
       </div>
-
       <div class="stat-grid">
-        <div class="stat-card">
-          <div class="stat-label">Loss Limit Today</div>
-          <div class="stat-value gold">$41.81</div>
-          <div class="stat-sub">Dynamic — resets Sunday</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-label">Week P&L</div>
-          <div class="stat-value green">+$66.07</div>
-          <div class="stat-sub">4 sessions this week</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-label">Win Rate WTD</div>
-          <div class="stat-value blue">68.8%</div>
-          <div class="stat-sub">11W / 5L</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-label">Setup Priority</div>
-          <div class="stat-value gold">R1 / R2</div>
-          <div class="stat-sub">Today's focus</div>
-        </div>
+        <div class="stat-card"><div class="stat-label">Loss Limit Today</div><div class="stat-value gold">$41.81</div><div class="stat-sub">Resets Sunday</div></div>
+        <div class="stat-card"><div class="stat-label">Week P&L</div><div class="stat-value green">+$66.07</div><div class="stat-sub">4 sessions</div></div>
+        <div class="stat-card"><div class="stat-label">Win Rate WTD</div><div class="stat-value blue">68.8%</div><div class="stat-sub">11W / 5L</div></div>
+        <div class="stat-card"><div class="stat-label">Setup Priority</div><div class="stat-value gold">R1 / R2</div><div class="stat-sub">Today's focus</div></div>
       </div>
-
       <div class="t-section-title">Pre-Session Checklist</div>
       <button class="reset-btn" onclick="resetChecklist()">Reset</button>
       <div class="checklist" id="checklist">
-        <div class="check-item" onclick="toggleCheck(this)">
-          <div class="check-box"></div>
-          <span class="check-text">Hydration — water before anything else</span>
-          <span class="check-tag tag-david">David</span>
-        </div>
-        <div class="check-item" onclick="toggleCheck(this)">
-          <div class="check-box"></div>
-          <span class="check-text">Body activation — pushups, squats, 2-min walk</span>
-          <span class="check-tag tag-david">David</span>
-        </div>
-        <div class="check-item" onclick="toggleCheck(this)">
-          <div class="check-box"></div>
-          <span class="check-text">Mantra read out loud</span>
-          <span class="check-tag tag-david">David</span>
-        </div>
-        <div class="check-item" onclick="toggleCheck(this)">
-          <div class="check-box"></div>
-          <span class="check-text">Morning brief reviewed</span>
-          <span class="check-tag tag-gemini">Gemini</span>
-        </div>
-        <div class="check-item" onclick="toggleCheck(this)">
-          <div class="check-box"></div>
-          <span class="check-text">Gemini trade prep — all gates passed</span>
-          <span class="check-tag tag-gemini">Gemini</span>
-        </div>
-        <div class="check-item" onclick="toggleCheck(this)">
-          <div class="check-box"></div>
-          <span class="check-text">Loss limit confirmed from memory</span>
-          <span class="check-tag tag-david">David</span>
-        </div>
-        <div class="check-item" onclick="toggleCheck(this)">
-          <div class="check-box"></div>
-          <span class="check-text">Stop-and-Reset protocol recited</span>
-          <span class="check-tag tag-david">David</span>
-        </div>
+        <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><span class="check-text">Hydration — water before anything else</span><span class="check-tag tag-david">David</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><span class="check-text">Body activation — pushups, squats, 2-min walk</span><span class="check-tag tag-david">David</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><span class="check-text">Mantra read out loud</span><span class="check-tag tag-david">David</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><span class="check-text">Morning brief reviewed</span><span class="check-tag tag-gemini">Gemini</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><span class="check-text">Gemini trade prep — all gates passed</span><span class="check-tag tag-gemini">Gemini</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><span class="check-text">Loss limit confirmed from memory</span><span class="check-tag tag-david">David</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><span class="check-text">Stop-and-Reset protocol recited</span><span class="check-tag tag-david">David</span></div>
       </div>
-
-      <div class="chart-card">
-        <div class="chart-header">
-          <span class="chart-title">Weekly P&L</span>
-          <span class="chart-badge">+$66.07</span>
-        </div>
-        <canvas id="pnlChart" height="120"></canvas>
-      </div>
-
+      <div class="chart-card"><div class="chart-header"><span class="chart-title">Weekly P&L</span><span class="chart-badge">+$66.07</span></div><canvas id="pnlChart" height="120"></canvas></div>
       <div class="t-section-title">Quick Access</div>
       <div class="link-grid">
-        <div class="link-card" onclick="showPage('handbook')">
-          <div class="link-icon">📖</div>
-          <div class="link-title">Handbook</div>
-          <div class="link-sub">Playbook & strategy</div>
-        </div>
-        <div class="link-card" onclick="showPage('datalog')">
-          <div class="link-icon">📊</div>
-          <div class="link-title">Data Log</div>
-          <div class="link-sub">Trade log & movers</div>
-        </div>
-        <div class="link-card" onclick="showPage('workflow')">
-          <div class="link-icon">⚙️</div>
-          <div class="link-title">Workflow</div>
-          <div class="link-sub">Protocols & prompts</div>
-        </div>
-        <div class="link-card" onclick="showPage('performance')">
-          <div class="link-icon">📈</div>
-          <div class="link-title">Performance</div>
-          <div class="link-sub">Stats & reviews</div>
-        </div>
+        <div class="link-card" onclick="showPage('handbook')"><div class="link-icon">📖</div><div class="link-title">Handbook</div><div class="link-sub">Playbook & strategy</div></div>
+        <div class="link-card" onclick="showPage('datalog')"><div class="link-icon">📊</div><div class="link-title">Data Log</div><div class="link-sub">Trade log & movers</div></div>
+        <div class="link-card" onclick="showPage('workflow')"><div class="link-icon">⚙️</div><div class="link-title">Workflow</div><div class="link-sub">Protocols & prompts</div></div>
+        <div class="link-card" onclick="showPage('performance')"><div class="link-icon">📈</div><div class="link-title">Performance</div><div class="link-sub">Stats & reviews</div></div>
       </div>
-
       <div class="t-section-title">Week Breakdown</div>
       <div class="chart-card" style="padding:0;overflow:hidden;">
-        <table class="stats-table">
-          <thead>
-            <tr><th>Metric</th><th>Value</th><th>Status</th></tr>
-          </thead>
-          <tbody>
-            <tr><td>Total Trades</td><td class="gold">16</td><td style="font-size:10px;color:var(--text-dim);">This week</td></tr>
-            <tr><td>Win Rate</td><td class="green">68.8%</td><td style="font-size:10px;color:var(--green-bright);">↑ Above avg</td></tr>
-            <tr><td>Best Day</td><td class="green">+$35.61</td><td style="font-size:10px;color:var(--text-dim);">Monday</td></tr>
-            <tr><td>Worst Day</td><td class="red">-$8.21</td><td style="font-size:10px;color:var(--green-bright);">Within limit</td></tr>
-            <tr><td>Avg Entry Accuracy</td><td class="gold">3.1 / 5</td><td style="font-size:10px;color:var(--text-dim);">Improving</td></tr>
-            <tr><td>Rules Broken</td><td class="red">4</td><td style="font-size:10px;color:var(--red-bright);">↓ Address Sunday</td></tr>
-          </tbody>
-        </table>
+        <table class="stats-table"><thead><tr><th>Metric</th><th>Value</th><th>Status</th></tr></thead><tbody>
+          <tr><td>Total Trades</td><td class="gold">16</td><td style="font-size:10px;color:var(--text-dim);">This week</td></tr>
+          <tr><td>Win Rate</td><td class="green">68.8%</td><td style="font-size:10px;color:var(--green-bright);">↑ Above avg</td></tr>
+          <tr><td>Best Day</td><td class="green">+$35.61</td><td style="font-size:10px;color:var(--text-dim);">Monday</td></tr>
+          <tr><td>Worst Day</td><td class="red">-$8.21</td><td style="font-size:10px;color:var(--green-bright);">Within limit</td></tr>
+          <tr><td>Avg Entry Accuracy</td><td class="gold">3.1 / 5</td><td style="font-size:10px;color:var(--text-dim);">Improving</td></tr>
+          <tr><td>Rules Broken</td><td class="red">4</td><td style="font-size:10px;color:var(--red-bright);">↓ Address Sunday</td></tr>
+        </tbody></table>
       </div>
-
-    </div>
-  </div><!-- /trading -->
-
-  <!-- ══ PLACEHOLDER PAGES ══ -->
-  <div class="page" id="page-handbook">
-    <div class="placeholder">
-      <div class="placeholder-icon">📖</div>
-      <div class="placeholder-title">Trading Handbook</div>
-      <div class="placeholder-sub">Playbook, entry sequence, market conditions,<br>lessons, and strategy framework.</div>
-      <span class="placeholder-phase badge-gold">Phase 2 Build</span>
     </div>
   </div>
 
-  <div class="page" id="page-performance">
-    <div class="placeholder">
-      <div class="placeholder-icon">📈</div>
-      <div class="placeholder-title">Performance</div>
-      <div class="placeholder-sub">Weekly reviews, setup rank win rates,<br>P&L attribution, and monthly analysis.</div>
-      <span class="placeholder-phase badge-gold">Phase 2 Build</span>
+  <!-- DAVID -->
+  <div class="page" id="page-david">
+    <div class="domain-page">
+      <div class="domain-page-header"><div class="domain-page-icon">🧠</div><div><div class="domain-page-title">David</div><div class="domain-page-sub">Personal Foundation — Phase 1</div></div></div>
+      <div class="stat-grid">
+        <div class="stat-card"><div class="stat-label">Log Streak</div><div class="stat-value green">1</div><div class="stat-sub">consecutive days</div></div>
+        <div class="stat-card"><div class="stat-label">Best Streak</div><div class="stat-value blue">14</div><div class="stat-sub">all-time record</div></div>
+        <div class="stat-card"><div class="stat-label">Avg Calories</div><div class="stat-value green">1,862</div><div class="stat-sub">vs 2,600 target</div></div>
+        <div class="stat-card"><div class="stat-label">Avg Deficit</div><div class="stat-value gold">838</div><div class="stat-sub">cal/day</div></div>
+      </div>
+      <div class="t-section-title">Today's Macros</div>
+      <div class="chart-card">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;"><div style="font-size:11px;color:var(--text-muted);width:60px;flex-shrink:0;">Calories</div><div style="flex:1;height:5px;background:var(--surface3);border-radius:2px;overflow:hidden;"><div style="width:72%;height:100%;background:var(--green-mid);border-radius:2px;"></div></div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--text-muted);width:80px;text-align:right;">1,862 / 2,600</div></div>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;"><div style="font-size:11px;color:var(--text-muted);width:60px;flex-shrink:0;">Protein</div><div style="flex:1;height:5px;background:var(--surface3);border-radius:2px;overflow:hidden;"><div style="width:65%;height:100%;background:var(--green-bright);border-radius:2px;"></div></div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--text-muted);width:80px;text-align:right;">117g / 180g</div></div>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;"><div style="font-size:11px;color:var(--text-muted);width:60px;flex-shrink:0;">Carbs</div><div style="flex:1;height:5px;background:var(--surface3);border-radius:2px;overflow:hidden;"><div style="width:80%;height:100%;background:var(--gold-light);border-radius:2px;"></div></div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--text-muted);width:80px;text-align:right;">160g / 200g</div></div>
+        <div style="display:flex;align-items:center;gap:8px;"><div style="font-size:11px;color:var(--text-muted);width:60px;flex-shrink:0;">Fat</div><div style="flex:1;height:5px;background:var(--surface3);border-radius:2px;overflow:hidden;"><div style="width:55%;height:100%;background:var(--amber);border-radius:2px;"></div></div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--text-muted);width:80px;text-align:right;">49g / 90g</div></div>
+      </div>
     </div>
   </div>
 
-  <div class="page" id="page-datalog">
-    <div class="placeholder">
-      <div class="placeholder-icon">📊</div>
-      <div class="placeholder-title">Data Log</div>
-      <div class="placeholder-sub">Trade log, big movers tracker,<br>sector performance — linked from Google Sheets.</div>
-      <span class="placeholder-phase badge-gold">Phase 2 Build</span>
-    </div>
-  </div>
-
-  <div class="page" id="page-workflow">
-    <div class="placeholder">
-      <div class="placeholder-icon">⚙️</div>
-      <div class="placeholder-title">Workflow & Protocols</div>
-      <div class="placeholder-sub">Daily workflow, quick reference prompts,<br>Gemini scripts, and Claude role definitions.</div>
-      <span class="placeholder-phase badge-gold">Phase 2 Build</span>
-    </div>
-  </div>
-
-  <div class="page" id="page-photography">
-    <div class="placeholder">
-      <div class="placeholder-icon">📷</div>
-      <div class="placeholder-title">Taylor Hendry Photography</div>
-      <div class="placeholder-sub">Business overview, clients, marketing,<br>finances, and craft development.</div>
-      <span class="placeholder-phase badge-green">Phase 3 Build</span>
-    </div>
-  </div>
-
-  <div class="page" id="page-finances">
-    <div class="placeholder">
-      <div class="placeholder-icon">💰</div>
-      <div class="placeholder-title">Finances</div>
-      <div class="placeholder-sub">Overall financial picture, entity planning,<br>tax strategy, and investment tracking.</div>
-      <span class="placeholder-phase" style="background:rgba(58,122,170,0.1);color:var(--blue-bright);">Phase 4 Build</span>
-    </div>
-  </div>
-
-  <div class="page" id="page-family">
-    <div class="placeholder">
-      <div class="placeholder-icon">👨‍👩‍👧‍👦</div>
-      <div class="placeholder-title">Family & Growth</div>
-      <div class="placeholder-sub">David's path, Taylor's path,<br>and each child's development roadmap.</div>
-      <span class="placeholder-phase" style="background:rgba(58,122,170,0.1);color:var(--blue-bright);">Phase 4 Build</span>
-    </div>
-  </div>
-
-  <div class="page" id="page-lifegoals">
-    <div class="placeholder">
-      <div class="placeholder-icon">🎯</div>
-      <div class="placeholder-title">Life Goals</div>
-      <div class="placeholder-sub">North star vision, financial freedom,<br>lifestyle design, and bucket list.</div>
-      <span class="placeholder-phase" style="background:rgba(58,122,170,0.1);color:var(--blue-bright);">Phase 4 Build</span>
-    </div>
-  </div>
-
-  <div class="page" id="page-homebuild">
-    <div class="placeholder">
-      <div class="placeholder-icon">🏡</div>
-      <div class="placeholder-title">Home / Build</div>
-      <div class="placeholder-sub">Vision & requirements, floor plans,<br>land research, and financing plan.</div>
-      <span class="placeholder-phase" style="background:rgba(90,130,90,0.1);color:var(--text-muted);">When Door Opens</span>
-    </div>
-  </div>
-
-  <div class="page" id="page-hrs">
-    <div class="placeholder">
-      <div class="placeholder-icon">🔧</div>
-      <div class="placeholder-title">Hendry Residential Services</div>
-      <div class="placeholder-sub">Overview, clients, finances,<br>and reactivation planning.</div>
-      <span class="placeholder-phase" style="background:rgba(58,122,170,0.1);color:var(--blue-bright);">Phase 4 Build</span>
-    </div>
-  </div>
-
-  <div class="page" id="page-dailyops">
-    <div class="placeholder">
-      <div class="placeholder-icon">⚡</div>
-      <div class="placeholder-title">Daily Operations</div>
-      <div class="placeholder-sub">Morning routine, task system,<br>weekly review, and Gemini/Claude workflows.</div>
-      <span class="placeholder-phase" style="background:rgba(58,122,170,0.1);color:var(--blue-bright);">Phase 4 Build</span>
-    </div>
-  </div>
-
-  <div class="page" id="page-roadmap">
-    <div class="placeholder">
-      <div class="placeholder-icon">🗺️</div>
-      <div class="placeholder-title">Life Roadmap</div>
-      <div class="placeholder-sub">The complete picture — phase completions,<br>cross-domain milestones, and what opens next.<br>Built last, after all domains are complete.</div>
-      <span class="placeholder-phase" style="background:rgba(90,130,90,0.1);color:var(--text-muted);">Built Last</span>
-    </div>
-  </div>
-
-</div><!-- /main -->
+  <!-- PLACEHOLDERS -->
+  <div class="page" id="page-david-fitness"><div class="placeholder"><div class="placeholder-icon">💪</div><div class="placeholder-title">Fitness</div><div class="placeholder-sub">Workout plan and progress tracking.</div><span class="ph-phase badge-green">Phase 1</span></div></div>
+  <div class="page" id="page-david-diet"><div class="placeholder"><div class="placeholder-icon">🥗</div><div class="placeholder-title">Diet & Nutrition</div><div class="placeholder-sub">Daily log and macro tracking.</div><span class="ph-phase badge-green">Phase 1</span></div></div>
+  <div class="page" id="page-david-mental"><div class="placeholder"><div class="placeholder-icon">🧘</div><div class="placeholder-title">Mental & Emotional</div><div class="placeholder-sub">Mindset, stress management, reflection.</div><span class="ph-phase badge-green">Phase 1</span></div></div>
+  <div class="page" id="page-family"><div class="placeholder"><div class="placeholder-icon">👨‍👩‍👧‍👦</div><div class="placeholder-title">Family & Growth</div><div class="placeholder-sub">Taylor, each child, and family vision.</div><span class="ph-phase badge-blue">Phase 4</span></div></div>
+  <div class="page" id="page-family-taylor"><div class="placeholder"><div class="placeholder-icon">👩</div><div class="placeholder-title">Taylor</div><div class="placeholder-sub">Taylor's path and growth.</div><span class="ph-phase badge-blue">Phase 4</span></div></div>
+  <div class="page" id="page-family-kids"><div class="placeholder"><div class="placeholder-icon">👧👦</div><div class="placeholder-title">Children</div><div class="placeholder-sub">Each child's development roadmap.</div><span class="ph-phase badge-blue">Phase 4</span></div></div>
+  <div class="page" id="page-handbook"><div class="placeholder"><div class="placeholder-icon">📖</div><div class="placeholder-title">Trading Handbook</div><div class="placeholder-sub">Playbook, entry sequence, and strategy.</div><span class="ph-phase badge-gold">Phase 2</span></div></div>
+  <div class="page" id="page-performance"><div class="placeholder"><div class="placeholder-icon">📈</div><div class="placeholder-title">Performance</div><div class="placeholder-sub">Weekly reviews and analysis.</div><span class="ph-phase badge-gold">Phase 2</span></div></div>
+  <div class="page" id="page-datalog"><div class="placeholder"><div class="placeholder-icon">📊</div><div class="placeholder-title">Data Log</div><div class="placeholder-sub">Trade log and big movers.</div><span class="ph-phase badge-gold">Phase 2</span></div></div>
+  <div class="page" id="page-workflow"><div class="placeholder"><div class="placeholder-icon">⚙️</div><div class="placeholder-title">Workflow & Protocols</div><div class="placeholder-sub">Daily workflow and prompts.</div><span class="ph-phase badge-gold">Phase 2</span></div></div>
+  <div class="page" id="page-finances"><div class="placeholder"><div class="placeholder-icon">💰</div><div class="placeholder-title">Finances</div><div class="placeholder-sub">Financial picture and planning.</div><span class="ph-phase badge-blue">Phase 4</span></div></div>
+  <div class="page" id="page-finances-entity"><div class="placeholder"><div class="placeholder-icon">🏢</div><div class="placeholder-title">Entity</div><div class="placeholder-sub">Business entity and tax strategy.</div><span class="ph-phase badge-blue">Phase 4</span></div></div>
+  <div class="page" id="page-photography"><div class="placeholder"><div class="placeholder-icon">📷</div><div class="placeholder-title">Taylor Hendry Photography</div><div class="placeholder-sub">Business overview and clients.</div><span class="ph-phase badge-green">Phase 3</span></div></div>
+  <div class="page" id="page-homebuild"><div class="placeholder"><div class="placeholder-icon">🏡</div><div class="placeholder-title">Home / Build</div><div class="placeholder-sub">Vision, plans, and financing.</div><span class="ph-phase" style="background:rgba(90,130,90,0.1);color:var(--text-muted);">When Door Opens</span></div></div>
+  <div class="page" id="page-dailyops"><div class="placeholder"><div class="placeholder-icon">⚡</div><div class="placeholder-title">Daily Operations</div><div class="placeholder-sub">Morning routine and workflows.</div><span class="ph-phase badge-blue">Phase 4</span></div></div>
+  <div class="page" id="page-lifegoals"><div class="placeholder"><div class="placeholder-icon">🎯</div><div class="placeholder-title">Life Goals</div><div class="placeholder-sub">North star and bucket list.</div><span class="ph-phase badge-blue">Phase 4</span></div></div>
+  <div class="page" id="page-roadmap"><div class="placeholder"><div class="placeholder-icon">🗺️</div><div class="placeholder-title">Life Roadmap</div><div class="placeholder-sub">Phase completions and what opens next.<br>Built last — after all domains complete.</div><span class="ph-phase" style="background:rgba(90,130,90,0.1);color:var(--text-muted);">Built Last</span></div></div>
+</div>
 
 <script>
-// ── Date ──
-const d = new Date();
-const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-document.getElementById('topbar-date').textContent = days[d.getDay()] + ' ' + months[d.getMonth()] + ' ' + d.getDate();
+// DATE
+const d=new Date();
+const days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+document.getElementById('topbar-date').textContent=days[d.getDay()]+' '+months[d.getMonth()]+' '+d.getDate();
 
-// ── Gate state ──
-let gatePassed = false;
-
-// ── Navigation ──
-const pageNames = {
-  briefing: 'Daily Briefing',
-  trading: 'Trading — Command Center',
-  handbook: 'Handbook',
-  performance: 'Performance',
-  datalog: 'Data Log',
-  workflow: 'Workflow & Protocols',
-  photography: 'Taylor Hendry Photography',
-  finances: 'Finances',
-  family: 'Family & Growth',
-  lifegoals: 'Life Goals',
-  homebuild: 'Home / Build',
-  hrs: 'Hendry Residential',
-  dailyops: 'Daily Operations',
-  roadmap: 'Life Roadmap'
-};
-
-const goldPages = ['trading','handbook','performance','datalog','workflow'];
-
-function showPage(id, fromGate) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n => {
-    n.classList.remove('active');
-    n.classList.remove('active-gold');
-  });
-  document.getElementById('page-' + id).classList.add('active');
-  const title = document.getElementById('topbar-title');
-  title.textContent = pageNames[id] || id;
-  title.className = goldPages.includes(id) ? 'topbar-title gold-title' : 'topbar-title';
-  const navEl = document.getElementById('nav-' + id);
-  if (navEl) {
-    navEl.classList.add(goldPages.includes(id) ? 'active-gold' : 'active');
-  }
-  closeSidebar();
-  window.scrollTo(0, 0);
+// GATE — once per day via localStorage
+const todayKey='gate_'+d.getFullYear()+'_'+d.getMonth()+'_'+d.getDate();
+let gatePassed=localStorage.getItem(todayKey)==='passed';
+if(gatePassed){
+  document.getElementById('gate-passed').style.display='block';
+  const btn=document.getElementById('gate-btn');
+  btn.textContent='✓ CLEARED';btn.disabled=true;btn.style.background='var(--green-mid)';
 }
 
-function requireGate(id) {
-  if (!gatePassed) {
-    // Scroll to gate section
-    document.getElementById('gate-section').scrollIntoView({ behavior: 'smooth' });
-    const btn = document.getElementById('gate-btn');
-    btn.style.transform = 'scale(0.97)';
-    btn.style.boxShadow = '0 0 30px rgba(45,107,40,0.8)';
-    setTimeout(() => {
-      btn.style.transform = '';
-      btn.style.boxShadow = '';
-    }, 300);
-  } else {
-    showPage(id);
-  }
+function passGate(){
+  gatePassed=true;
+  localStorage.setItem(todayKey,'passed');
+  const btn=document.getElementById('gate-btn');
+  btn.textContent='✓ CLEARED';btn.disabled=true;btn.style.background='var(--green-mid)';
+  const banner=document.getElementById('gate-passed');
+  banner.style.display='block';
+  banner.scrollIntoView({behavior:'smooth'});
 }
 
-function passGate() {
-  gatePassed = true;
-  const btn = document.getElementById('gate-btn');
-  const passed = document.getElementById('gate-passed');
-  btn.textContent = '✓ CLEARED';
-  btn.style.background = 'var(--green-mid)';
-  btn.style.boxShadow = '0 0 30px rgba(61,138,54,0.8)';
-  btn.disabled = true;
-  passed.style.display = 'block';
-  setTimeout(() => {
-    passed.scrollIntoView({ behavior: 'smooth' });
-  }, 200);
+function requireGate(id){
+  if(!gatePassed){
+    document.getElementById('gate-section').scrollIntoView({behavior:'smooth'});
+    const btn=document.getElementById('gate-btn');
+    btn.style.transform='scale(0.97)';btn.style.boxShadow='0 0 30px rgba(45,107,40,0.9)';
+    setTimeout(()=>{btn.style.transform='';btn.style.boxShadow='';},300);
+  } else showPage(id);
 }
 
-// ── Sidebar ──
-function toggleSidebar() {
-  const sb = document.getElementById('sidebar');
-  const ov = document.getElementById('overlay');
-  const isOpen = sb.classList.contains('open');
-  sb.classList.toggle('open');
-  ov.classList.toggle('visible');
+// NAV
+const goldPages=['trading','handbook','performance','datalog','workflow'];
+function showPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>{n.classList.remove('active');n.classList.remove('active-gold');});
+  const pg=document.getElementById('page-'+id);
+  if(pg)pg.classList.add('active');
+  const t=document.getElementById('topbar-title');
+  t.textContent=id.replace(/-/g,' ').replace(/\b\w/g,c=>c.toUpperCase());
+  t.className=goldPages.includes(id)?'topbar-title gold':'topbar-title';
+  const nav=document.getElementById('nav-'+id);
+  if(nav)nav.classList.add(goldPages.includes(id)?'active-gold':'active');
+  closeSidebar();window.scrollTo(0,0);
 }
 
-function closeSidebar() {
+function toggleDomain(subId,chevId){
+  document.getElementById(subId).classList.toggle('open');
+  document.getElementById(chevId).classList.toggle('open');
+}
+
+function toggleSidebar(){
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('overlay').classList.toggle('visible');
+}
+function closeSidebar(){
   document.getElementById('sidebar').classList.remove('open');
   document.getElementById('overlay').classList.remove('visible');
 }
 
-// ── Checklist ──
-function toggleCheck(item) {
+function toggleCheck(item){
   item.classList.toggle('done');
-  item.querySelector('.check-box').textContent = item.classList.contains('done') ? '✓' : '';
+  item.querySelector('.check-box').textContent=item.classList.contains('done')?'✓':'';
+}
+function resetChecklist(){
+  document.querySelectorAll('.check-item').forEach(i=>{i.classList.remove('done');i.querySelector('.check-box').textContent='';});
 }
 
-function resetChecklist() {
-  document.querySelectorAll('.check-item').forEach(i => {
-    i.classList.remove('done');
-    i.querySelector('.check-box').textContent = '';
-  });
-}
-
-// ── P&L Chart ──
-window.addEventListener('load', () => {
-  const ctx = document.getElementById('pnlChart');
-  if (!ctx) return;
-  new Chart(ctx.getContext('2d'), {
-    type: 'bar',
-    data: {
-      labels: ['Mon', 'Tue', 'Wed', 'Thu'],
-      datasets: [{
-        data: [31.97, -8.21, 22.14, 20.17],
-        backgroundColor: ['rgba(90,184,78,0.5)','rgba(200,64,64,0.5)','rgba(90,184,78,0.5)','rgba(90,184,78,0.5)'],
-        borderColor: ['rgba(90,184,78,1)','rgba(200,64,64,1)','rgba(90,184,78,1)','rgba(90,184,78,1)'],
-        borderWidth: 1,
-        borderRadius: 4
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: true,
-      plugins: {
-        legend: { display: false },
-        tooltip: {
-          callbacks: { label: c => (c.raw >= 0 ? '+' : '') + '$' + c.raw.toFixed(2) }
-        }
-      },
-      scales: {
-        x: { grid: { color: 'rgba(255,255,255,0.03)' }, ticks: { color: '#5a7055', font: { family: 'IBM Plex Mono', size: 10 } } },
-        y: { grid: { color: 'rgba(255,255,255,0.03)' }, ticks: { color: '#5a7055', font: { family: 'IBM Plex Mono', size: 10 }, callback: v => '$' + v } }
-      }
-    }
-  });
+window.addEventListener('load',()=>{
+  const ctx=document.getElementById('pnlChart');
+  if(!ctx)return;
+  new Chart(ctx.getContext('2d'),{type:'bar',data:{labels:['Mon','Tue','Wed','Thu'],datasets:[{data:[31.97,-8.21,22.14,20.17],backgroundColor:['rgba(90,184,78,0.5)','rgba(200,64,64,0.5)','rgba(90,184,78,0.5)','rgba(90,184,78,0.5)'],borderColor:['rgba(90,184,78,1)','rgba(200,64,64,1)','rgba(90,184,78,1)','rgba(90,184,78,1)'],borderWidth:1,borderRadius:4}]},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>(c.raw>=0?'+':'')+'$'+c.raw.toFixed(2)}}},scales:{x:{grid:{color:'rgba(255,255,255,0.03)'},ticks:{color:'#5a7055',font:{family:'IBM Plex Mono',size:10}}},y:{grid:{color:'rgba(255,255,255,0.03)'},ticks:{color:'#5a7055',font:{family:'IBM Plex Mono',size:10},callback:v=>'$'+v}}}}});
 });
 
-// ── PWA Manifest (inline) ──
-const manifest = {
-  name: "Hendry Command Center",
-  short_name: "HCC",
-  start_url: ".",
-  display: "standalone",
-  background_color: "#080c08",
-  theme_color: "#080c08",
-  icons: [{
-    src: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23080c08' rx='20'/><text y='68' x='50' text-anchor='middle' font-size='55' font-family='serif' fill='%2372d464'>H</text></svg>",
-    sizes: "192x192",
-    type: "image/svg+xml"
-  }]
-};
-const blob = new Blob([JSON.stringify(manifest)], {type: 'application/json'});
-document.getElementById('manifest-link').href = URL.createObjectURL(blob);
+// PWA
+const manifest={name:"Hendry Command Center",short_name:"HCC",start_url:".",display:"standalone",background_color:"#080c08",theme_color:"#080c08",icons:[{src:"data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23080c08' rx='20'/><text y='68' x='50' text-anchor='middle' font-size='55' font-family='serif' fill='%2372d464'>H</text></svg>",sizes:"192x192",type:"image/svg+xml"}]};
+const blob=new Blob([JSON.stringify(manifest)],{type:'application/json'});
+document.getElementById('manifest-link').href=URL.createObjectURL(blob);
 </script>
 </body>
 </html>
