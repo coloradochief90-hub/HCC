@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<meta name="theme-color" content="#080c08">
+<meta name="theme-color" content="#111318">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="HCC">
@@ -12,187 +12,219 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
-:root{--bg:#080c08;--surface:#0f140f;--surface2:#141a13;--surface3:#1a2218;--border:#1e2a1c;--border2:#263824;--text:#e8f0e0;--text-muted:#5a7055;--text-dim:#2a3828;--green:#2d6b28;--green-mid:#3d8a36;--green-light:#5ab84e;--green-bright:#72d464;--green-pale:#a8e09a;--green-glow:rgba(90,184,78,0.12);--gold:#b8920a;--gold-light:#d4b030;--gold-bright:#f0cc50;--gold-glow:rgba(240,204,80,0.1);--amber:#c06820;--amber-light:#e08840;--red:#8a2020;--red-light:#c84040;--red-bright:#e06060;--blue:#1a4a6a;--blue-light:#3a7aaa;--blue-bright:#58a6ff;--purple:#4a2880;--purple-light:#7a50c0;--sidebar-w:265px;--topbar-h:52px;}
+:root {
+  /* Base - consistent dark gray */
+  --bg: #111318;
+  --surface: #181c22;
+  --surface2: #1e2330;
+  --surface3: #232838;
+  --border: #2a3040;
+  --border2: #323848;
+  --text: #e8eaf0;
+  --text-muted: #6b7280;
+  --text-dim: #374151;
+
+  /* Default accent (household/neutral) */
+  --accent: #c8d0e0;
+  --accent-dim: #374151;
+  --accent-glow: rgba(200,208,224,0.08);
+
+  /* Person/domain accent palettes — NEON */
+  --david-cmd: #ff6600;      /* neon orange */
+  --david-trading: #88ff00;  /* neon green */
+  --david-photo: #ff1493;    /* neon pink */
+  --david-hrs: #00ccff;      /* neon blue */
+  --david-ventures: #ffaa00; /* neon amber */
+  --david-home: #00ffcc;     /* neon teal */
+  --david-ops: #dd00ff;      /* neon purple */
+  --david-goals: #ffee00;    /* neon gold */
+  --david-roadmap: #ff6600;  /* neon orange-red */
+  --david-hcc: #88ff00;      /* neon lime */
+
+  --taylor-primary: #ff44bb; /* neon pink */
+  --taylor-accent: #bb44ff;  /* neon purple */
+  --adley-primary: #bb44ff;  /* neon purple */
+  --adley-accent: #ff44bb;   /* neon pink */
+  --evie-primary: #ff99cc;   /* neon light pink */
+  --callan-primary: #0099ff; /* neon electric blue */
+  --cooper-primary: #ffee00; /* neon yellow */
+
+  --sidebar-w: 265px;
+  --topbar-h: 52px;
+}
+
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 html{scroll-behavior:smooth;}
 body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;font-size:14px;line-height:1.6;overflow-x:hidden;}
 
 /* SIDEBAR */
-.sidebar{width:var(--sidebar-w);min-height:100vh;background:var(--surface);border-right:1px solid var(--border2);display:flex;flex-direction:column;position:fixed;top:0;left:0;z-index:300;overflow-y:auto;transform:translateX(-100%);transition:transform 0.28s cubic-bezier(0.4,0,0.2,1);}
+.sidebar{width:var(--sidebar-w);height:100vh;background:var(--surface);border-right:1px solid var(--border2);display:flex;flex-direction:column;position:fixed;top:0;left:0;z-index:300;overflow-y:auto;overflow-x:hidden;transform:translateX(-100%);transition:transform 0.28s cubic-bezier(0.4,0,0.2,1);}
 .sidebar.open{transform:translateX(0);}
-.sidebar-logo{padding:22px 20px 16px;border-bottom:1px solid var(--border2);background:linear-gradient(180deg,#0e180c 0%,var(--surface) 100%);}
-.sidebar-logo .mark{font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:3px;color:var(--green-bright);line-height:1;text-shadow:0 0 16px rgba(90,184,78,0.4);}
-.sidebar-logo .sub{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--text-muted);letter-spacing:2px;margin-top:3px;text-transform:uppercase;}
+.sidebar-logo{padding:20px 20px 14px;border-bottom:1px solid var(--border2);}
+.sidebar-logo .mark{font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:3px;color:#88ff00;line-height:1;text-shadow:0 0 16px rgba(0,255,136,0.4);}
+.sidebar-logo .sub{font-family:'IBM Plex Mono',monospace;font-size:9px;color:#ff44bb;letter-spacing:2px;margin-top:3px;text-transform:uppercase;text-shadow:0 0 10px rgba(255,68,187,0.4);}
 .nav-section{padding:10px 0 2px;}
-.nav-label{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-dim);padding:0 18px 5px;}
-.nav-item{display:flex;align-items:center;gap:10px;padding:9px 18px;color:var(--text-muted);font-size:13px;cursor:pointer;border-left:2px solid transparent;transition:all 0.15s;user-select:none;}
-.nav-item:hover{color:var(--text);background:rgba(90,184,78,0.04);}
-.nav-item.active{color:var(--green-bright);border-left-color:var(--green-bright);background:var(--green-glow);font-weight:500;}
-.nav-item.active-gold{color:var(--gold-bright);border-left-color:var(--gold-bright);background:var(--gold-glow);font-weight:500;}
-.nav-item.domain-parent{font-weight:500;color:var(--text);}
+.nav-label{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#00ccff;padding:0 18px 5px;}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 18px;color:#a0a8c0;font-size:13px;cursor:pointer;border-left:2px solid transparent;transition:all 0.15s;user-select:none;}
+.nav-item:hover{color:#e0e8ff;background:rgba(255,255,255,0.05);}
+.nav-item.active{border-left-color:var(--accent);background:var(--accent-glow);font-weight:500;color:#ffffff;}
+.nav-dot{width:6px;height:6px;border-radius:50%;background:var(--text-dim);flex-shrink:0;transition:background 0.15s;}
+.nav-item.active .nav-dot{background:var(--accent);}
+.nav-item.domain-parent{font-weight:600;color:#d0d8f0;}
 .nav-sub{display:none;flex-direction:column;}
 .nav-sub.open{display:flex;}
 .nav-sub .nav-item{padding:7px 18px 7px 36px;font-size:12px;}
-.nav-dot{width:6px;height:6px;border-radius:50%;background:var(--text-dim);flex-shrink:0;}
-.nav-item.active .nav-dot{background:var(--green-bright);}
-.nav-item.active-gold .nav-dot{background:var(--gold-bright);}
-.dot-green{background:var(--green-bright)!important;}.dot-gold{background:var(--gold-bright)!important;}.dot-blue{background:var(--blue-bright)!important;}.dot-red{background:var(--red-bright)!important;}.dot-amber{background:var(--amber-light)!important;}.dot-purple{background:var(--purple-light)!important;}
+.nav-sub .nav-sub .nav-item{padding:6px 18px 6px 52px;font-size:11px;}
 .chevron{margin-left:auto;font-size:10px;color:var(--text-dim);transition:transform 0.2s;}
 .chevron.open{transform:rotate(90deg);}
-.sidebar-footer{margin-top:auto;padding:12px 18px;border-top:1px solid var(--border);display:flex;gap:8px;}
+.sidebar-footer{flex-shrink:0;padding:12px 18px;border-top:1px solid var(--border);display:flex;gap:8px;}
 .ai-btn{flex:1;padding:8px 6px;border-radius:7px;border:1px solid var(--border2);background:var(--surface2);color:var(--text-muted);font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:1px;cursor:pointer;text-align:center;text-decoration:none;display:flex;flex-direction:column;align-items:center;gap:3px;transition:all 0.15s;}
-.ai-btn:hover{border-color:var(--green-mid);color:var(--green-bright);}
-.ai-btn.gemini:hover{border-color:var(--blue-light);color:var(--blue-bright);}
+.ai-btn:hover{color:var(--text);border-color:var(--border2);}
 .ai-btn-icon{font-size:14px;}
 
 /* OVERLAY */
-.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.65);z-index:250;}
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:250;}
 .overlay.visible{display:block;}
 
 /* MAIN */
-.main{flex:1;min-height:100vh;}
+.main{flex:1;min-height:100vh;overflow-x:hidden;}
 
 /* TOPBAR */
-.topbar{position:sticky;top:0;height:var(--topbar-h);background:linear-gradient(180deg,#0e180c 0%,var(--surface) 100%);border-bottom:1px solid var(--border2);padding:0 16px;display:flex;align-items:center;gap:12px;z-index:100;box-shadow:0 2px 16px rgba(0,0,0,0.4);}
+.topbar{position:sticky;top:0;height:var(--topbar-h);background:var(--surface);border-bottom:1px solid var(--border2);padding:0 16px;display:flex;align-items:center;gap:12px;z-index:100;}
 .menu-btn{background:none;border:1px solid var(--border2);color:var(--text-muted);width:34px;height:34px;border-radius:7px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;transition:all 0.15s;flex-shrink:0;}
-.menu-btn:hover{border-color:var(--green-mid);color:var(--green-bright);}
-.topbar-title{font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:2px;color:var(--green-bright);}
-.topbar-title.gold{color:var(--gold-bright);}
+.menu-btn:hover{color:var(--text);border-color:var(--border2);}
+.topbar-title{font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:2px;color:var(--accent);}
 .topbar-date{margin-left:auto;font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text-dim);}
 
 /* PAGES */
 .page{display:none;}
 .page.active{display:block;}
 
+/* DAILY LOG FORMS */
+.log-label{display:block;font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-muted);margin-bottom:4px;}
+.log-input{width:100%;background:var(--surface2);border:1px solid var(--border2);border-radius:6px;padding:8px 10px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none;transition:border-color 0.15s;}
+.log-input:focus{border-color:var(--accent);}
+.log-select{width:100%;background:var(--surface2);border:1px solid var(--border2);border-radius:6px;padding:8px 10px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none;appearance:none;}
+.log-textarea{width:100%;background:var(--surface2);border:1px solid var(--border2);border-radius:6px;padding:8px 10px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:12px;outline:none;resize:vertical;min-height:52px;line-height:1.5;}
+.log-textarea:focus{border-color:var(--accent);}
+.log-submit-btn{width:100%;padding:12px;background:transparent;border:1px solid;border-radius:8px;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;cursor:pointer;transition:all 0.15s;margin-top:4px;}
+.log-submit-btn:hover{opacity:0.8;transform:translateY(-1px);}
+.toggle-btn{padding:9px 6px;background:var(--surface2);border:1px solid var(--border2);border-radius:6px;color:var(--text-muted);font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:1px;cursor:pointer;transition:all 0.15s;text-align:center;}
+.toggle-btn.on{background:rgba(0,204,255,0.12);border-color:#00ccff;color:#00ccff;font-weight:600;}
+.meter-row-dl{display:flex;align-items:center;gap:8px;margin-bottom:7px;}
+.meter-row-dl:last-child{margin-bottom:0;}
+
 /* DESKTOP */
-@media(min-width:768px){.sidebar{transform:translateX(0)!important;position:fixed;}.main{margin-left:var(--sidebar-w);}.menu-btn{display:none;}.overlay{display:none!important;}}
+@media(min-width:768px){.sidebar{transform:translateX(0)!important;}.main{margin-left:var(--sidebar-w);}.menu-btn{display:none;}.overlay{display:none!important;}}
 
-/* QUOTE */
-.quote-section{background:linear-gradient(180deg,#0a120a 0%,var(--bg) 100%);border-bottom:1px solid var(--border2);padding:20px 16px 16px;text-align:center;}
-.quote-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--text-dim);margin-bottom:8px;}
-.quote-text{font-size:14px;font-weight:300;color:var(--green-pale);line-height:1.7;font-style:italic;max-width:360px;margin:0 auto 6px;}
-.quote-attr{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text-muted);letter-spacing:1px;}
+/* UNIVERSAL COMPONENTS */
+.page-content{padding:16px;}
+.page-header{background:var(--surface);border:1px solid var(--border2);border-radius:10px;padding:16px;margin-bottom:14px;display:flex;align-items:center;gap:12px;border-left:3px solid var(--accent);}
+.page-icon{font-size:28px;}
+.page-title{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px;color:var(--accent);}
+.page-sub{font-size:11px;color:var(--text-muted);margin-top:2px;}
 
-/* SECTION HELPERS */
-.briefing-section{padding:14px 16px 0;}
-.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
-.section-title{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--text-muted);}
-.section-badge{font-family:'IBM Plex Mono',monospace;font-size:9px;padding:2px 8px;border-radius:10px;letter-spacing:1px;}
-.badge-green{background:rgba(90,184,78,0.1);color:var(--green-bright);border:1px solid rgba(90,184,78,0.2);}
-.badge-gold{background:rgba(240,204,80,0.1);color:var(--gold-bright);border:1px solid rgba(240,204,80,0.2);}
-.badge-red{background:rgba(200,64,64,0.1);color:var(--red-bright);border:1px solid rgba(200,64,64,0.2);}
-.badge-blue{background:rgba(58,122,170,0.1);color:var(--blue-bright);border:1px solid rgba(58,122,170,0.2);}
+.section-hdr{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid var(--border);}
 
-/* PERSONAL STREAKS */
+.stat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:14px;}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px;}
+.stat-label{font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-dim);margin-bottom:5px;}
+.stat-value{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:1px;line-height:1;color:var(--accent);}
+.stat-value.green{color:#88ff00;}.stat-value.red{color:#ff0000;}.stat-value.blue{color:#00ccff;}.stat-value.gold{color:#ffee00;}
+.stat-sub{font-size:10px;color:var(--text-dim);margin-top:3px;}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:12px;}
+
+/* STREAKS */
 .streak-grid{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--border2);border-radius:10px;overflow:hidden;background:var(--surface);margin-bottom:10px;}
 .streak-block{padding:10px 4px;text-align:center;border-right:1px solid var(--border);}
 .streak-block:last-child{border-right:none;}
-.streak-label{font-family:'IBM Plex Mono',monospace;font-size:7px;letter-spacing:1px;text-transform:uppercase;color:var(--text-muted);margin-bottom:3px;white-space:nowrap;}
-.streak-val{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:1px;line-height:1;}
-.streak-val.green{color:var(--green-bright);text-shadow:0 0 12px rgba(90,184,78,0.4);}
-.streak-val.gold{color:var(--gold-bright);}
-.streak-val.red{color:var(--red-bright);}
-.streak-val.blue{color:var(--blue-bright);}
+.streak-label{font-family:'IBM Plex Mono',monospace;font-size:7px;letter-spacing:1px;text-transform:uppercase;color:var(--text-muted);margin-bottom:3px;}
+.streak-val{font-family:'Bebas Neue',sans-serif;font-size:24px;line-height:1;color:var(--accent);}
+.streak-val.g{color:#88ff00;}.streak-val.r{color:#ff0000;}.streak-val.b{color:#00ccff;}.streak-val.gold{color:#ffee00;}
 .streak-sub{font-size:8px;color:var(--text-dim);margin-top:1px;}
 
 /* TRADING SNAPSHOT */
-.trading-snapshot{background:var(--surface);border:1px solid var(--border2);border-radius:10px;overflow:hidden;margin-bottom:10px;}
-.snapshot-header{padding:10px 14px 8px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
-.snapshot-label{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-dim);}
-.condition-pill{font-family:'IBM Plex Mono',monospace;font-size:9px;padding:2px 8px;border-radius:10px;letter-spacing:1px;}
-.pill-bear{background:rgba(200,64,64,0.12);color:var(--red-bright);border:1px solid rgba(200,64,64,0.2);}
-.pill-bull{background:rgba(90,184,78,0.12);color:var(--green-bright);border:1px solid rgba(90,184,78,0.2);}
-.snapshot-grid{display:grid;grid-template-columns:repeat(3,1fr);}
+.t-snapshot{background:var(--surface);border:1px solid var(--border2);border-radius:10px;overflow:hidden;margin-bottom:10px;}
+.t-snap-hdr{padding:10px 14px 8px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.t-snap-lbl{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-dim);}
+.cond-pill{font-family:'IBM Plex Mono',monospace;font-size:9px;padding:2px 8px;border-radius:10px;letter-spacing:1px;}
+.pill-bear{background:rgba(255,0,0,0.12);color:#ff0000;border:1px solid rgba(255,0,0,0.2);}
+.pill-bull{background:rgba(34,197,94,0.12);color:#22c55e;border:1px solid rgba(34,197,94,0.2);}
+.snap-grid{display:grid;grid-template-columns:repeat(3,1fr);}
 .snap-block{padding:10px 6px;text-align:center;border-right:1px solid var(--border);border-bottom:1px solid var(--border);}
 .snap-block:nth-child(3n){border-right:none;}
 .snap-block:nth-child(4),.snap-block:nth-child(5),.snap-block:nth-child(6){border-bottom:none;}
 .snap-lbl{font-family:'IBM Plex Mono',monospace;font-size:7px;letter-spacing:1px;text-transform:uppercase;color:var(--text-muted);margin-bottom:3px;}
 .snap-val{font-family:'Bebas Neue',sans-serif;font-size:20px;line-height:1;}
-.snap-val.green{color:var(--green-bright);}.snap-val.gold{color:var(--gold-bright);}.snap-val.red{color:var(--red-bright);}.snap-val.blue{color:var(--blue-bright);}
+.snap-val.g{color:#88ff00;}.snap-val.r{color:#ff0000;}.snap-val.gold{color:#ffee00;}
 
 /* FAILURE TRACKER */
-.failure-card{background:var(--surface);border:1px solid rgba(200,64,64,0.2);border-radius:10px;overflow:hidden;margin-bottom:10px;}
-.failure-header{padding:9px 14px;border-bottom:1px solid var(--border);background:rgba(200,64,64,0.05);}
-.failure-header-label{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--red-bright);}
-.failure-row{padding:10px 14px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:10px;}
-.failure-row:last-child{border-bottom:none;}
-.failure-tag{font-family:'IBM Plex Mono',monospace;font-size:8px;padding:2px 6px;border-radius:3px;letter-spacing:1px;flex-shrink:0;margin-top:2px;white-space:nowrap;}
-.tag-longstanding{background:rgba(200,64,64,0.15);color:var(--red-bright);}
-.tag-week{background:rgba(192,104,32,0.15);color:var(--amber-light);}
-.tag-yesterday{background:rgba(240,204,80,0.1);color:var(--gold-bright);}
-.failure-text{font-size:12px;color:var(--text-muted);line-height:1.5;flex:1;}
+.fail-card{background:var(--surface);border:1px solid rgba(255,0,0,0.2);border-radius:10px;overflow:hidden;margin-bottom:10px;}
+.fail-hdr{padding:9px 14px;border-bottom:1px solid var(--border);background:rgba(255,0,0,0.05);}
+.fail-hdr-lbl{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#ff0000;}
+.fail-row{padding:10px 14px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:10px;}
+.fail-row:last-child{border-bottom:none;}
+.fail-tag{font-family:'IBM Plex Mono',monospace;font-size:8px;padding:2px 6px;border-radius:3px;letter-spacing:1px;flex-shrink:0;margin-top:2px;white-space:nowrap;}
+.tag-ls{background:rgba(255,0,0,0.15);color:#ff0000;}
+.tag-wk{background:rgba(249,115,22,0.15);color:#f97316;}
+.tag-yd{background:rgba(234,179,8,0.15);color:#eab308;}
+.fail-text{font-size:12px;color:var(--text-muted);line-height:1.5;flex:1;}
 
 /* DOMAIN CARDS */
-.domains-section{padding:0 16px 14px;}
+.domain-cards{padding:0 0 14px;}
 .domain-card{background:var(--surface);border:1px solid var(--border2);border-radius:10px;padding:12px 14px;margin-bottom:8px;cursor:pointer;transition:all 0.15s;}
-.domain-card:hover{border-color:var(--green-mid);background:var(--surface2);}
+.domain-card:hover{background:var(--surface2);border-color:var(--border2);}
 .domain-card-top{display:flex;align-items:flex-start;gap:10px;margin-bottom:8px;}
 .domain-icon{font-size:18px;flex-shrink:0;margin-top:1px;}
 .domain-info{flex:1;min-width:0;}
 .domain-name{font-size:13px;font-weight:500;color:var(--text);margin-bottom:2px;}
 .domain-focus{font-size:11px;color:var(--text-muted);line-height:1.4;}
 .domain-status{flex-shrink:0;font-family:'IBM Plex Mono',monospace;font-size:8px;padding:2px 6px;border-radius:3px;letter-spacing:1px;margin-top:2px;}
-.status-active{background:rgba(90,184,78,0.1);color:var(--green-bright);}
-.status-hold{background:rgba(90,130,90,0.08);color:var(--text-muted);}
-.status-building{background:rgba(240,204,80,0.1);color:var(--gold-bright);}
-.status-phase{background:rgba(58,122,170,0.1);color:var(--blue-bright);}
-.domain-progress{display:flex;align-items:center;gap:8px;}
-.progress-track{flex:1;height:4px;background:var(--surface3);border-radius:2px;overflow:hidden;}
-.progress-fill{height:100%;border-radius:2px;background:var(--green-mid);transition:width 0.4s ease;}
-.progress-fraction{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--text-muted);white-space:nowrap;}
-.progress-pct{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--green-bright);white-space:nowrap;min-width:30px;text-align:right;}
+.s-active{background:rgba(0,255,136,0.1);color:#88ff00;}
+.s-hold{background:rgba(107,114,128,0.1);color:var(--text-muted);}
+.s-building{background:rgba(234,179,8,0.1);color:#eab308;}
+.s-phase{background:rgba(0,204,255,0.1);color:#00ccff;}
+.prog-row{display:flex;align-items:center;gap:8px;}
+.prog-track{flex:1;height:4px;background:var(--surface3);border-radius:2px;overflow:hidden;}
+.prog-fill{height:100%;border-radius:2px;background:var(--accent);transition:width 0.4s;}
+.prog-frac{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--text-muted);white-space:nowrap;}
+.prog-pct{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--accent);white-space:nowrap;min-width:30px;text-align:right;}
 
 /* GATE */
-.gate-passed-banner{display:none;background:rgba(90,184,78,0.08);border:1px solid var(--green-mid);border-radius:8px;padding:10px 16px;font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--green-bright);letter-spacing:1px;text-align:center;margin:10px 16px;}
-.gate-section{padding:18px 16px 32px;text-align:center;border-top:1px solid var(--border2);background:linear-gradient(180deg,var(--bg) 0%,#0a120a 100%);}
+.gate-passed-banner{display:none;background:rgba(34,197,94,0.08);border:1px solid #88ff00;border-radius:8px;padding:10px 16px;font-family:'IBM Plex Mono',monospace;font-size:10px;color:#88ff00;letter-spacing:1px;text-align:center;margin:10px 16px;}
+.gate-section{padding:18px 16px 32px;text-align:center;border-top:1px solid var(--border2);}
 .gate-text{font-size:12px;color:var(--text-muted);margin-bottom:14px;line-height:1.6;}
-.gate-btn{background:var(--green);border:1px solid var(--green-mid);color:var(--green-bright);font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:3px;padding:14px 40px;border-radius:10px;cursor:pointer;width:100%;max-width:320px;transition:all 0.2s;box-shadow:0 0 20px rgba(45,107,40,0.4);}
-.gate-btn:hover{background:var(--green-mid);box-shadow:0 0 30px rgba(61,138,54,0.6);transform:translateY(-1px);}
-.gate-btn:disabled{opacity:0.7;cursor:default;transform:none;}
-
-/* DOMAIN INNER PAGES */
-.domain-page{padding:16px;}
-.domain-page-header{background:linear-gradient(135deg,var(--surface),var(--surface2));border:1px solid var(--border2);border-radius:10px;padding:16px;margin-bottom:14px;display:flex;align-items:center;gap:12px;}
-.domain-page-icon{font-size:28px;}
-.domain-page-title{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px;color:var(--green-bright);}
-.domain-page-title.gold{color:var(--gold-bright);}
-.domain-page-sub{font-size:11px;color:var(--text-muted);margin-top:2px;}
-
-/* STATS */
-.stat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:14px;}
-.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px;}
-.stat-label{font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-dim);margin-bottom:5px;}
-.stat-value{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:1px;line-height:1;}
-.stat-value.gold{color:var(--gold-bright);}.stat-value.green{color:var(--green-bright);}.stat-value.red{color:var(--red-bright);}.stat-value.blue{color:var(--blue-bright);}
-.stat-sub{font-size:10px;color:var(--text-dim);margin-top:3px;}
+.gate-btn{background:rgba(34,197,94,0.15);border:1px solid #88ff00;color:#88ff00;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:3px;padding:14px 40px;border-radius:10px;cursor:pointer;width:100%;max-width:320px;transition:all 0.2s;}
+.gate-btn:hover{background:rgba(0,255,136,0.2);transform:translateY(-1px);}
+.gate-btn:disabled{opacity:0.6;cursor:default;transform:none;}
 
 /* CHECKLIST */
-.t-section-title{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-dim);margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid var(--border);}
 .checklist{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:14px;}
 .check-item{display:flex;align-items:center;gap:10px;padding:11px 14px;border-bottom:1px solid var(--border);cursor:pointer;transition:background 0.12s;}
 .check-item:last-child{border-bottom:none;}
 .check-item:hover{background:rgba(255,255,255,0.02);}
 .check-item.done{opacity:0.5;}
 .check-box{width:17px;height:17px;border-radius:4px;border:1.5px solid var(--border2);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:10px;transition:all 0.12s;}
-.check-item.done .check-box{background:var(--green-mid);border-color:var(--green-mid);color:#000;}
+.check-item.done .check-box{background:#88ff00;border-color:#88ff00;color:#000;}
 .check-text{font-size:12px;color:var(--text);flex:1;}
 .check-item.done .check-text{text-decoration:line-through;color:var(--text-muted);}
 .check-tag{font-family:'IBM Plex Mono',monospace;font-size:8px;padding:2px 5px;border-radius:3px;letter-spacing:1px;}
-.tag-gemini{background:rgba(58,122,170,0.12);color:var(--blue-bright);}
-.tag-david{background:rgba(240,204,80,0.1);color:var(--gold-bright);}
+.tag-gemini{background:rgba(0,204,255,0.12);color:#00ccff;}
+.tag-david{background:rgba(249,115,22,0.12);color:#f97316;}
 .reset-btn{background:none;border:1px solid var(--border);color:var(--text-dim);font-family:'IBM Plex Mono',monospace;font-size:9px;padding:4px 10px;border-radius:5px;cursor:pointer;transition:all 0.15s;letter-spacing:1px;margin-bottom:8px;display:block;margin-left:auto;}
-.reset-btn:hover{border-color:var(--gold);color:var(--gold-bright);}
+.reset-btn:hover{border-color:var(--accent);color:var(--accent);}
 
 /* CHART */
 .chart-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:14px;}
-.chart-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.chart-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
 .chart-title{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-dim);}
-.chart-badge{font-family:'IBM Plex Mono',monospace;font-size:10px;padding:2px 8px;border-radius:4px;background:rgba(90,184,78,0.1);color:var(--green-bright);}
+.chart-badge{font-family:'IBM Plex Mono',monospace;font-size:10px;padding:2px 8px;border-radius:4px;background:rgba(0,255,136,0.1);color:#88ff00;}
 
 /* LINK GRID */
 .link-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:14px;}
 .link-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px;cursor:pointer;transition:all 0.15s;}
-.link-card:hover{border-color:var(--gold);background:var(--gold-glow);}
+.link-card:hover{border-color:var(--accent);background:var(--accent-glow);}
 .link-icon{font-size:18px;margin-bottom:5px;}
 .link-title{font-size:12px;font-weight:500;color:var(--text);}
 .link-sub{font-size:10px;color:var(--text-dim);margin-top:1px;}
@@ -202,7 +234,38 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .stats-table th{font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:1px;text-transform:uppercase;color:var(--text-dim);text-align:left;padding:8px 12px;border-bottom:1px solid var(--border);}
 .stats-table td{padding:9px 12px;border-bottom:1px solid var(--border);color:var(--text-muted);}
 .stats-table tr:last-child td{border-bottom:none;}
-.stats-table td.green{color:var(--green-bright);}.stats-table td.red{color:var(--red-bright);}.stats-table td.gold{color:var(--gold-bright);}
+.stats-table td.g{color:#88ff00;}.stats-table td.r{color:#ff0000;}.stats-table td.gold{color:#ffee00;}
+
+/* HCC COMPLETION TASK LIST */
+.phase-block{margin-bottom:20px;}
+.phase-title{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;color:var(--accent);margin-bottom:8px;padding:8px 14px;background:var(--surface);border:1px solid var(--border2);border-radius:8px;border-left:3px solid var(--accent);}
+.task-item{display:flex;align-items:flex-start;gap:10px;padding:9px 14px;background:var(--surface);border-bottom:1px solid var(--border);cursor:pointer;transition:background 0.12s;}
+.task-item:first-of-type{border-top:1px solid var(--border);border-radius:8px 8px 0 0;}
+.task-item:last-of-type{border-radius:0 0 8px 8px;}
+.task-item:hover{background:var(--surface2);}
+.task-item.done{opacity:0.45;}
+.task-box{width:16px;height:16px;border-radius:3px;border:1.5px solid var(--border2);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;font-size:9px;transition:all 0.12s;}
+.task-item.done .task-box{background:var(--accent);border-color:var(--accent);color:#000;}
+.task-text{font-size:12px;color:var(--text);flex:1;line-height:1.4;}
+.task-item.done .task-text{text-decoration:line-through;color:var(--text-muted);}
+.task-tag{font-family:'IBM Plex Mono',monospace;font-size:8px;padding:1px 5px;border-radius:3px;letter-spacing:1px;white-space:nowrap;margin-top:1px;}
+.tt-done{background:rgba(0,255,136,0.1);color:#88ff00;}
+.tt-pending{background:rgba(234,179,8,0.1);color:#eab308;}
+.tt-next{background:rgba(249,115,22,0.12);color:#f97316;}
+
+/* QUOTE */
+.quote-section{background:var(--surface);border-bottom:1px solid var(--border2);padding:18px 16px 14px;text-align:center;}
+.quote-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--text-dim);margin-bottom:8px;}
+.quote-text{font-size:14px;font-weight:300;color:var(--text);line-height:1.7;font-style:italic;max-width:360px;margin:0 auto 6px;opacity:0.85;}
+.quote-attr{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text-muted);letter-spacing:1px;}
+
+/* MACRO BARS */
+.macro-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+.macro-row:last-child{margin-bottom:0;}
+.macro-name{font-size:11px;color:var(--text-muted);width:60px;flex-shrink:0;}
+.macro-track{flex:1;height:5px;background:var(--surface3);border-radius:2px;overflow:hidden;}
+.macro-fill{height:100%;border-radius:2px;}
+.macro-nums{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--text-muted);width:80px;text-align:right;flex-shrink:0;}
 
 /* PLACEHOLDER */
 .placeholder{text-align:center;padding:60px 20px;color:var(--text-dim);}
@@ -210,6 +273,23 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .placeholder-title{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:2px;color:var(--text-muted);margin-bottom:8px;}
 .placeholder-sub{font-size:12px;line-height:1.7;}
 .ph-phase{display:inline-block;margin-top:14px;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2px;padding:4px 12px;border-radius:4px;text-transform:uppercase;}
+
+/* SECTION BADGE */
+.sec-badge{font-family:'IBM Plex Mono',monospace;font-size:9px;padding:2px 8px;border-radius:10px;letter-spacing:1px;}
+.badge-green{background:rgba(0,255,136,0.1);color:#88ff00;border:1px solid rgba(34,197,94,0.2);}
+.badge-gold{background:rgba(234,179,8,0.1);color:#eab308;border:1px solid rgba(234,179,8,0.2);}
+.badge-red{background:rgba(255,0,0,0.1);color:#ff0000;border:1px solid rgba(255,0,0,0.2);}
+.badge-blue{background:rgba(0,204,255,0.1);color:#00ccff;border:1px solid rgba(0,204,255,0.2);}
+.section-header-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
+.section-lbl{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--text-muted);}
+
+/* FAMILY BRIEFING */
+.family-event-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px;display:flex;align-items:flex-start;gap:10px;}
+.event-time{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--accent);white-space:nowrap;min-width:46px;margin-top:1px;}
+.event-info{flex:1;}
+.event-title{font-size:13px;color:var(--text);}
+.event-sub{font-size:11px;color:var(--text-muted);margin-top:2px;}
+.event-person{font-family:'IBM Plex Mono',monospace;font-size:8px;padding:1px 5px;border-radius:3px;margin-top:4px;display:inline-block;}
 </style>
 </head>
 <body>
@@ -217,57 +297,80 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 <nav class="sidebar" id="sidebar">
   <div class="sidebar-logo">
     <div class="mark">HENDRY COMMAND CENTER</div>
-    <div class="sub">Life Operating System</div>
+    <div class="sub">Family Operating System</div>
   </div>
   <div class="nav-section">
-    <div class="nav-label">Dashboard</div>
-    <div class="nav-item active" onclick="showPage('briefing')" id="nav-briefing"><span class="nav-dot dot-green"></span>Daily Briefing</div>
+    <div class="nav-label">Household</div>
+    <div class="nav-item" onclick="nav('briefing','#ff6600')" id="nav-briefing"><span class="nav-dot" style="background:#ff6600"></span>Daily Briefing</div>
+    <div class="nav-item" onclick="nav('calendar','#00ccff')" id="nav-calendar"><span class="nav-dot" style="background:#0088ff"></span>Calendar</div>
+    <div class="nav-item domain-parent" onclick="toggleDomain('fin-sub','chev-fin')"><span class="nav-dot" style="background:#00ff88"></span>Finances<span class="chevron" id="chev-fin">›</span></div>
+    <div class="nav-sub" id="fin-sub">
+      <div class="nav-item" onclick="nav('finances','#00ff88')"><span class="nav-dot"></span>Overview</div>
+      <div class="nav-item" onclick="nav('entity','#00ff88')"><span class="nav-dot"></span>Entity</div>
+    </div>
   </div>
   <div class="nav-section">
-    <div class="nav-label">Domains</div>
-    <div class="nav-item domain-parent" onclick="toggleDomain('david-sub','chev-david')"><span class="nav-dot dot-green"></span>David<span class="chevron" id="chev-david">›</span></div>
+    <div class="nav-label">Family</div>
+    <!-- DAVID -->
+    <div class="nav-item domain-parent" onclick="toggleDomain('david-sub','chev-david')"><span class="nav-dot" style="background:#88ff00"></span>David<span class="chevron" id="chev-david">›</span></div>
     <div class="nav-sub" id="david-sub">
-      <div class="nav-item" onclick="showPage('david')"><span class="nav-dot"></span>Overview</div>
-      <div class="nav-item" onclick="showPage('david-fitness')"><span class="nav-dot"></span>Fitness</div>
-      <div class="nav-item" onclick="showPage('david-diet')"><span class="nav-dot"></span>Diet & Nutrition</div>
-      <div class="nav-item" onclick="showPage('david-mental')"><span class="nav-dot"></span>Mental & Emotional</div>
+      <div class="nav-item" onclick="nav('david-cmd','#ff6600')"><span class="nav-dot" style="background:#ff6600"></span>Command Center</div>
+      <div class="nav-item" style="padding-left:36px;" onclick="nav('daily-log','#ff0000')"><span class="nav-dot" style="background:#ff0000"></span>Daily Log</div>
+      <div class="nav-item domain-parent" style="padding-left:36px;" onclick="toggleDomain('trading-sub','chev-trading')"><span class="nav-dot" style="background:#88ff00"></span>Trading<span class="chevron" id="chev-trading">›</span></div>
+      <div class="nav-sub" id="trading-sub">
+        <div class="nav-item" style="padding-left:52px;" onclick="nav('trading','#88ff00')"><span class="nav-dot" style="background:#88ff00"></span>Command Center</div>
+        <div class="nav-item" style="padding-left:52px;" onclick="nav('handbook','#88ff00')"><span class="nav-dot" style="background:#ffee00"></span>Handbook</div>
+        <div class="nav-item" style="padding-left:52px;" onclick="nav('performance','#88ff00')"><span class="nav-dot" style="background:#00ccff"></span>Performance</div>
+        <div class="nav-item" style="padding-left:52px;" onclick="nav('datalog','#88ff00')"><span class="nav-dot" style="background:#ff0000"></span>Data Log</div>
+        <div class="nav-item" style="padding-left:52px;" onclick="nav('workflow','#88ff00')"><span class="nav-dot"></span>Workflow & Protocols</div>
+      </div>
+      <div class="nav-item" style="padding-left:36px;" onclick="nav('photography','#ff1493')"><span class="nav-dot" style="background:#ff1493"></span>Taylor Hendry Photography</div>
+      <div class="nav-item" style="padding-left:36px;" onclick="nav('hrs','#00ccff')"><span class="nav-dot" style="background:#00ccff"></span>Hendry Residential</div>
+      <div class="nav-item" style="padding-left:36px;" onclick="nav('ventures','#ffaa00')"><span class="nav-dot" style="background:#ffaa00"></span>New Ventures</div>
+      <div class="nav-item" style="padding-left:36px;" onclick="nav('homebuild','#00ffcc')"><span class="nav-dot" style="background:#00ffcc"></span>Home / Build</div>
+      <div class="nav-item" style="padding-left:36px;" onclick="nav('dailyops','#dd00ff')"><span class="nav-dot" style="background:#dd00ff"></span>Daily Operations</div>
+      <div class="nav-item" style="padding-left:36px;" onclick="nav('lifegoals','#ffee00')"><span class="nav-dot" style="background:#ffee00"></span>Life Goals</div>
+      <div class="nav-item" style="padding-left:36px;" onclick="nav('roadmap','#ff6600')"><span class="nav-dot" style="background:#ff6600"></span>Life Roadmap</div>
+      <div class="nav-item" style="padding-left:36px;" onclick="nav('hcc','#88ff00')"><span class="nav-dot" style="background:#88ff00"></span>HCC Completion</div>
     </div>
-    <div class="nav-item domain-parent" onclick="toggleDomain('family-sub','chev-family')"><span class="nav-dot dot-purple"></span>Family & Growth<span class="chevron" id="chev-family">›</span></div>
-    <div class="nav-sub" id="family-sub">
-      <div class="nav-item" onclick="showPage('family')"><span class="nav-dot"></span>Overview</div>
-      <div class="nav-item" onclick="showPage('family-taylor')"><span class="nav-dot"></span>Taylor</div>
-      <div class="nav-item" onclick="showPage('family-kids')"><span class="nav-dot"></span>Children</div>
+    <!-- TAYLOR -->
+    <div class="nav-item domain-parent" onclick="toggleDomain('taylor-sub','chev-taylor')"><span class="nav-dot" style="background:#ff44bb"></span>Taylor<span class="chevron" id="chev-taylor">›</span></div>
+    <div class="nav-sub" id="taylor-sub">
+      <div class="nav-item" onclick="nav('taylor','#ff44bb')"><span class="nav-dot"></span>Overview</div>
     </div>
-    <div class="nav-item domain-parent" onclick="toggleDomain('trading-sub','chev-trading')"><span class="nav-dot dot-gold"></span>Trading<span class="chevron" id="chev-trading">›</span></div>
-    <div class="nav-sub" id="trading-sub">
-      <div class="nav-item" onclick="showPage('trading')"><span class="nav-dot dot-gold"></span>Command Center</div>
-      <div class="nav-item" onclick="showPage('handbook')"><span class="nav-dot"></span>Handbook</div>
-      <div class="nav-item" onclick="showPage('performance')"><span class="nav-dot"></span>Performance</div>
-      <div class="nav-item" onclick="showPage('datalog')"><span class="nav-dot"></span>Data Log</div>
-      <div class="nav-item" onclick="showPage('workflow')"><span class="nav-dot"></span>Workflow & Protocols</div>
+    <!-- ADLEY -->
+    <div class="nav-item domain-parent" onclick="toggleDomain('adley-sub','chev-adley')"><span class="nav-dot" style="background:#bb44ff"></span>Adley<span class="chevron" id="chev-adley">›</span></div>
+    <div class="nav-sub" id="adley-sub">
+      <div class="nav-item" onclick="nav('adley','#bb44ff')"><span class="nav-dot"></span>Overview</div>
     </div>
-    <div class="nav-item domain-parent" onclick="toggleDomain('finances-sub','chev-finances')"><span class="nav-dot dot-green"></span>Finances<span class="chevron" id="chev-finances">›</span></div>
-    <div class="nav-sub" id="finances-sub">
-      <div class="nav-item" onclick="showPage('finances')"><span class="nav-dot"></span>Overview</div>
-      <div class="nav-item" onclick="showPage('finances-entity')"><span class="nav-dot"></span>Entity</div>
+    <!-- EVIE -->
+    <div class="nav-item domain-parent" onclick="toggleDomain('evie-sub','chev-evie')"><span class="nav-dot" style="background:#ff99cc"></span>Evie<span class="chevron" id="chev-evie">›</span></div>
+    <div class="nav-sub" id="evie-sub">
+      <div class="nav-item" onclick="nav('evie','#ff99cc')"><span class="nav-dot"></span>Overview</div>
     </div>
-    <div class="nav-item domain-parent" onclick="toggleDomain('photo-sub','chev-photo')"><span class="nav-dot dot-red"></span>Taylor Hendry Photography<span class="chevron" id="chev-photo">›</span></div>
-    <div class="nav-sub" id="photo-sub">
-      <div class="nav-item" onclick="showPage('photography')"><span class="nav-dot"></span>Overview</div>
+    <!-- CALLAN -->
+    <div class="nav-item domain-parent" onclick="toggleDomain('callan-sub','chev-callan')"><span class="nav-dot" style="background:#0099ff"></span>Callan<span class="chevron" id="chev-callan">›</span></div>
+    <div class="nav-sub" id="callan-sub">
+      <div class="nav-item" onclick="nav('callan','#0099ff')"><span class="nav-dot"></span>Overview</div>
     </div>
-    <div class="nav-item domain-parent" onclick="toggleDomain('home-sub','chev-home')"><span class="nav-dot"></span>Home / Build<span class="chevron" id="chev-home">›</span></div>
-    <div class="nav-sub" id="home-sub">
-      <div class="nav-item" onclick="showPage('homebuild')"><span class="nav-dot"></span>Overview</div>
+    <!-- COOPER -->
+    <div class="nav-item domain-parent" onclick="toggleDomain('cooper-sub','chev-cooper')"><span class="nav-dot" style="background:#ffee00"></span>Cooper<span class="chevron" id="chev-cooper">›</span></div>
+    <div class="nav-sub" id="cooper-sub">
+      <div class="nav-item" onclick="nav('cooper','#ffee00')"><span class="nav-dot"></span>Overview</div>
     </div>
-    <div class="nav-item domain-parent" onclick="toggleDomain('ops-sub','chev-ops')"><span class="nav-dot dot-amber"></span>Daily Operations<span class="chevron" id="chev-ops">›</span></div>
-    <div class="nav-sub" id="ops-sub">
-      <div class="nav-item" onclick="showPage('dailyops')"><span class="nav-dot"></span>Overview</div>
+  </div>
+  <div class="nav-section">
+    <div class="nav-label">System</div>
+    <div class="nav-item domain-parent" onclick="toggleDomain('sys-sub','chev-sys')"><span class="nav-dot" style="background:#888888"></span>System &amp; Reference<span class="chevron" id="chev-sys">›</span></div>
+    <div class="nav-sub" id="sys-sub">
+      <div class="nav-item" onclick="nav('sys-instructions','#888888')"><span class="nav-dot" style="background:#aaaaaa"></span>App Instructions</div>
+      <div class="nav-item" onclick="nav('sys-tools','#888888')"><span class="nav-dot" style="background:#aaaaaa"></span>Tool Roles</div>
+      <div class="nav-item" onclick="nav('sys-data','#888888')"><span class="nav-dot" style="background:#aaaaaa"></span>Data &amp; Logging</div>
+      <div class="nav-item" onclick="nav('sys-undo','#888888')"><span class="nav-dot" style="background:#aaaaaa"></span>Error Recovery</div>
+      <div class="nav-item" onclick="nav('sys-integrations','#888888')"><span class="nav-dot" style="background:#aaaaaa"></span>Integrations</div>
+      <div class="nav-item" onclick="nav('sys-privacy','#888888')"><span class="nav-dot" style="background:#aaaaaa"></span>Privacy &amp; Security</div>
+      <div class="nav-item" onclick="nav('sys-buildlog','#888888')"><span class="nav-dot" style="background:#aaaaaa"></span>Build Log</div>
     </div>
-    <div class="nav-item domain-parent" onclick="toggleDomain('goals-sub','chev-goals')"><span class="nav-dot dot-gold"></span>Life Goals<span class="chevron" id="chev-goals">›</span></div>
-    <div class="nav-sub" id="goals-sub">
-      <div class="nav-item" onclick="showPage('lifegoals')"><span class="nav-dot"></span>Overview</div>
-    </div>
-    <div class="nav-item" onclick="showPage('roadmap')" id="nav-roadmap"><span class="nav-dot dot-amber"></span>Life Roadmap</div>
   </div>
   <div class="sidebar-footer">
     <a href="https://claude.ai" target="_blank" class="ai-btn"><span class="ai-btn-icon">🤖</span>CLAUDE</a>
@@ -284,112 +387,239 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
     <span class="topbar-date" id="topbar-date"></span>
   </div>
 
-  <!-- DAILY BRIEFING -->
+  <!-- ══ HOUSEHOLD DAILY BRIEFING ══ -->
   <div class="page active" id="page-briefing">
+    <div style="background:linear-gradient(180deg,#180a00 0%,var(--bg) 100%);border-bottom:1px solid #2a1800;padding:20px 16px 16px;text-align:center;">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#ff6600;margin-bottom:8px;">Good Morning, Hendry Family</div>
+      <div style="font-size:15px;font-weight:300;color:#ffe8d0;line-height:1.7;font-style:italic;max-width:360px;margin:0 auto 6px;">"The days are long but the years are short."</div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#ff6600;letter-spacing:1px;">— Gretchen Rubin</div>
+    </div>
+    <div class="page-content">
+      <!-- WEATHER CARD -->
+      <div id="weather-card" style="background:var(--surface);border:1px solid #2a1800;border-radius:10px;padding:12px 14px;margin-bottom:12px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#ff6600;">Today's Environment — Conifer, CO</div>
+          <button onclick="toggleWeatherEdit()" style="background:none;border:1px solid #2a3a4a;color:#4a5a6a;font-size:10px;border-radius:4px;cursor:pointer;padding:2px 6px;font-family:'IBM Plex Mono',monospace;letter-spacing:1px;" id="weather-edit-btn">EDIT</button>
+        </div>
+
+        <!-- DISPLAY MODE -->
+        <div id="weather-display">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+            <div id="weather-icon" style="font-size:32px;flex-shrink:0;">🌤️</div>
+            <div style="flex:1;">
+              <div style="display:flex;align-items:baseline;gap:6px;">
+                <div id="weather-temp" style="font-family:'Bebas Neue',sans-serif;font-size:34px;letter-spacing:1px;color:#ff6600;line-height:1;">--°</div>
+                <div style="display:flex;flex-direction:column;gap:1px;">
+                  <div id="weather-high" style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:#ff6600;">H: --°</div>
+                  <div id="weather-low" style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:#00ccff;">L: --°</div>
+                </div>
+              </div>
+              <div id="weather-condition" style="font-size:12px;color:#8899aa;margin-top:2px;">Tap EDIT to set weather</div>
+            </div>
+            <div style="text-align:center;flex-shrink:0;">
+              <div id="moon-icon" style="font-size:26px;">🌙</div>
+              <div id="moon-name" style="font-family:'IBM Plex Mono',monospace;font-size:7px;color:#8899aa;letter-spacing:1px;margin-top:2px;text-align:center;max-width:52px;"></div>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;border-top:1px solid #1a2a3a;padding-top:10px;">
+            <div style="display:flex;align-items:center;gap:8px;">
+              <span style="font-size:16px;">🌅</span>
+              <div>
+                <div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:#4a5a6a;letter-spacing:1px;text-transform:uppercase;">Sunrise</div>
+                <div id="weather-sunrise" style="font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:1px;color:#ffee00;line-height:1.1;">--:--</div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;">
+              <span style="font-size:16px;">🌇</span>
+              <div>
+                <div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:#4a5a6a;letter-spacing:1px;text-transform:uppercase;">Sunset</div>
+                <div id="weather-sunset" style="font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:1px;color:#ff6600;line-height:1.1;">--:--</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- EDIT MODE -->
+        <div id="weather-edit" style="display:none;">
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:8px;">
+            <div><div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:#4a5a6a;letter-spacing:1px;margin-bottom:3px;">CURRENT °F</div><input type="number" id="wi-temp" placeholder="52" style="width:100%;background:#0a0e0a;border:1px solid #2a3a2a;border-radius:5px;padding:7px 8px;color:#ff6600;font-family:'Bebas Neue',sans-serif;font-size:18px;outline:none;"></div>
+            <div><div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:#4a5a6a;letter-spacing:1px;margin-bottom:3px;">HIGH °F</div><input type="number" id="wi-high" placeholder="65" style="width:100%;background:#0a0e0a;border:1px solid #2a3a2a;border-radius:5px;padding:7px 8px;color:#ff6600;font-family:'Bebas Neue',sans-serif;font-size:18px;outline:none;"></div>
+            <div><div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:#4a5a6a;letter-spacing:1px;margin-bottom:3px;">LOW °F</div><input type="number" id="wi-low" placeholder="38" style="width:100%;background:#0a0e0a;border:1px solid #2a3a2a;border-radius:5px;padding:7px 8px;color:#00ccff;font-family:'Bebas Neue',sans-serif;font-size:18px;outline:none;"></div>
+          </div>
+          <div style="margin-bottom:8px;">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:#4a5a6a;letter-spacing:1px;margin-bottom:3px;">CONDITIONS</div>
+            <select id="wi-cond" style="width:100%;background:#0a0e0a;border:1px solid #2a3a2a;border-radius:5px;padding:7px 8px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none;">
+              <option>Clear Sky</option><option>Mainly Clear</option><option>Partly Cloudy</option><option>Mostly Cloudy</option><option>Overcast</option><option>Fog</option><option>Light Rain</option><option>Rain</option><option>Heavy Rain</option><option>Light Snow</option><option>Snow</option><option>Heavy Snow</option><option>Rain Showers</option><option>Thunderstorm</option><option>Blowing Snow</option><option>Icy</option>
+            </select>
+          </div>
+          <button onclick="saveWeather()" style="width:100%;background:rgba(255,102,0,0.15);border:1px solid #ff6600;color:#ff6600;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:2px;padding:8px;border-radius:6px;cursor:pointer;">SAVE WEATHER</button>
+        </div>
+      </div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:#ff6600;">Today's Schedule</div>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;padding:2px 8px;border-radius:10px;letter-spacing:1px;background:rgba(255,119,0,0.1);color:#ff6600;border:1px solid rgba(255,119,0,0.2);">Pending Calendar Sync</span>
+      </div>
+
+      <div style="background:var(--surface);border:1px solid #2a1800;border-radius:10px;padding:12px 14px;margin-bottom:8px;display:flex;align-items:flex-start;gap:10px;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#ff6600;white-space:nowrap;min-width:46px;margin-top:1px;">10:55</div>
+        <div style="flex:1;">
+          <div style="font-size:13px;color:#ffe8d0;">School Pickup — Adley</div>
+          <div style="font-size:11px;color:#0088ff;margin-top:2px;">Half day — leave by 10:55</div>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:8px;padding:1px 5px;border-radius:3px;margin-top:4px;display:inline-block;background:rgba(187,68,255,0.1);color:#bb44ff;">Adley</span>
+        </div>
+      </div>
+
+      <div style="background:var(--surface);border:1px solid #2a1800;border-radius:10px;padding:12px 14px;margin-bottom:8px;display:flex;align-items:flex-start;gap:10px;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#ff6600;white-space:nowrap;min-width:46px;margin-top:1px;">1:55</div>
+        <div style="flex:1;">
+          <div style="font-size:13px;color:#ffe8d0;">School Pickup — Girls</div>
+          <div style="font-size:11px;color:#0088ff;margin-top:2px;">Return home ~2:50</div>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:8px;padding:1px 5px;border-radius:3px;margin-top:4px;display:inline-block;background:rgba(255,153,204,0.1);color:#ff99cc;">Adley + Evie</span>
+        </div>
+      </div>
+
+      <div style="background:var(--surface);border:1px solid #2a1800;border-radius:10px;padding:12px 14px;margin-bottom:8px;display:flex;align-items:flex-start;gap:10px;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#ff6600;white-space:nowrap;min-width:46px;margin-top:1px;">5:00</div>
+        <div style="flex:1;">
+          <div style="font-size:13px;color:#ffe8d0;">Dinner</div>
+          <div style="font-size:11px;color:#0088ff;margin-top:2px;">Family dinner together</div>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:8px;padding:1px 5px;border-radius:3px;margin-top:4px;display:inline-block;background:rgba(224,240,255,0.1);color:#e0f0ff;">All</span>
+        </div>
+      </div>
+
+      <div style="background:var(--surface);border:1px solid #2a1800;border-radius:10px;padding:12px 14px;margin-bottom:8px;display:flex;align-items:flex-start;gap:10px;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#ff6600;white-space:nowrap;min-width:46px;margin-top:1px;">6:30</div>
+        <div style="flex:1;">
+          <div style="font-size:13px;color:#ffe8d0;">Bedtime Routine — Little Ones</div>
+          <div style="font-size:11px;color:#0088ff;margin-top:2px;">Callan, Cooper, Evie — sleep at 7:00</div>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:8px;padding:1px 5px;border-radius:3px;margin-top:4px;display:inline-block;background:rgba(0,153,255,0.1);color:#0099ff;">C + C + E</span>
+        </div>
+      </div>
+
+      <div style="margin-top:16px;padding:12px 14px;background:var(--surface);border:1px solid #1a2a3a;border-radius:10px;font-size:12px;color:#0088ff;text-align:center;">
+        Connect Google Calendar to populate live family events automatically.
+      </div>
+
+      <!-- Family Quick Nav -->
+      <div style="margin-top:16px;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:#ff6600;margin-bottom:10px;">Family</div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;">
+          <div onclick="nav('david-cmd','#ff6600')" style="background:var(--surface);border:1px solid #1a2a3a;border-radius:8px;padding:10px;text-align:center;cursor:pointer;transition:all 0.15s;" onmouseover="this.style.borderColor='#ff6600'" onmouseout="this.style.borderColor='#1a2a3a'">
+            <div style="font-size:18px;margin-bottom:4px;">👤</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:#ff6600;letter-spacing:1px;">DAVID</div>
+          </div>
+          <div onclick="nav('taylor','#ff44bb')" style="background:var(--surface);border:1px solid #1a2a3a;border-radius:8px;padding:10px;text-align:center;cursor:pointer;transition:all 0.15s;" onmouseover="this.style.borderColor='#ff44bb'" onmouseout="this.style.borderColor='#1a2a3a'">
+            <div style="font-size:18px;margin-bottom:4px;">👩</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:#ff44bb;letter-spacing:1px;">TAYLOR</div>
+          </div>
+          <div onclick="nav('adley','#bb44ff')" style="background:var(--surface);border:1px solid #1a2a3a;border-radius:8px;padding:10px;text-align:center;cursor:pointer;transition:all 0.15s;" onmouseover="this.style.borderColor='#bb44ff'" onmouseout="this.style.borderColor='#1a2a3a'">
+            <div style="font-size:18px;margin-bottom:4px;">👧</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:#bb44ff;letter-spacing:1px;">ADLEY</div>
+          </div>
+          <div onclick="nav('evie','#ff99cc')" style="background:var(--surface);border:1px solid #1a2a3a;border-radius:8px;padding:10px;text-align:center;cursor:pointer;transition:all 0.15s;" onmouseover="this.style.borderColor='#ff99cc'" onmouseout="this.style.borderColor='#1a2a3a'">
+            <div style="font-size:18px;margin-bottom:4px;">👧</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:#ff99cc;letter-spacing:1px;">EVIE</div>
+          </div>
+          <div onclick="nav('callan','#0099ff')" style="background:var(--surface);border:1px solid #1a2a3a;border-radius:8px;padding:10px;text-align:center;cursor:pointer;transition:all 0.15s;" onmouseover="this.style.borderColor='#0099ff'" onmouseout="this.style.borderColor='#1a2a3a'">
+            <div style="font-size:18px;margin-bottom:4px;">👦</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:#0099ff;letter-spacing:1px;">CALLAN</div>
+          </div>
+          <div onclick="nav('cooper','#ffee00')" style="background:var(--surface);border:1px solid #1a2a3a;border-radius:8px;padding:10px;text-align:center;cursor:pointer;transition:all 0.15s;" onmouseover="this.style.borderColor='#ffee00'" onmouseout="this.style.borderColor='#1a2a3a'">
+            <div style="font-size:18px;margin-bottom:4px;">👦</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:#ffee00;letter-spacing:1px;">COOPER</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ DAVID COMMAND CENTER ══ -->
+  <div class="page" id="page-david-cmd">
     <div class="gate-passed-banner" id="gate-passed">✓ CLEARED FOR THE DAY — EXECUTE WITH DISCIPLINE</div>
     <div class="quote-section">
       <div class="quote-eyebrow">Today's Intention</div>
       <div class="quote-text">"The process is the destination. Every rep, every trade, every moment with your kids — done with full presence — that's the life."</div>
       <div class="quote-attr">— David Hendry</div>
     </div>
-
-    <!-- Personal -->
-    <div class="briefing-section">
-      <div class="section-header"><div class="section-title">David — Personal</div><span class="section-badge badge-green">Phase 1</span></div>
-      <div class="streak-grid">
-        <div class="streak-block"><div class="streak-label">Log Streak</div><div class="streak-val green">1</div><div class="streak-sub">days</div></div>
-        <div class="streak-block"><div class="streak-label">Fitness</div><div class="streak-val green">1</div><div class="streak-sub">goals hit</div></div>
+    <div class="page-content">
+      <!-- Personal Streaks -->
+      <div class="section-header-row"><div class="section-lbl">Personal State</div><span class="sec-badge badge-green">Phase 1</span></div>
+      <div class="streak-grid" style="margin-top:8px;">
+        <div class="streak-block"><div class="streak-label">Log Streak</div><div class="streak-val g">1</div><div class="streak-sub">days</div></div>
+        <div class="streak-block"><div class="streak-label">Fitness</div><div class="streak-val g">1</div><div class="streak-sub">goals hit</div></div>
         <div class="streak-block"><div class="streak-label">Diet</div><div class="streak-val gold">0</div><div class="streak-sub">goals hit</div></div>
-        <div class="streak-block"><div class="streak-label">Best</div><div class="streak-val blue">14</div><div class="streak-sub">all-time</div></div>
+        <div class="streak-block"><div class="streak-label">Best</div><div class="streak-val b">14</div><div class="streak-sub">all-time</div></div>
       </div>
-    </div>
 
-    <!-- Trading Snapshot -->
-    <div class="briefing-section" style="padding-bottom:0;">
-      <div class="section-header"><div class="section-title">Trading — Snapshot</div><span class="section-badge badge-red">🐻 Bear</span></div>
-    </div>
-    <div style="padding:0 16px 14px;">
-      <div class="trading-snapshot">
-        <div class="snapshot-header"><span class="snapshot-label">Market Condition</span><span class="condition-pill pill-bear">Bear / Starved Relief</span></div>
-        <div class="snapshot-grid">
-          <div class="snap-block"><div class="snap-lbl">Rules Broken</div><div class="snap-val red">4</div></div>
-          <div class="snap-block"><div class="snap-lbl">Prev Day W%</div><div class="snap-val green">75%</div></div>
-          <div class="snap-block"><div class="snap-lbl">Week W%</div><div class="snap-val green">68.8%</div></div>
-          <div class="snap-block"><div class="snap-lbl">Week P&L</div><div class="snap-val green" style="font-size:16px;padding-top:3px;">+$66</div></div>
-          <div class="snap-block"><div class="snap-lbl">Loss Limit</div><div class="snap-val gold" style="font-size:16px;padding-top:3px;">$41.81</div></div>
-          <div class="snap-block"><div class="snap-lbl">Focus</div><div class="snap-val gold" style="font-size:16px;padding-top:3px;">R1/R2</div></div>
+      <!-- Trading Snapshot -->
+      <div class="section-header-row" style="margin-top:6px;"><div class="section-lbl">Trading — Snapshot</div><span class="sec-badge badge-red">🐻 Bear</span></div>
+      <div style="margin-top:8px;">
+        <div class="t-snapshot">
+          <div class="t-snap-hdr"><span class="t-snap-lbl">Market Condition</span><span class="cond-pill pill-bear">Bear / Starved Relief</span></div>
+          <div class="snap-grid">
+            <div class="snap-block"><div class="snap-lbl">Rules Broken</div><div class="snap-val r">4</div></div>
+            <div class="snap-block"><div class="snap-lbl">Prev Day W%</div><div class="snap-val g">75%</div></div>
+            <div class="snap-block"><div class="snap-lbl">Week W%</div><div class="snap-val g">68.8%</div></div>
+            <div class="snap-block"><div class="snap-lbl">Week P&L</div><div class="snap-val g" style="font-size:16px;padding-top:3px;">+$66</div></div>
+            <div class="snap-block"><div class="snap-lbl">Loss Limit</div><div class="snap-val gold" style="font-size:16px;padding-top:3px;">$41.81</div></div>
+            <div class="snap-block"><div class="snap-lbl">Focus</div><div class="snap-val gold" style="font-size:16px;padding-top:3px;">R1/R2</div></div>
+          </div>
+        </div>
+        <div class="fail-card">
+          <div class="fail-hdr"><div class="fail-hdr-lbl">Trading Focus — Current Failures</div></div>
+          <div class="fail-row"><span class="fail-tag tag-ls">Long Standing</span><span class="fail-text">Emotional re-entry after stop hit — not running Stop-and-Reset protocol</span></div>
+          <div class="fail-row"><span class="fail-tag tag-wk">This Week</span><span class="fail-text">MACD not confirmed on entry — entering on momentum alone</span></div>
+          <div class="fail-row"><span class="fail-tag tag-yd">Yesterday</span><span class="fail-text">Open spike entry before 9:45 AM EDT — too early before direction established</span></div>
         </div>
       </div>
-      <div class="failure-card">
-        <div class="failure-header"><div class="failure-header-label">Trading Focus — Current Failures</div></div>
-        <div class="failure-row"><span class="failure-tag tag-longstanding">Long Standing</span><span class="failure-text">Emotional re-entry after stop hit — entering distribution without running Stop-and-Reset protocol</span></div>
-        <div class="failure-row"><span class="failure-tag tag-week">This Week</span><span class="failure-text">MACD not confirmed on entry — entering on momentum alone without indicator confirmation</span></div>
-        <div class="failure-row"><span class="failure-tag tag-yesterday">Yesterday</span><span class="failure-text">Open spike phase entry — entered before 9:45 AM EDT, too early before price established direction</span></div>
-      </div>
-    </div>
 
-    <!-- Domain Cards -->
-    <div class="domains-section">
-      <div class="section-header" style="padding:0 0 10px;"><div class="section-title">Domain Focus</div></div>
-
-      <div class="domain-card" onclick="requireGate('david')">
-        <div class="domain-card-top"><div class="domain-icon">🧠</div><div class="domain-info"><div class="domain-name">David</div><div class="domain-focus">Phase 1 — Building daily consistency in fitness and diet. Logging streak active.</div></div><div class="domain-status status-active">Active</div></div>
-        <div class="domain-progress"><div class="progress-track"><div class="progress-fill" style="width:15%"></div></div><div class="progress-fraction">3 / 20</div><div class="progress-pct">15%</div></div>
-      </div>
-
-      <div class="domain-card" onclick="requireGate('family')">
-        <div class="domain-card-top"><div class="domain-icon">👨‍👩‍👧‍👦</div><div class="domain-info"><div class="domain-name">Family & Growth</div><div class="domain-focus">Kids development checklists pending. Son's medical schedule maintained.</div></div><div class="domain-status status-active">Active</div></div>
-        <div class="domain-progress"><div class="progress-track"><div class="progress-fill" style="width:10%"></div></div><div class="progress-fraction">2 / 20</div><div class="progress-pct">10%</div></div>
-      </div>
-
-      <div class="domain-card" onclick="requireGate('trading')">
-        <div class="domain-card-top"><div class="domain-icon">📈</div><div class="domain-info"><div class="domain-name">Trading</div><div class="domain-focus">Phase 1 — Execution accuracy. Eliminating repeat errors. Bear market conditions.</div></div><div class="domain-status status-active">Active</div></div>
-        <div class="domain-progress"><div class="progress-track"><div class="progress-fill" style="width:20%;background:var(--gold-light);"></div></div><div class="progress-fraction">4 / 20</div><div class="progress-pct" style="color:var(--gold-bright);">20%</div></div>
-      </div>
-
-      <div class="domain-card" onclick="requireGate('finances')">
-        <div class="domain-card-top"><div class="domain-icon">💰</div><div class="domain-info"><div class="domain-name">Finances</div><div class="domain-focus">Trading P&L tracking active. Entity planning on horizon.</div></div><div class="domain-status status-phase">Phase 4</div></div>
-        <div class="domain-progress"><div class="progress-track"><div class="progress-fill" style="width:5%"></div></div><div class="progress-fraction">1 / 20</div><div class="progress-pct">5%</div></div>
+      <!-- Domain Cards -->
+      <div class="section-header-row"><div class="section-lbl">Domain Focus</div></div>
+      <div class="domain-cards" style="margin-top:8px;">
+        <div class="domain-card" onclick="requireGate('trading','#88ff00')">
+          <div class="domain-card-top"><div class="domain-icon">📈</div><div class="domain-info"><div class="domain-name">Trading</div><div class="domain-focus">Phase 1 — Execution accuracy. Bear market. Loss limit $41.81.</div></div><div class="domain-status s-active">Active</div></div>
+          <div class="prog-row"><div class="prog-track"><div class="prog-fill" style="width:20%;background:#88ff00;"></div></div><div class="prog-frac">4 / 20</div><div class="prog-pct" style="color:#88ff00;">20%</div></div>
+        </div>
+        <div class="domain-card" onclick="requireGate('photography','#ff1493')">
+          <div class="domain-card-top"><div class="domain-icon">📷</div><div class="domain-info"><div class="domain-name">Taylor Hendry Photography</div><div class="domain-focus">Restructure in progress. Phase 3 after trading complete.</div></div><div class="domain-status s-building">Building</div></div>
+          <div class="prog-row"><div class="prog-track"><div class="prog-fill" style="width:5%;background:#ff1493;"></div></div><div class="prog-frac">1 / 20</div><div class="prog-pct" style="color:#ff1493;">5%</div></div>
+        </div>
+        <div class="domain-card" onclick="requireGate('hcc','#88ff00')">
+          <div class="domain-card-top"><div class="domain-icon">🏗️</div><div class="domain-info"><div class="domain-name">HCC Completion</div><div class="domain-focus">Active build — trading system, Google integrations, daily log.</div></div><div class="domain-status s-active">Active</div></div>
+          <div class="prog-row"><div class="prog-track"><div class="prog-fill" style="width:25%;background:#88ff00;"></div></div><div class="prog-frac">5 / 20</div><div class="prog-pct" style="color:#88ff00;">25%</div></div>
+        </div>
+        <div class="domain-card" onclick="requireGate('homebuild','#00ffcc')">
+          <div class="domain-card-top"><div class="domain-icon">🏡</div><div class="domain-info"><div class="domain-name">Home / Build</div><div class="domain-focus">On hold — unlocks when trading milestones are met.</div></div><div class="domain-status s-hold">On Hold</div></div>
+          <div class="prog-row"><div class="prog-track"><div class="prog-fill" style="width:0%;background:#14b8a6;"></div></div><div class="prog-frac">0 / 20</div><div class="prog-pct" style="color:#14b8a6;">0%</div></div>
+        </div>
+        <div class="domain-card" onclick="requireGate('roadmap','#ff6600')">
+          <div class="domain-card-top"><div class="domain-icon">🗺️</div><div class="domain-info"><div class="domain-name">Life Roadmap</div><div class="domain-focus">Built last — awaiting domain completions.</div></div><div class="domain-status s-hold">Pending</div></div>
+          <div class="prog-row"><div class="prog-track"><div class="prog-fill" style="width:0%;background:#fb923c;"></div></div><div class="prog-frac">0 / 20</div><div class="prog-pct" style="color:#fb923c;">0%</div></div>
+        </div>
       </div>
 
-      <div class="domain-card" onclick="requireGate('photography')">
-        <div class="domain-card-top"><div class="domain-icon">📷</div><div class="domain-info"><div class="domain-name">Taylor Hendry Photography</div><div class="domain-focus">Business restructure in progress. Phase 3 begins after trading complete.</div></div><div class="domain-status status-building">Building</div></div>
-        <div class="domain-progress"><div class="progress-track"><div class="progress-fill" style="width:5%"></div></div><div class="progress-fraction">1 / 20</div><div class="progress-pct">5%</div></div>
+      <!-- Gate -->
+      <div class="gate-section" id="gate-section">
+        <div class="gate-text">You've reviewed your state and your domains.<br>Trade with discipline. Be present with your family.<br>Execute the process.</div>
+        <button class="gate-btn" id="gate-btn" onclick="passGate()">I'M READY — ENTER</button>
       </div>
-
-      <div class="domain-card" onclick="requireGate('homebuild')">
-        <div class="domain-card-top"><div class="domain-icon">🏡</div><div class="domain-info"><div class="domain-name">Home / Build</div><div class="domain-focus">On hold — door opens when trading milestones unlock financial capacity.</div></div><div class="domain-status status-hold">On Hold</div></div>
-        <div class="domain-progress"><div class="progress-track"><div class="progress-fill" style="width:0%"></div></div><div class="progress-fraction">0 / 20</div><div class="progress-pct">0%</div></div>
-      </div>
-
-      <div class="domain-card" onclick="requireGate('roadmap')">
-        <div class="domain-card-top"><div class="domain-icon">🗺️</div><div class="domain-info"><div class="domain-name">Life Roadmap</div><div class="domain-focus">Built last — awaiting domain completions to map cross-domain milestones.</div></div><div class="domain-status status-hold">Pending</div></div>
-        <div class="domain-progress"><div class="progress-track"><div class="progress-fill" style="width:0%"></div></div><div class="progress-fraction">0 / 20</div><div class="progress-pct">0%</div></div>
-      </div>
-    </div>
-
-    <!-- Gate -->
-    <div class="gate-section" id="gate-section">
-      <div class="gate-text">You've reviewed your state and your world.<br>Trade with discipline. Be present with your family.<br>Execute the process.</div>
-      <button class="gate-btn" id="gate-btn" onclick="passGate()">I'M READY — ENTER</button>
     </div>
   </div>
 
-  <!-- TRADING -->
+  <!-- ══ TRADING COMMAND CENTER ══ -->
   <div class="page" id="page-trading">
-    <div class="domain-page">
-      <div class="domain-page-header"><div class="domain-page-icon">📈</div><div><div class="domain-page-title gold">Trading</div><div class="domain-page-sub">Command Center — Phase 1 Execution Accuracy</div></div></div>
-      <div style="background:linear-gradient(135deg,#1a0a0a,#2d0f0f);border:1px solid #4a1515;border-radius:10px;padding:14px 16px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
-        <div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-dim);margin-bottom:3px;">Market Condition</div><div style="font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:2px;color:var(--red-bright);">🐻 Bear / Starved Relief</div></div>
-        <span class="condition-pill pill-bear">● Bear Active</span>
+    <div class="page-content">
+      <div class="page-header"><div class="page-icon">📈</div><div><div class="page-title">Trading</div><div class="page-sub">Command Center — Phase 1 Execution Accuracy</div></div></div>
+      <div style="background:var(--surface);border:1px solid rgba(255,0,0,0.25);border-radius:10px;padding:14px 16px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+        <div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-dim);margin-bottom:3px;">Market Condition</div><div style="font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:2px;color:#ff0000;">🐻 Bear / Starved Relief</div></div>
+        <span class="cond-pill pill-bear">● Bear Active</span>
       </div>
       <div class="stat-grid">
         <div class="stat-card"><div class="stat-label">Loss Limit Today</div><div class="stat-value gold">$41.81</div><div class="stat-sub">Resets Sunday</div></div>
         <div class="stat-card"><div class="stat-label">Week P&L</div><div class="stat-value green">+$66.07</div><div class="stat-sub">4 sessions</div></div>
         <div class="stat-card"><div class="stat-label">Win Rate WTD</div><div class="stat-value blue">68.8%</div><div class="stat-sub">11W / 5L</div></div>
-        <div class="stat-card"><div class="stat-label">Setup Priority</div><div class="stat-value gold">R1 / R2</div><div class="stat-sub">Today's focus</div></div>
+        <div class="stat-card"><div class="stat-label">Setup Priority</div><div class="stat-value" style="color:#88ff00;">R1 / R2</div><div class="stat-sub">Today's focus</div></div>
       </div>
-      <div class="t-section-title">Pre-Session Checklist</div>
+      <div class="section-hdr">Pre-Session Checklist</div>
       <button class="reset-btn" onclick="resetChecklist()">Reset</button>
       <div class="checklist" id="checklist">
         <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><span class="check-text">Hydration — water before anything else</span><span class="check-tag tag-david">David</span></div>
@@ -400,66 +630,306 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
         <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><span class="check-text">Loss limit confirmed from memory</span><span class="check-tag tag-david">David</span></div>
         <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><span class="check-text">Stop-and-Reset protocol recited</span><span class="check-tag tag-david">David</span></div>
       </div>
-      <div class="chart-card"><div class="chart-header"><span class="chart-title">Weekly P&L</span><span class="chart-badge">+$66.07</span></div><canvas id="pnlChart" height="120"></canvas></div>
-      <div class="t-section-title">Quick Access</div>
+      <div class="chart-card"><div class="chart-hdr"><span class="chart-title">Weekly P&L</span><span class="chart-badge">+$66.07</span></div><canvas id="pnlChart" height="120"></canvas></div>
+      <div class="section-hdr">Quick Access</div>
       <div class="link-grid">
-        <div class="link-card" onclick="showPage('handbook')"><div class="link-icon">📖</div><div class="link-title">Handbook</div><div class="link-sub">Playbook & strategy</div></div>
-        <div class="link-card" onclick="showPage('datalog')"><div class="link-icon">📊</div><div class="link-title">Data Log</div><div class="link-sub">Trade log & movers</div></div>
-        <div class="link-card" onclick="showPage('workflow')"><div class="link-icon">⚙️</div><div class="link-title">Workflow</div><div class="link-sub">Protocols & prompts</div></div>
-        <div class="link-card" onclick="showPage('performance')"><div class="link-icon">📈</div><div class="link-title">Performance</div><div class="link-sub">Stats & reviews</div></div>
-      </div>
-      <div class="t-section-title">Week Breakdown</div>
-      <div class="chart-card" style="padding:0;overflow:hidden;">
-        <table class="stats-table"><thead><tr><th>Metric</th><th>Value</th><th>Status</th></tr></thead><tbody>
-          <tr><td>Total Trades</td><td class="gold">16</td><td style="font-size:10px;color:var(--text-dim);">This week</td></tr>
-          <tr><td>Win Rate</td><td class="green">68.8%</td><td style="font-size:10px;color:var(--green-bright);">↑ Above avg</td></tr>
-          <tr><td>Best Day</td><td class="green">+$35.61</td><td style="font-size:10px;color:var(--text-dim);">Monday</td></tr>
-          <tr><td>Worst Day</td><td class="red">-$8.21</td><td style="font-size:10px;color:var(--green-bright);">Within limit</td></tr>
-          <tr><td>Avg Entry Accuracy</td><td class="gold">3.1 / 5</td><td style="font-size:10px;color:var(--text-dim);">Improving</td></tr>
-          <tr><td>Rules Broken</td><td class="red">4</td><td style="font-size:10px;color:var(--red-bright);">↓ Address Sunday</td></tr>
-        </tbody></table>
+        <div class="link-card" onclick="nav('handbook','#88ff00')"><div class="link-icon">📖</div><div class="link-title">Handbook</div><div class="link-sub">Playbook & strategy</div></div>
+        <div class="link-card" onclick="nav('datalog','#88ff00')"><div class="link-icon">📊</div><div class="link-title">Data Log</div><div class="link-sub">Trade log & movers</div></div>
+        <div class="link-card" onclick="nav('workflow','#88ff00')"><div class="link-icon">⚙️</div><div class="link-title">Workflow</div><div class="link-sub">Protocols & prompts</div></div>
+        <div class="link-card" onclick="nav('performance','#88ff00')"><div class="link-icon">📈</div><div class="link-title">Performance</div><div class="link-sub">Stats & reviews</div></div>
       </div>
     </div>
   </div>
 
-  <!-- DAVID -->
-  <div class="page" id="page-david">
-    <div class="domain-page">
-      <div class="domain-page-header"><div class="domain-page-icon">🧠</div><div><div class="domain-page-title">David</div><div class="domain-page-sub">Personal Foundation — Phase 1</div></div></div>
-      <div class="stat-grid">
-        <div class="stat-card"><div class="stat-label">Log Streak</div><div class="stat-value green">1</div><div class="stat-sub">consecutive days</div></div>
-        <div class="stat-card"><div class="stat-label">Best Streak</div><div class="stat-value blue">14</div><div class="stat-sub">all-time record</div></div>
-        <div class="stat-card"><div class="stat-label">Avg Calories</div><div class="stat-value green">1,862</div><div class="stat-sub">vs 2,600 target</div></div>
-        <div class="stat-card"><div class="stat-label">Avg Deficit</div><div class="stat-value gold">838</div><div class="stat-sub">cal/day</div></div>
+  <!-- ══ HCC COMPLETION ══ -->
+  <div class="page" id="page-hcc">
+    <div class="page-content">
+      <div class="page-header"><div class="page-icon">🏗️</div><div><div class="page-title">HCC Completion</div><div class="page-sub">Build roadmap — every phase and task tracked here</div></div></div>
+
+      <div class="phase-block">
+        <div class="phase-title">Phase 1 — Foundation & App</div>
+        <div class="task-item done" onclick="toggleTask(this)"><div class="task-box">✓</div><div class="task-text">Define life domains and organizational structure</div><span class="task-tag tt-done">Done</span></div>
+        <div class="task-item done" onclick="toggleTask(this)"><div class="task-box">✓</div><div class="task-text">Build Notion skeleton (sidelined — HCC replaced it)</div><span class="task-tag tt-done">Done</span></div>
+        <div class="task-item done" onclick="toggleTask(this)"><div class="task-box">✓</div><div class="task-text">Design HCC app in Summit Log visual DNA</div><span class="task-tag tt-done">Done</span></div>
+        <div class="task-item done" onclick="toggleTask(this)"><div class="task-box">✓</div><div class="task-text">Deploy to GitHub Pages — PWA on iPhone + Windows taskbar</div><span class="task-tag tt-done">Done</span></div>
+        <div class="task-item done" onclick="toggleTask(this)"><div class="task-box">✓</div><div class="task-text">Hard gate on David Command Center — resets daily</div><span class="task-tag tt-done">Done</span></div>
+        <div class="task-item done" onclick="toggleTask(this)"><div class="task-box">✓</div><div class="task-text">Sidebar with full domain/family structure</div><span class="task-tag tt-done">Done</span></div>
+        <div class="task-item done" onclick="toggleTask(this)"><div class="task-box">✓</div><div class="task-text">Per-domain accent color theme system</div><span class="task-tag tt-done">Done</span></div>
+        <div class="task-item done" onclick="toggleTask(this)"><div class="task-box">✓</div><div class="task-text">Google Cloud API key created (Sheets, Calendar, Tasks)</div><span class="task-tag tt-done">Done</span></div>
+        <div class="task-item done" onclick="toggleTask(this)"><div class="task-box">✓</div><div class="task-text">Claude + Gemini shortcut buttons in sidebar footer</div><span class="task-tag tt-done">Done</span></div>
       </div>
-      <div class="t-section-title">Today's Macros</div>
-      <div class="chart-card">
-        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;"><div style="font-size:11px;color:var(--text-muted);width:60px;flex-shrink:0;">Calories</div><div style="flex:1;height:5px;background:var(--surface3);border-radius:2px;overflow:hidden;"><div style="width:72%;height:100%;background:var(--green-mid);border-radius:2px;"></div></div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--text-muted);width:80px;text-align:right;">1,862 / 2,600</div></div>
-        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;"><div style="font-size:11px;color:var(--text-muted);width:60px;flex-shrink:0;">Protein</div><div style="flex:1;height:5px;background:var(--surface3);border-radius:2px;overflow:hidden;"><div style="width:65%;height:100%;background:var(--green-bright);border-radius:2px;"></div></div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--text-muted);width:80px;text-align:right;">117g / 180g</div></div>
-        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;"><div style="font-size:11px;color:var(--text-muted);width:60px;flex-shrink:0;">Carbs</div><div style="flex:1;height:5px;background:var(--surface3);border-radius:2px;overflow:hidden;"><div style="width:80%;height:100%;background:var(--gold-light);border-radius:2px;"></div></div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--text-muted);width:80px;text-align:right;">160g / 200g</div></div>
-        <div style="display:flex;align-items:center;gap:8px;"><div style="font-size:11px;color:var(--text-muted);width:60px;flex-shrink:0;">Fat</div><div style="flex:1;height:5px;background:var(--surface3);border-radius:2px;overflow:hidden;"><div style="width:55%;height:100%;background:var(--amber);border-radius:2px;"></div></div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--text-muted);width:80px;text-align:right;">49g / 90g</div></div>
+
+      <div class="phase-block">
+        <div class="phase-title">Phase 2A — Google Integrations</div>
+        <div class="task-item" onclick="toggleTask(this)"><div class="task-box"></div><div class="task-text">Connect Google Sheets — live trading data feeds app automatically</div><span class="task-tag tt-next">Next</span></div>
+        <div class="task-item" onclick="toggleTask(this)"><div class="task-box"></div><div class="task-text">Connect Google Calendar (joint account) — Daily Briefing + standalone page</div><span class="task-tag tt-next">Next</span></div>
+        <div class="task-item" onclick="toggleTask(this)"><div class="task-box"></div><div class="task-text">Connect Google Tasks (Colorado Chiefs list) — Daily Briefing + standalone page</div><span class="task-tag tt-next">Next</span></div>
+        <div class="task-item" onclick="toggleTask(this)"><div class="task-box"></div><div class="task-text">Spotify mini player embedded on David Command Center</div><span class="task-tag tt-next">Next</span></div>
+        <div class="task-item" onclick="toggleTask(this)"><div class="task-box"></div><div class="task-text">Claude + Gemini deep link buttons (open apps not webpages)</div><span class="task-tag tt-pending">Pending</span></div>
+        <div class="task-item" onclick="toggleTask(this)"><div class="task-box"></div><div class="task-text">Switch GitHub repo to private + add password protection</div><span class="task-tag tt-pending">Pending</span></div>
+        <div class="task-item" onclick="toggleTask(this)"><div class="task-box"></div><div class="task-text">Domain-level password protection for sensitive domains</div><span class="task-tag tt-pending">Pending</span></div>
+      </div>
+
+      <div class="phase-block">
+        <div class="phase-title">Phase 2B — Trading System</div>
+        <div class="task-item" onclick="toggleTask(this)"><div class="task-box"></div><div class="task-text">Complete Trading Performance Log — Section 2 (Technicals & Trade) + Section 3 (Analysis)</div><span class="task-tag tt-next">Next</span></div>
+        <div class="task-item" onclick="toggleTask(this)"><div class="task-box"></div><div class="task-text">Build Market Performance Log — Big Movers + Sector Performance tabs</div><span class="task-tag tt-pending">Pending</span></div>
+        <div class="task-item" onclick="toggleTask(this)"><div class="task-box"></div><div class="task-text">Cross-document review — flag redundancies, contradictions, gaps</div><span class="task-tag tt-pending">Pending</span></div>
+        <div class="task-item" onclick="toggleTask(this)"><div class="task-box"></div><div class="task-text">Complete PreTrade Protocol Sections 2 + 3</div><span class="task-tag tt-pending">Pending</span></div>
+        <div class="task-item" onclick="toggleTask(this)"><div class="task-box"></div><div class="task-text">Redesign Gemini morning prep — 5 gated subsections</div><span class="task-tag tt-pending">Pending</span></div>
+        <div class="task-item" onclick="toggleTask(this)"><div class="task-box"></div><div class="task-text">Build morning risk assessment + position sizing score</div><span class="task-tag tt-pending">Pending</span></div>
+        <div class="task-item" onclick="toggleTask(this)"><div class="task-box"></div><div class="task-text">Define trading level system + gate metrics with timeframes</div><span class="task-tag tt-pending">Pending</span></div>
+        <div class="task-item" onclick="toggleTask(this)"><div class="task-box"></div><div class="task-text">Build Trader Rehab Program into handbook</div><span class="task-tag tt-pending">Pending</span></div>
+        <div class="task-item" onclick="toggleTask(this)"><div class="task-box"></div><div class="task-text">Finalize Workflow & Protocols — who does what, when, every prompt</div><span class="task-tag tt-pending">Pending</span></div>
+        <div class="task-item" onclick="toggleTask(this)"><div class="task-box"></div><div class="task-text">Weekly review process — Claude reads Drive, generates HTML output</div><span class="task-tag tt-pending">Pending</span></div>
+        <div class="task-item" onclick="toggleTask(this)"><div class="task-box"></div><div class="task-text">Gemini Weekly Relay — Claude output → David → Gemini calibration</div><span class="task-tag tt-pending">Pending</span></div>
+        <div class="task-item" onclick="toggleTask(this)"><div class="task-box"></div><div class="task-text">Monthly review process built and tested</div><span class="task-tag tt-pending">Pending</span></div>
+        <div class="task-item" onclick="toggleTask(this)"><div class="task-box"></div><div class="task-text">Market breadth / 200MA positioning added to morning gauge</div><span class="task-tag tt-pending">Pending</span></div>
+      </div>
+
+      <div class="phase-block">
+        <div class="phase-title">Phase 2C — Daily Log System</div>
+        <div class="task-item" onclick="toggleTask(this)"><div class="task-box"></div><div class="task-text">Build HCC Daily Log domain — primary data entry interface</div><span class="task-tag tt-pending">Pending</span></div>
+        <div class="task-item" onclick="toggleTask(this)"><div class="task-box"></div><div class="task-text">Parallel logging: Trading, David (diet/fitness), each child, Taylor</div><span class="task-tag tt-pending">Pending</span></div>
+        <div class="task-item" onclick="toggleTask(this)"><div class="task-box"></div><div class="task-text">HCC → Google Sheets bidirectional sync</div><span class="task-tag tt-pending">Pending</span></div>
+        <div class="task-item" onclick="toggleTask(this)"><div class="task-box"></div><div class="task-text">Weekly/Monthly/Quarterly/Year-end review system across all domains</div><span class="task-tag tt-pending">Pending</span></div>
+        <div class="task-item" onclick="toggleTask(this)"><div class="task-box"></div><div class="task-text">Review projections — trajectory analysis per domain</div><span class="task-tag tt-pending">Pending</span></div>
+        <div class="task-item" onclick="toggleTask(this)"><div class="task-box"></div><div class="task-text">Diet/fitness body+mind progression narrative at each review</div><span class="task-tag tt-pending">Pending</span></div>
+        <div class="task-item" onclick="toggleTask(this)"><div class="task-box"></div><div class="task-text">Review notification triggers in HCC</div><span class="task-tag tt-pending">Pending</span></div>
+      </div>
+
+      <div class="phase-block">
+        <div class="phase-title">Phase 3 — Photography Business</div>
+        <div class="task-item" onclick="toggleTask(this)"><div class="task-box"></div><div class="task-text">Build Taylor Hendry Photography domain fully</div><span class="task-tag tt-pending">Pending</span></div>
+        <div class="task-item" onclick="toggleTask(this)"><div class="task-box"></div><div class="task-text">Business overview, clients, marketing, finances, craft improvements</div><span class="task-tag tt-pending">Pending</span></div>
+        <div class="task-item" onclick="toggleTask(this)"><div class="task-box"></div><div class="task-text">Photography performance log in Google Sheets</div><span class="task-tag tt-pending">Pending</span></div>
+      </div>
+
+      <div class="phase-block">
+        <div class="phase-title">Phase 4 — Family & Remaining Domains</div>
+        <div class="task-item" onclick="toggleTask(this)"><div class="task-box"></div><div class="task-text">Build 7 child development milestone checklists (dedicated session 3)</div><span class="task-tag tt-pending">Pending</span></div>
+        <div class="task-item" onclick="toggleTask(this)"><div class="task-box"></div><div class="task-text">Analyze each child's current development vs milestones</div><span class="task-tag tt-pending">Pending</span></div>
+        <div class="task-item" onclick="toggleTask(this)"><div class="task-box"></div><div class="task-text">Build development update reminders at age-based intervals</div><span class="task-tag tt-pending">Pending</span></div>
+        <div class="task-item" onclick="toggleTask(this)"><div class="task-box"></div><div class="task-text">Explore empath traits — identify markers, build parenting guidance</div><span class="task-tag tt-pending">Pending</span></div>
+        <div class="task-item" onclick="toggleTask(this)"><div class="task-box"></div><div class="task-text">Build each child's HCC domain page</div><span class="task-tag tt-pending">Pending</span></div>
+        <div class="task-item" onclick="toggleTask(this)"><div class="task-box"></div><div class="task-text">Build Taylor's personal domain page</div><span class="task-tag tt-pending">Pending</span></div>
+        <div class="task-item" onclick="toggleTask(this)"><div class="task-box"></div><div class="task-text">Evaluate Nori app + Aplosin wall calendar for family coordination</div><span class="task-tag tt-pending">Pending</span></div>
+        <div class="task-item" onclick="toggleTask(this)"><div class="task-box"></div><div class="task-text">Build Finances domain — entity, tax strategy, investment tracking</div><span class="task-tag tt-pending">Pending</span></div>
+        <div class="task-item" onclick="toggleTask(this)"><div class="task-box"></div><div class="task-text">Build David personal domain — fitness, diet, mental/emotional</div><span class="task-tag tt-pending">Pending</span></div>
+        <div class="task-item" onclick="toggleTask(this)"><div class="task-box"></div><div class="task-text">Build Daily Operations domain</div><span class="task-tag tt-pending">Pending</span></div>
+        <div class="task-item" onclick="toggleTask(this)"><div class="task-box"></div><div class="task-text">Build Life Goals domain with video game level system</div><span class="task-tag tt-pending">Pending</span></div>
+        <div class="task-item" onclick="toggleTask(this)"><div class="task-box"></div><div class="task-text">Native HCC task system — Daily + Priority per domain</div><span class="task-tag tt-pending">Pending</span></div>
+        <div class="task-item" onclick="toggleTask(this)"><div class="task-box"></div><div class="task-text">Timeframe goals added to all levels and milestones</div><span class="task-tag tt-pending">Pending</span></div>
+      </div>
+
+      <div class="phase-block">
+        <div class="phase-title">Phase 5 — Automation Layer</div>
+        <div class="task-item" onclick="toggleTask(this)"><div class="task-box"></div><div class="task-text">Evaluate Make.com for Gemini → Notion/Sheets automation</div><span class="task-tag tt-pending">Pending</span></div>
+        <div class="task-item" onclick="toggleTask(this)"><div class="task-box"></div><div class="task-text">Gemini notification triggers — market close, weekly review, transitions</div><span class="task-tag tt-pending">Pending</span></div>
+        <div class="task-item" onclick="toggleTask(this)"><div class="task-box"></div><div class="task-text">Verbal data relay protocol via Gemini Live — chart-based data entry</div><span class="task-tag tt-pending">Pending</span></div>
+        <div class="task-item" onclick="toggleTask(this)"><div class="task-box"></div><div class="task-text">Failure tracker auto-calculation from trade log frequency</div><span class="task-tag tt-pending">Pending</span></div>
+      </div>
+
+      <div class="phase-block">
+        <div class="phase-title">Final — Life Roadmap</div>
+        <div class="task-item" onclick="toggleTask(this)"><div class="task-box"></div><div class="task-text">Build Life Roadmap — video game level system, cross-domain milestones</div><span class="task-tag tt-pending">Pending</span></div>
+        <div class="task-item" onclick="toggleTask(this)"><div class="task-box"></div><div class="task-text">Connect domain level completions to roadmap unlocks</div><span class="task-tag tt-pending">Pending</span></div>
+        <div class="task-item" onclick="toggleTask(this)"><div class="task-box"></div><div class="task-text">Display roadmap in HCC with phase status and next unlocks</div><span class="task-tag tt-pending">Pending</span></div>
       </div>
     </div>
   </div>
 
-  <!-- PLACEHOLDERS -->
-  <div class="page" id="page-david-fitness"><div class="placeholder"><div class="placeholder-icon">💪</div><div class="placeholder-title">Fitness</div><div class="placeholder-sub">Workout plan and progress tracking.</div><span class="ph-phase badge-green">Phase 1</span></div></div>
-  <div class="page" id="page-david-diet"><div class="placeholder"><div class="placeholder-icon">🥗</div><div class="placeholder-title">Diet & Nutrition</div><div class="placeholder-sub">Daily log and macro tracking.</div><span class="ph-phase badge-green">Phase 1</span></div></div>
-  <div class="page" id="page-david-mental"><div class="placeholder"><div class="placeholder-icon">🧘</div><div class="placeholder-title">Mental & Emotional</div><div class="placeholder-sub">Mindset, stress management, reflection.</div><span class="ph-phase badge-green">Phase 1</span></div></div>
-  <div class="page" id="page-family"><div class="placeholder"><div class="placeholder-icon">👨‍👩‍👧‍👦</div><div class="placeholder-title">Family & Growth</div><div class="placeholder-sub">Taylor, each child, and family vision.</div><span class="ph-phase badge-blue">Phase 4</span></div></div>
-  <div class="page" id="page-family-taylor"><div class="placeholder"><div class="placeholder-icon">👩</div><div class="placeholder-title">Taylor</div><div class="placeholder-sub">Taylor's path and growth.</div><span class="ph-phase badge-blue">Phase 4</span></div></div>
-  <div class="page" id="page-family-kids"><div class="placeholder"><div class="placeholder-icon">👧👦</div><div class="placeholder-title">Children</div><div class="placeholder-sub">Each child's development roadmap.</div><span class="ph-phase badge-blue">Phase 4</span></div></div>
-  <div class="page" id="page-handbook"><div class="placeholder"><div class="placeholder-icon">📖</div><div class="placeholder-title">Trading Handbook</div><div class="placeholder-sub">Playbook, entry sequence, and strategy.</div><span class="ph-phase badge-gold">Phase 2</span></div></div>
-  <div class="page" id="page-performance"><div class="placeholder"><div class="placeholder-icon">📈</div><div class="placeholder-title">Performance</div><div class="placeholder-sub">Weekly reviews and analysis.</div><span class="ph-phase badge-gold">Phase 2</span></div></div>
-  <div class="page" id="page-datalog"><div class="placeholder"><div class="placeholder-icon">📊</div><div class="placeholder-title">Data Log</div><div class="placeholder-sub">Trade log and big movers.</div><span class="ph-phase badge-gold">Phase 2</span></div></div>
-  <div class="page" id="page-workflow"><div class="placeholder"><div class="placeholder-icon">⚙️</div><div class="placeholder-title">Workflow & Protocols</div><div class="placeholder-sub">Daily workflow and prompts.</div><span class="ph-phase badge-gold">Phase 2</span></div></div>
-  <div class="page" id="page-finances"><div class="placeholder"><div class="placeholder-icon">💰</div><div class="placeholder-title">Finances</div><div class="placeholder-sub">Financial picture and planning.</div><span class="ph-phase badge-blue">Phase 4</span></div></div>
-  <div class="page" id="page-finances-entity"><div class="placeholder"><div class="placeholder-icon">🏢</div><div class="placeholder-title">Entity</div><div class="placeholder-sub">Business entity and tax strategy.</div><span class="ph-phase badge-blue">Phase 4</span></div></div>
-  <div class="page" id="page-photography"><div class="placeholder"><div class="placeholder-icon">📷</div><div class="placeholder-title">Taylor Hendry Photography</div><div class="placeholder-sub">Business overview and clients.</div><span class="ph-phase badge-green">Phase 3</span></div></div>
-  <div class="page" id="page-homebuild"><div class="placeholder"><div class="placeholder-icon">🏡</div><div class="placeholder-title">Home / Build</div><div class="placeholder-sub">Vision, plans, and financing.</div><span class="ph-phase" style="background:rgba(90,130,90,0.1);color:var(--text-muted);">When Door Opens</span></div></div>
-  <div class="page" id="page-dailyops"><div class="placeholder"><div class="placeholder-icon">⚡</div><div class="placeholder-title">Daily Operations</div><div class="placeholder-sub">Morning routine and workflows.</div><span class="ph-phase badge-blue">Phase 4</span></div></div>
-  <div class="page" id="page-lifegoals"><div class="placeholder"><div class="placeholder-icon">🎯</div><div class="placeholder-title">Life Goals</div><div class="placeholder-sub">North star and bucket list.</div><span class="ph-phase badge-blue">Phase 4</span></div></div>
-  <div class="page" id="page-roadmap"><div class="placeholder"><div class="placeholder-icon">🗺️</div><div class="placeholder-title">Life Roadmap</div><div class="placeholder-sub">Phase completions and what opens next.<br>Built last — after all domains complete.</div><span class="ph-phase" style="background:rgba(90,130,90,0.1);color:var(--text-muted);">Built Last</span></div></div>
+  <!-- PLACEHOLDER PAGES -->
+  <div class="page" id="page-calendar"><div class="placeholder"><div class="placeholder-icon">📅</div><div class="placeholder-title">Calendar</div><div class="placeholder-sub">Joint Google Calendar — live family schedule.<br>Pending Google Calendar integration.</div><span class="ph-phase badge-blue">Integration Pending</span></div></div>
+  <div class="page" id="page-finances"><div class="placeholder"><div class="placeholder-icon">💰</div><div class="placeholder-title">Finances</div><div class="placeholder-sub">Financial picture, entity planning, and tax strategy.</div><span class="ph-phase badge-blue">Phase 4</span></div></div>
+  <div class="page" id="page-entity"><div class="placeholder"><div class="placeholder-icon">🏢</div><div class="placeholder-title">Entity</div><div class="placeholder-sub">Business entity structure and tax optimization.</div><span class="ph-phase badge-blue">Phase 4</span></div></div>
+  <div class="page" id="page-handbook"><div class="placeholder"><div class="placeholder-icon">📖</div><div class="placeholder-title">Trading Handbook</div><div class="placeholder-sub">Playbook, entry sequence, market conditions, and strategy.</div><span class="ph-phase badge-gold">Phase 2</span></div></div>
+  <div class="page" id="page-performance"><div class="placeholder"><div class="placeholder-icon">📈</div><div class="placeholder-title">Performance</div><div class="placeholder-sub">Weekly, monthly, YTD reviews and win rate analysis.</div><span class="ph-phase badge-gold">Phase 2</span></div></div>
+  <div class="page" id="page-datalog"><div class="placeholder"><div class="placeholder-icon">📊</div><div class="placeholder-title">Data Log</div><div class="placeholder-sub">Trade log and big movers — linked from Google Sheets.</div><span class="ph-phase badge-gold">Phase 2</span></div></div>
+  <div class="page" id="page-workflow"><div class="placeholder"><div class="placeholder-icon">⚙️</div><div class="placeholder-title">Workflow & Protocols</div><div class="placeholder-sub">Daily workflow, prompts, and Gemini scripts.</div><span class="ph-phase badge-gold">Phase 2</span></div></div>
+  <div class="page" id="page-photography"><div class="placeholder"><div class="placeholder-icon">📷</div><div class="placeholder-title">Taylor Hendry Photography</div><div class="placeholder-sub">Business overview, clients, and marketing.</div><span class="ph-phase badge-green">Phase 3</span></div></div>
+  <div class="page" id="page-hrs"><div class="placeholder"><div class="placeholder-icon">🔧</div><div class="placeholder-title">Hendry Residential Services</div><div class="placeholder-sub">Overview, clients, and reactivation planning.</div><span class="ph-phase badge-blue">Phase 4</span></div></div>
+  <div class="page" id="page-ventures"><div class="placeholder"><div class="placeholder-icon">🚀</div><div class="placeholder-title">New Ventures</div><div class="placeholder-sub">Photography sales, stock photography, print-on-demand,<br>digital products, drone photography/videography.</div><span class="ph-phase" style="background:rgba(107,114,128,0.1);color:var(--text-muted);">Idle — When Ready</span></div></div>
+  <div class="page" id="page-homebuild"><div class="placeholder"><div class="placeholder-icon">🏡</div><div class="placeholder-title">Home / Build</div><div class="placeholder-sub">Vision, floor plans, land research, and financing.</div><span class="ph-phase" style="background:rgba(107,114,128,0.1);color:var(--text-muted);">When Door Opens</span></div></div>
+  <div class="page" id="page-dailyops"><div class="placeholder"><div class="placeholder-icon">⚡</div><div class="placeholder-title">Daily Operations</div><div class="placeholder-sub">Morning routine, schedule reference, and workflows.</div><span class="ph-phase badge-blue">Phase 4</span></div></div>
+  <div class="page" id="page-lifegoals"><div class="placeholder"><div class="placeholder-icon">🎯</div><div class="placeholder-title">Life Goals</div><div class="placeholder-sub">North star vision, level system, and bucket list.</div><span class="ph-phase badge-blue">Phase 4</span></div></div>
+  <div class="page" id="page-roadmap"><div class="placeholder"><div class="placeholder-icon">🗺️</div><div class="placeholder-title">Life Roadmap</div><div class="placeholder-sub">Phase completions and cross-domain milestones.<br>Built last — after all domains complete.</div><span class="ph-phase" style="background:rgba(107,114,128,0.1);color:var(--text-muted);">Built Last</span></div></div>
+  <div class="page" id="page-taylor"><div class="placeholder"><div class="placeholder-icon">👩</div><div class="placeholder-title" style="color:#ff44bb;">Taylor</div><div class="placeholder-sub">Taylor's personal domain — goals and growth.</div><span class="ph-phase" style="background:rgba(255,68,187,0.1);color:#ff44bb;border:1px solid rgba(255,68,187,0.2);">Phase 4</span></div></div>
+  <div class="page" id="page-adley"><div class="placeholder"><div class="placeholder-icon">👧</div><div class="placeholder-title" style="color:#bb44ff;">Adley</div><div class="placeholder-sub">Development, milestones, and focus areas.</div><span class="ph-phase" style="background:rgba(187,68,255,0.1);color:#bb44ff;border:1px solid rgba(187,68,255,0.2);">Phase 4</span></div></div>
+  <div class="page" id="page-evie"><div class="placeholder"><div class="placeholder-icon">👧</div><div class="placeholder-title" style="color:#ff99cc;">Evie</div><div class="placeholder-sub">Development, milestones, and focus areas.</div><span class="ph-phase" style="background:rgba(255,153,204,0.1);color:#ff99cc;border:1px solid rgba(255,153,204,0.2);">Phase 4</span></div></div>
+  <div class="page" id="page-callan"><div class="placeholder"><div class="placeholder-icon">👦</div><div class="placeholder-title" style="color:#0099ff;">Callan</div><div class="placeholder-sub">Development, milestones, and focus areas.</div><span class="ph-phase" style="background:rgba(0,153,255,0.1);color:#0099ff;border:1px solid rgba(0,153,255,0.2);">Phase 4</span></div></div>
+  <div class="page" id="page-cooper"><div class="placeholder"><div class="placeholder-icon">👦</div><div class="placeholder-title" style="color:#ffee00;">Cooper</div><div class="placeholder-sub">Development, milestones, and focus areas.</div><span class="ph-phase" style="background:rgba(255,238,0,0.1);color:#ffee00;border:1px solid rgba(255,238,0,0.2);">Phase 4</span></div></div>
+  <div class="page" id="page-david"><div class="placeholder"><div class="placeholder-icon">🧠</div><div class="placeholder-title">David — Personal</div><div class="placeholder-sub">Fitness, diet, mental/emotional, and personal growth.</div><span class="ph-phase badge-blue">Phase 4</span></div></div>
+  <div class="page" id="page-daily-log">
+    <div class="page-content">
+      <div class="page-header"><div class="page-icon">📝</div><div><div class="page-title" style="color:#ff0000;">Daily Log</div><div class="page-sub">Trading · Diet · Fitness — submit each section independently</div></div></div>
+
+      <!-- ── TRADING LOG ── -->
+      <div style="margin-bottom:20px;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;color:#88ff00;margin-bottom:10px;padding:8px 14px;background:var(--surface);border:1px solid var(--border2);border-radius:8px;border-left:3px solid #88ff00;">📈 TRADE ENTRY — One trade at a time</div>
+
+        <div id="trade-submitted-msg" style="display:none;background:rgba(0,255,136,0.08);border:1px solid #88ff00;border-radius:8px;padding:10px 14px;margin-bottom:10px;font-family:'IBM Plex Mono',monospace;font-size:10px;color:#88ff00;text-align:center;letter-spacing:1px;">✓ TRADE LOGGED — Form cleared for next trade</div>
+
+        <div style="background:var(--surface);border:1px solid var(--border2);border-radius:10px;padding:14px;margin-bottom:8px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-dim);margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border);">Trade Context</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
+            <div><label class="log-label">Date</label><input type="date" class="log-input" id="t-date"></div>
+            <div><label class="log-label">Day</label>
+              <select class="log-select" id="t-day">
+                <option value="">Select</option>
+                <option>Monday</option><option>Tuesday</option><option>Wednesday</option><option>Thursday</option><option>Friday</option>
+              </select>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
+            <div><label class="log-label">Market Type</label>
+              <select class="log-select" id="t-mtype">
+                <option value="">Select</option><option>Bull</option><option>Bear</option>
+              </select>
+            </div>
+            <div><label class="log-label">Market Condition</label>
+              <select class="log-select" id="t-mcond">
+                <option value="">Select</option><option>Hot Bull</option><option>Warm Bull</option><option>Choppy</option><option>Starved Relief</option><option>Bear</option>
+              </select>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
+            <div><label class="log-label">Ticker</label><input type="text" class="log-input" id="t-ticker" placeholder="AAPL" style="text-transform:uppercase;"></div>
+            <div><label class="log-label">Float</label><input type="number" class="log-input" id="t-float" placeholder="4200000"></div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
+            <div><label class="log-label">ETB / HTB</label>
+              <select class="log-select" id="t-etb">
+                <option value="">Select</option><option>ETB</option><option>HTB</option>
+              </select>
+            </div>
+            <div><label class="log-label">Catalyst</label><input type="text" class="log-input" id="t-catalyst" placeholder="Earnings beat, PR..."></div>
+          </div>
+        </div>
+
+        <div style="background:var(--surface);border:1px solid var(--border2);border-radius:10px;padding:14px;margin-bottom:8px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-dim);margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border);">Technicals & Trade</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
+            <div><label class="log-label">VWAP</label>
+              <select class="log-select" id="t-vwap"><option value="">Select</option><option>Above</option><option>Below</option></select>
+            </div>
+            <div><label class="log-label">100K / Min</label>
+              <select class="log-select" id="t-100k"><option value="">Select</option><option>Above</option><option>Below</option></select>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
+            <div><label class="log-label">Trade Type</label>
+              <select class="log-select" id="t-ttype"><option value="">Select</option><option>Channel</option><option>Scalp</option><option>Repricing Thesis</option></select>
+            </div>
+            <div><label class="log-label">Entry Type</label>
+              <select class="log-select" id="t-etype"><option value="">Select</option><option>Breakout</option><option>Breakout Pullback</option><option>Cup & Handle</option><option>Support</option><option>VWAP Break</option><option>VWAP Support</option><option>W</option></select>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
+            <div><label class="log-label">Initial R:R</label><input type="text" class="log-input" id="t-irr" placeholder="2:1"></div>
+            <div><label class="log-label">Executed R:R</label><input type="text" class="log-input" id="t-err" placeholder="1.5:1"></div>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:8px;">
+            <div><label class="log-label"># Trades</label><input type="number" class="log-input" id="t-ntrades" placeholder="3" min="0"></div>
+            <div><label class="log-label"># Green</label><input type="number" class="log-input" id="t-ngreen" placeholder="2" min="0"></div>
+            <div><label class="log-label"># Red</label><input type="number" class="log-input" id="t-nred" placeholder="1" min="0"></div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
+            <div><label class="log-label">P&L ($)</label><input type="number" class="log-input" id="t-pnl" placeholder="+25.40" step="0.01"></div>
+            <div><label class="log-label">Wash Sale</label>
+              <select class="log-select" id="t-wash"><option value="">Select</option><option>Y</option><option>N</option></select>
+            </div>
+          </div>
+          <div><label class="log-label">Wash Sale $ Impact</label><input type="number" class="log-input" id="t-washamt" placeholder="0.00" step="0.01"></div>
+        </div>
+
+        <div style="background:var(--surface);border:1px solid var(--border2);border-radius:10px;padding:14px;margin-bottom:8px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-dim);margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border);">Analysis — Your Review</div>
+          <div style="margin-bottom:8px;"><label class="log-label">Was my entry well timed?</label><textarea class="log-textarea" id="t-a1" placeholder="Yes / No — and why..."></textarea></div>
+          <div style="margin-bottom:8px;"><label class="log-label">Was my stop placed appropriately?</label><textarea class="log-textarea" id="t-a2" placeholder="Yes / No — basis..."></textarea></div>
+          <div style="margin-bottom:8px;"><label class="log-label">What did I do well?</label><textarea class="log-textarea" id="t-a3" placeholder="Execution, patience, discipline..."></textarea></div>
+          <div style="margin-bottom:8px;"><label class="log-label">One thing I could have done better?</label><textarea class="log-textarea" id="t-a4" placeholder="One specific improvement..."></textarea></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
+            <div><label class="log-label">Best Case P&L ($)</label><input type="number" class="log-input" id="t-bestpnl" placeholder="0.00" step="0.01"></div>
+            <div><label class="log-label">Sold Appropriately?</label>
+              <select class="log-select" id="t-sold"><option value="">Select</option><option>Yes — appropriate</option><option>No — sold early</option><option>No — held too long</option></select>
+            </div>
+          </div>
+          <div style="margin-bottom:8px;"><label class="log-label">Why did I sell?</label><textarea class="log-textarea" id="t-a5" placeholder="Target hit, stop triggered, intuition..."></textarea></div>
+          <div style="margin-bottom:8px;"><label class="log-label">My Conclusion</label><textarea class="log-textarea" id="t-a6" placeholder="Overall takeaway from this trade..."></textarea></div>
+        </div>
+
+        <button class="log-submit-btn" style="border-color:#88ff00;color:#88ff00;" onclick="submitTrade()">SUBMIT TRADE — LOG NEXT</button>
+      </div>
+
+      <!-- ── DIET LOG ── -->
+      <div style="margin-bottom:20px;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;color:#ff6600;margin-bottom:10px;padding:8px 14px;background:var(--surface);border:1px solid var(--border2);border-radius:8px;border-left:3px solid #ff6600;">🥗 DIET — Daily Macros</div>
+
+        <div id="diet-submitted-msg" style="display:none;background:rgba(255,119,0,0.08);border:1px solid #ff6600;border-radius:8px;padding:10px 14px;margin-bottom:10px;font-family:'IBM Plex Mono',monospace;font-size:10px;color:#ff6600;text-align:center;letter-spacing:1px;">✓ DIET LOGGED</div>
+
+        <div style="background:var(--surface);border:1px solid var(--border2);border-radius:10px;padding:14px;margin-bottom:8px;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
+            <div><label class="log-label">Calories</label><input type="number" class="log-input" id="d-cal" placeholder="2200"></div>
+            <div><label class="log-label">Protein (g)</label><input type="number" class="log-input" id="d-pro" placeholder="180"></div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
+            <div><label class="log-label">Carbs (g)</label><input type="number" class="log-input" id="d-carb" placeholder="175"></div>
+            <div><label class="log-label">Fat (g)</label><input type="number" class="log-input" id="d-fat" placeholder="80"></div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;">
+            <div><label class="log-label">Sodium (mg)</label><input type="number" class="log-input" id="d-sod" placeholder="1800"></div>
+            <div><label class="log-label">Added Sugar (g)</label><input type="number" class="log-input" id="d-sug" placeholder="25"></div>
+          </div>
+
+          <!-- LIVE MACRO METERS -->
+          <div id="diet-meters" style="display:none;">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-dim);margin-bottom:10px;padding-top:8px;border-top:1px solid var(--border);">vs Targets</div>
+            <div id="meter-cal" class="meter-row-dl"></div>
+            <div id="meter-pro" class="meter-row-dl"></div>
+            <div id="meter-carb" class="meter-row-dl"></div>
+            <div id="meter-fat" class="meter-row-dl"></div>
+            <div id="meter-sod" class="meter-row-dl"></div>
+            <div id="meter-sug" class="meter-row-dl"></div>
+          </div>
+        </div>
+        <button class="log-submit-btn" style="border-color:#ff6600;color:#ff6600;" onclick="submitDiet()">LOG DIET</button>
+      </div>
+
+      <!-- ── FITNESS LOG ── -->
+      <div style="margin-bottom:20px;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;color:#00ccff;margin-bottom:10px;padding:8px 14px;background:var(--surface);border:1px solid var(--border2);border-radius:8px;border-left:3px solid #00ccff;">💪 FITNESS — Daily Activity</div>
+
+        <div id="fit-submitted-msg" style="display:none;background:rgba(0,204,255,0.08);border:1px solid #00ccff;border-radius:8px;padding:10px 14px;margin-bottom:10px;font-family:'IBM Plex Mono',monospace;font-size:10px;color:#00ccff;text-align:center;letter-spacing:1px;">✓ FITNESS LOGGED</div>
+
+        <div style="background:var(--surface);border:1px solid var(--border2);border-radius:10px;padding:14px;margin-bottom:8px;">
+          <!-- TOGGLE BUTTONS -->
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-dim);margin-bottom:8px;">Goals</div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px;">
+            <button class="toggle-btn" id="tog-exercise" onclick="toggleBtn('tog-exercise')">Exercise</button>
+            <button class="toggle-btn" id="tog-iso" onclick="toggleBtn('tog-iso')">Iso Holds</button>
+            <button class="toggle-btn" id="tog-stretch" onclick="toggleBtn('tog-stretch')">Stretch</button>
+          </div>
+          <div style="margin-bottom:10px;"><label class="log-label">Workout Day</label>
+            <select class="log-select" id="f-wtype">
+              <option value="">Select or Rest Day</option>
+              <option>Push</option><option>Pull</option><option>Bike</option><option>Hike</option><option>Run</option><option>Beaver Ranch</option><option>Rest</option>
+            </select>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
+            <div><label class="log-label">Daily Steps</label><input type="number" class="log-input" id="f-steps" placeholder="8500"></div>
+            <div><label class="log-label">Flights of Stairs</label><input type="number" class="log-input" id="f-flights" placeholder="4"></div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+            <div><label class="log-label">Intensity Minutes</label><input type="number" class="log-input" id="f-intensity" placeholder="35"></div>
+            <div><label class="log-label">Body Battery</label><input type="number" class="log-input" id="f-battery" placeholder="72" min="0" max="100"></div>
+          </div>
+        </div>
+        <button class="log-submit-btn" style="border-color:#00ccff;color:#00ccff;" onclick="submitFitness()">LOG FITNESS</button>
+      </div>
+
+    </div>
+  </div>
 </div>
 
 <script>
@@ -469,46 +939,66 @@ const days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturda
 const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 document.getElementById('topbar-date').textContent=days[d.getDay()]+' '+months[d.getMonth()]+' '+d.getDate();
 
-// GATE — once per day via localStorage
+// ACCENT COLOR SYSTEM
+function setAccent(color){
+  if(!color) color='#9ca3af';
+  document.documentElement.style.setProperty('--accent',color);
+  const alpha=color+'26';
+  document.documentElement.style.setProperty('--accent-glow','rgba('+hexToRgb(color)+',0.1)');
+}
+function hexToRgb(hex){
+  const r=parseInt(hex.slice(1,3),16);
+  const g=parseInt(hex.slice(3,5),16);
+  const b=parseInt(hex.slice(5,7),16);
+  return r+','+g+','+b;
+}
+
+// GATE
 const todayKey='gate_'+d.getFullYear()+'_'+d.getMonth()+'_'+d.getDate();
 let gatePassed=localStorage.getItem(todayKey)==='passed';
 if(gatePassed){
-  document.getElementById('gate-passed').style.display='block';
+  const banner=document.getElementById('gate-passed');
+  if(banner) banner.style.display='block';
   const btn=document.getElementById('gate-btn');
-  btn.textContent='✓ CLEARED';btn.disabled=true;btn.style.background='var(--green-mid)';
+  if(btn){btn.textContent='✓ CLEARED';btn.disabled=true;}
 }
 
 function passGate(){
   gatePassed=true;
   localStorage.setItem(todayKey,'passed');
   const btn=document.getElementById('gate-btn');
-  btn.textContent='✓ CLEARED';btn.disabled=true;btn.style.background='var(--green-mid)';
+  btn.textContent='✓ CLEARED';btn.disabled=true;
   const banner=document.getElementById('gate-passed');
   banner.style.display='block';
   banner.scrollIntoView({behavior:'smooth'});
 }
 
-function requireGate(id){
+function requireGate(id,color){
   if(!gatePassed){
     document.getElementById('gate-section').scrollIntoView({behavior:'smooth'});
     const btn=document.getElementById('gate-btn');
-    btn.style.transform='scale(0.97)';btn.style.boxShadow='0 0 30px rgba(45,107,40,0.9)';
-    setTimeout(()=>{btn.style.transform='';btn.style.boxShadow='';},300);
-  } else showPage(id);
+    btn.style.transform='scale(0.97)';
+    setTimeout(()=>{btn.style.transform='';},300);
+  } else nav(id,color);
 }
 
-// NAV
-const goldPages=['trading','handbook','performance','datalog','workflow'];
-function showPage(id){
+// NAVIGATION
+function nav(id,color){
+  setAccent(color);
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n=>{n.classList.remove('active');n.classList.remove('active-gold');});
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
   const pg=document.getElementById('page-'+id);
-  if(pg)pg.classList.add('active');
-  const t=document.getElementById('topbar-title');
-  t.textContent=id.replace(/-/g,' ').replace(/\b\w/g,c=>c.toUpperCase());
-  t.className=goldPages.includes(id)?'topbar-title gold':'topbar-title';
-  const nav=document.getElementById('nav-'+id);
-  if(nav)nav.classList.add(goldPages.includes(id)?'active-gold':'active');
+  if(pg) pg.classList.add('active');
+  const titles={
+    'briefing':'Daily Briefing','david-cmd':'Command Center','trading':'Trading',
+    'handbook':'Handbook','performance':'Performance','datalog':'Data Log',
+    'workflow':'Workflow & Protocols','photography':'Taylor Hendry Photography',
+    'hrs':'Hendry Residential','ventures':'New Ventures','homebuild':'Home / Build',
+    'dailyops':'Daily Operations','lifegoals':'Life Goals','roadmap':'Life Roadmap',
+    'hcc':'HCC Completion','calendar':'Calendar','finances':'Finances','entity':'Entity',
+    'taylor':'Taylor','adley':'Adley','evie':'Evie','callan':'Callan','cooper':'Cooper','david':'David'
+  };
+  document.getElementById('topbar-title').textContent=titles[id]||id;
   closeSidebar();window.scrollTo(0,0);
 }
 
@@ -516,7 +1006,6 @@ function toggleDomain(subId,chevId){
   document.getElementById(subId).classList.toggle('open');
   document.getElementById(chevId).classList.toggle('open');
 }
-
 function toggleSidebar(){
   document.getElementById('sidebar').classList.toggle('open');
   document.getElementById('overlay').classList.toggle('visible');
@@ -526,24 +1015,604 @@ function closeSidebar(){
   document.getElementById('overlay').classList.remove('visible');
 }
 
-function toggleCheck(item){
+// CHECKLISTS
+function toggleCheck(item){item.classList.toggle('done');item.querySelector('.check-box').textContent=item.classList.contains('done')?'✓':'';}
+function resetChecklist(){document.querySelectorAll('.check-item').forEach(i=>{i.classList.remove('done');i.querySelector('.check-box').textContent='';});}
+function toggleTask(item){
   item.classList.toggle('done');
-  item.querySelector('.check-box').textContent=item.classList.contains('done')?'✓':'';
-}
-function resetChecklist(){
-  document.querySelectorAll('.check-item').forEach(i=>{i.classList.remove('done');i.querySelector('.check-box').textContent='';});
+  item.querySelector('.task-box').textContent=item.classList.contains('done')?'✓':'';
 }
 
+// CHART
 window.addEventListener('load',()=>{
   const ctx=document.getElementById('pnlChart');
   if(!ctx)return;
-  new Chart(ctx.getContext('2d'),{type:'bar',data:{labels:['Mon','Tue','Wed','Thu'],datasets:[{data:[31.97,-8.21,22.14,20.17],backgroundColor:['rgba(90,184,78,0.5)','rgba(200,64,64,0.5)','rgba(90,184,78,0.5)','rgba(90,184,78,0.5)'],borderColor:['rgba(90,184,78,1)','rgba(200,64,64,1)','rgba(90,184,78,1)','rgba(90,184,78,1)'],borderWidth:1,borderRadius:4}]},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>(c.raw>=0?'+':'')+'$'+c.raw.toFixed(2)}}},scales:{x:{grid:{color:'rgba(255,255,255,0.03)'},ticks:{color:'#5a7055',font:{family:'IBM Plex Mono',size:10}}},y:{grid:{color:'rgba(255,255,255,0.03)'},ticks:{color:'#5a7055',font:{family:'IBM Plex Mono',size:10},callback:v=>'$'+v}}}}});
+  new Chart(ctx.getContext('2d'),{type:'bar',data:{labels:['Mon','Tue','Wed','Thu'],datasets:[{data:[31.97,-8.21,22.14,20.17],backgroundColor:['rgba(34,197,94,0.5)','rgba(255,0,0,0.5)','rgba(34,197,94,0.5)','rgba(34,197,94,0.5)'],borderColor:['#22c55e','#ff0000','#22c55e','#22c55e'],borderWidth:1,borderRadius:4}]},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>(c.raw>=0?'+':'')+'$'+c.raw.toFixed(2)}}},scales:{x:{grid:{color:'rgba(255,255,255,0.03)'},ticks:{color:'#6b7280',font:{family:'IBM Plex Mono',size:10}}},y:{grid:{color:'rgba(255,255,255,0.03)'},ticks:{color:'#6b7280',font:{family:'IBM Plex Mono',size:10},callback:v=>'$'+v}}}}});
 });
 
+// DAILY LOG FUNCTIONS
+const MACRO_TARGETS = {cal:2750,pro:190,carb:175,fat:80,sod:2000,sug:30};
+const MACRO_COLORS = {cal:'#88ff00',pro:'#00ccff',carb:'#ffee00',fat:'#ff6600',sod:'#ff0000',sug:'#bb44ff'};
+const MACRO_LABELS = {cal:'Calories',pro:'Protein',carb:'Carbs',fat:'Fat',sod:'Sodium',sug:'Sugar'};
+const MACRO_UNITS = {cal:'kcal',pro:'g',carb:'g',fat:'g',sod:'mg',sug:'g'};
+
+function buildMeter(id, val, key) {
+  const el = document.getElementById(id);
+  if(!el) return;
+  const target = MACRO_TARGETS[key];
+  const pct = Math.min((val/target)*100, 110);
+  const over = val > target;
+  const color = over ? '#ff0000' : MACRO_COLORS[key];
+  el.innerHTML = `
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--text-muted);width:52px;flex-shrink:0;">${MACRO_LABELS[key]}</span>
+    <div style="flex:1;height:5px;background:var(--surface3);border-radius:2px;overflow:hidden;">
+      <div style="width:${pct}%;height:100%;background:${color};border-radius:2px;transition:width 0.5s;"></div>
+    </div>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:${color};width:100px;text-align:right;flex-shrink:0;">${val}${MACRO_UNITS[key]} / ${target}${MACRO_UNITS[key]}</span>
+  `;
+}
+
+function updateDietMeters() {
+  const vals = {
+    cal: parseFloat(document.getElementById('d-cal').value)||0,
+    pro: parseFloat(document.getElementById('d-pro').value)||0,
+    carb: parseFloat(document.getElementById('d-carb').value)||0,
+    fat: parseFloat(document.getElementById('d-fat').value)||0,
+    sod: parseFloat(document.getElementById('d-sod').value)||0,
+    sug: parseFloat(document.getElementById('d-sug').value)||0
+  };
+  const hasAny = Object.values(vals).some(v=>v>0);
+  document.getElementById('diet-meters').style.display = hasAny ? 'block' : 'none';
+  if(hasAny) {
+    Object.keys(vals).forEach(k => buildMeter('meter-'+k, vals[k], k));
+  }
+}
+
+// Live meter updates as you type
+['d-cal','d-pro','d-carb','d-fat','d-sod','d-sug'].forEach(id => {
+  setTimeout(() => {
+    const el = document.getElementById(id);
+    if(el) el.addEventListener('input', updateDietMeters);
+  }, 500);
+});
+
+function toggleBtn(id) {
+  const btn = document.getElementById(id);
+  btn.classList.toggle('on');
+}
+
+function submitTrade() {
+  // Clear all trade fields
+  ['t-date','t-ticker','t-float','t-catalyst','t-irr','t-err','t-ntrades','t-ngreen','t-nred','t-pnl','t-washamt','t-bestpnl','t-a1','t-a2','t-a3','t-a4','t-a5','t-a6'].forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.value = '';
+  });
+  ['t-day','t-mtype','t-mcond','t-etb','t-vwap','t-100k','t-ttype','t-etype','t-wash','t-sold'].forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.value = '';
+  });
+  const msg = document.getElementById('trade-submitted-msg');
+  msg.style.display = 'block';
+  setTimeout(() => msg.style.display = 'none', 3000);
+  window.scrollTo(0, document.getElementById('page-daily-log').offsetTop);
+}
+
+function submitDiet() {
+  const msg = document.getElementById('diet-submitted-msg');
+  msg.style.display = 'block';
+  setTimeout(() => msg.style.display = 'none', 3000);
+}
+
+function submitFitness() {
+  const msg = document.getElementById('fit-submitted-msg');
+  msg.style.display = 'block';
+  setTimeout(() => msg.style.display = 'none', 3000);
+}
+
+// Auto-fill today's date in trade form
+setTimeout(() => {
+  const dateEl = document.getElementById('t-date');
+  if(dateEl) {
+    const today = new Date();
+    dateEl.value = today.toISOString().split('T')[0];
+  }
+}, 300);
+
+// ── WEATHER & MOON ──
+function getMoonPhase(date) {
+  const phases=[{name:'New Moon',icon:'🌑'},{name:'Waxing Crescent',icon:'🌒'},{name:'First Quarter',icon:'🌓'},{name:'Waxing Gibbous',icon:'🌔'},{name:'Full Moon',icon:'🌕'},{name:'Waning Gibbous',icon:'🌖'},{name:'Last Quarter',icon:'🌗'},{name:'Waning Crescent',icon:'🌘'}];
+  const knownNew=new Date('2024-01-11');
+  const cycleMs=29.53058867*24*60*60*1000;
+  const diff=date-knownNew;
+  return phases[Math.floor((((diff%cycleMs)+cycleMs)%cycleMs/cycleMs)*8)];
+}
+
+function calcSunTimes() {
+  const now=new Date();
+  const JD=Math.floor(now/86400000)+2440587.5;
+  const n=JD-2451545.0;
+  const L=(280.460+0.9856474*n)%360;
+  const g=((357.528+0.9856003*n)%360)*Math.PI/180;
+  const lambda=(L+1.915*Math.sin(g)+0.020*Math.sin(2*g))*Math.PI/180;
+  const eps=23.439*Math.PI/180;
+  const dec=Math.asin(Math.sin(eps)*Math.sin(lambda));
+  const lat=39.5197*Math.PI/180;
+  const cosH=(Math.cos(90.833*Math.PI/180)-Math.sin(lat)*Math.sin(dec))/(Math.cos(lat)*Math.cos(dec));
+  if(Math.abs(cosH)>1) return {sunrise:'--:--',sunset:'--:--'};
+  const H=Math.acos(cosH)*180/Math.PI;
+  const RA=Math.atan2(Math.cos(eps)*Math.sin(lambda),Math.cos(lambda))*12/Math.PI;
+  const EoT=(L-(RA*15))/15;
+  const offset=new Date().getTimezoneOffset()/-60;
+  const noon=12-(-105.3003)/15-EoT+offset;
+  const sr=noon-H/15;
+  const ss=noon+H/15;
+  const fmt=t=>{const h=Math.floor(t)%12||12,m=Math.round((t%1)*60),ap=Math.floor(t)>=12?'PM':'AM';return h+':'+(m<10?'0':'')+m+' '+ap;};
+  return {sunrise:fmt(sr),sunset:fmt(ss)};
+}
+
+// JSONP weather handler — called by wttr.in script response
+window.handleWttr = function(data) {
+  try {
+    const cur = data.current_condition[0];
+    const day = data.weather[0];
+    const desc = cur.weatherDesc[0].value;
+    const ICON={'Clear':'☀️','Sunny':'☀️','Partly':'⛅','Overcast':'☁️','Cloudy':'🌥️','Mist':'🌫️','Fog':'🌫️','Rain':'🌧️','Drizzle':'🌦️','Snow':'❄️','Sleet':'🌨️','Thunder':'⛈️','Blizzard':'❄️','Wind':'💨'};
+    let icon='🌤️';
+    for(const[k,v] of Object.entries(ICON)){if(desc.includes(k)){icon=v;break;}}
+
+    const te=document.getElementById('weather-temp');
+    const hi=document.getElementById('weather-high');
+    const lo=document.getElementById('weather-low');
+    const co=document.getElementById('weather-condition');
+    const ic=document.getElementById('weather-icon');
+    if(te) te.textContent=cur.temp_F+'°';
+    if(hi) hi.textContent='H: '+day.maxtempF+'°';
+    if(lo) lo.textContent='L: '+day.mintempF+'°';
+    if(co) co.textContent=desc;
+    if(ic) ic.textContent=icon;
+
+    // Hide edit card if showing
+    const ed=document.getElementById('weather-edit');
+    if(ed) ed.style.display='none';
+    const btn=document.getElementById('weather-edit-btn');
+    if(btn) btn.textContent='EDIT';
+  } catch(e) {}
+};
+
+function loadWeatherJSONP() {
+  // Remove old script if exists
+  const old=document.getElementById('wttr-script');
+  if(old) old.remove();
+  const s=document.createElement('script');
+  s.id='wttr-script';
+  s.src='https://wttr.in/Conifer+CO?format=j1&callback=handleWttr&rand='+Date.now();
+  s.onerror=function(){
+    const co=document.getElementById('weather-condition');
+    if(co && co.textContent==='Loading...') co.textContent='Tap EDIT to enter manually';
+  };
+  document.head.appendChild(s);
+}
+
+function fmtTime12(t){if(!t)return'--';const p=t.split(':');let h=parseInt(p[0]),m=parseInt(p[1]||0);const ap=h>=12?'PM':'AM';h=h%12||12;return h+':'+(m<10?'0':'')+m+' '+ap;}
+
+function initWeather() {
+  // Moon — always local
+  const moon=getMoonPhase(new Date());
+  const mi=document.getElementById('moon-icon');
+  const mn=document.getElementById('moon-name');
+  if(mi) mi.textContent=moon.icon;
+  if(mn) mn.textContent=moon.name;
+
+  // Sunrise/sunset — always local calculation
+  const sun=calcSunTimes();
+  const sr=document.getElementById('weather-sunrise');
+  const ss=document.getElementById('weather-sunset');
+  if(sr) sr.textContent=sun.sunrise;
+  if(ss) ss.textContent=sun.sunset;
+
+  // Set loading state
+  const co=document.getElementById('weather-condition');
+  if(co) co.textContent='Loading...';
+
+  // Try JSONP weather load
+  loadWeatherJSONP();
+}
+
+// Manual save
+const COND_ICON={'Clear Sky':'☀️','Mainly Clear':'🌤️','Partly Cloudy':'⛅','Mostly Cloudy':'🌥️','Overcast':'☁️','Fog':'🌫️','Light Rain':'🌦️','Rain':'🌧️','Heavy Rain':'🌧️','Light Snow':'🌨️','Snow':'❄️','Heavy Snow':'❄️','Rain Showers':'🌦️','Thunderstorm':'⛈️','Blowing Snow':'❄️','Icy':'🌨️'};
+
+function toggleWeatherEdit(){
+  const disp=document.getElementById('weather-display');
+  const edit=document.getElementById('weather-edit');
+  const btn=document.getElementById('weather-edit-btn');
+  const isEdit=edit.style.display!=='none';
+  edit.style.display=isEdit?'none':'block';
+  btn.textContent=isEdit?'EDIT':'CANCEL';
+}
+
+function saveWeather(){
+  const w={
+    date:new Date().toDateString(),
+    temp:document.getElementById('wi-temp').value||'--',
+    high:document.getElementById('wi-high').value||'--',
+    low:document.getElementById('wi-low').value||'--',
+    cond:document.getElementById('wi-cond').value
+  };
+  const te=document.getElementById('weather-temp');
+  const hi=document.getElementById('weather-high');
+  const lo=document.getElementById('weather-low');
+  const co=document.getElementById('weather-condition');
+  const ic=document.getElementById('weather-icon');
+  if(te) te.textContent=w.temp+'°';
+  if(hi) hi.textContent='H: '+w.high+'°';
+  if(lo) lo.textContent='L: '+w.low+'°';
+  if(co) co.textContent=w.cond;
+  if(ic) ic.textContent=COND_ICON[w.cond]||'🌤️';
+  toggleWeatherEdit();
+}
+
+function fetchWeatherLive(){loadWeatherJSONP();}
+function loadWeatherByCity(){}
+
+// Init on load
+window.addEventListener('load', initWeather);
+
 // PWA
-const manifest={name:"Hendry Command Center",short_name:"HCC",start_url:".",display:"standalone",background_color:"#080c08",theme_color:"#080c08",icons:[{src:"data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23080c08' rx='20'/><text y='68' x='50' text-anchor='middle' font-size='55' font-family='serif' fill='%2372d464'>H</text></svg>",sizes:"192x192",type:"image/svg+xml"}]};
+const manifest={name:"Hendry Command Center",short_name:"HCC",start_url:".",display:"standalone",background_color:"#111318",theme_color:"#111318",icons:[{src:"data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23111318' rx='20'/><text y='68' x='50' text-anchor='middle' font-size='55' font-family='serif' fill='%23e8eaf0'>H</text></svg>",sizes:"192x192",type:"image/svg+xml"}]};
 const blob=new Blob([JSON.stringify(manifest)],{type:'application/json'});
 document.getElementById('manifest-link').href=URL.createObjectURL(blob);
+
+// Set default accent on load
+setAccent('#ff6600');
 </script>
+  <!-- ══ SYSTEM — APP INSTRUCTIONS ══ -->
+  <div class="page" id="page-sys-instructions">
+    <div class="page-content">
+      <div class="page-header" style="border-left-color:#888888;"><div class="page-icon">📋</div><div><div class="page-title" style="color:#aaaaaa;">App Instructions</div><div class="page-sub">How to use the Hendry Command Center</div></div></div>
+
+      <div class="card">
+        <div class="section-hdr" style="color:#888888;">Daily Flow</div>
+        <div style="font-size:13px;color:var(--text-muted);line-height:1.8;">
+          <p style="margin-bottom:8px;"><span style="color:#ff6600;font-weight:600;">1. Open HCC</span> — lands on Daily Briefing. Review family schedule and quick-nav to any family member.</p>
+          <p style="margin-bottom:8px;"><span style="color:#ff6600;font-weight:600;">2. Go to David → Command Center</span> — review personal streaks, trading snapshot, and failure tracker. Hard gate at the bottom must be passed before accessing any David sub-domain.</p>
+          <p style="margin-bottom:8px;"><span style="color:#ff6600;font-weight:600;">3. Pass the gate</span> — "I'm Ready — Enter" clears once per day via localStorage. Resets automatically at midnight.</p>
+          <p style="margin-bottom:8px;"><span style="color:#ff6600;font-weight:600;">4. Trade</span> — access Trading Command Center for pre-session checklist, market condition, loss limit, and quick links to Handbook and Data Log.</p>
+          <p style="margin-bottom:8px;"><span style="color:#ff6600;font-weight:600;">5. Log trades</span> — David → Daily Log → Trading section. One trade at a time. Submit clears form for next trade.</p>
+          <p style="margin-bottom:8px;"><span style="color:#ff6600;font-weight:600;">6. Log diet and fitness</span> — Daily Log → Diet and Fitness sections. Diet meters update live as you type. Fitness toggles track goal completion.</p>
+          <p><span style="color:#ff6600;font-weight:600;">7. Evening</span> — check HCC Completion for any pending build tasks. Review domain focus cards.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="section-hdr" style="color:#888888;">Navigation</div>
+        <div style="font-size:13px;color:var(--text-muted);line-height:1.8;">
+          <p style="margin-bottom:8px;"><span style="color:#aaaaaa;font-weight:600;">Sidebar</span> — tap the ☰ menu button on mobile. On desktop the sidebar is always visible. Domain names with › expand to show sub-sections.</p>
+          <p style="margin-bottom:8px;"><span style="color:#aaaaaa;font-weight:600;">Accent colors</span> — every domain has its own neon accent color. The topbar title and page headers shift to that color when you navigate into a domain.</p>
+          <p style="margin-bottom:8px;"><span style="color:#aaaaaa;font-weight:600;">Claude + Gemini buttons</span> — bottom of sidebar. Tap to open either tool directly.</p>
+          <p><span style="color:#aaaaaa;font-weight:600;">Back to briefing</span> — tap Daily Briefing in the sidebar at any time.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="section-hdr" style="color:#888888;">Daily Log — How It Works</div>
+        <div style="font-size:13px;color:var(--text-muted);line-height:1.8;">
+          <p style="margin-bottom:8px;"><span style="color:#88ff00;font-weight:600;">Trading</span> — fill in all fields for one trade. Tap Submit — form clears and shows confirmation. Repeat for each trade. Data will push to Trading Performance Log Google Sheet when integration is live.</p>
+          <p style="margin-bottom:8px;"><span style="color:#ff6600;font-weight:600;">Diet</span> — enter macros and the meters appear automatically showing actual vs target. Tap Log Diet when done.</p>
+          <p><span style="color:#00ccff;font-weight:600;">Fitness</span> — tap toggle buttons for Exercise, Iso Holds, Stretch — they turn neon blue when on. Select workout type, enter steps, flights, intensity minutes, and body battery. Tap Log Fitness.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="section-hdr" style="color:#888888;">Updating the App</div>
+        <div style="font-size:13px;color:var(--text-muted);line-height:1.8;">
+          <p style="margin-bottom:8px;">HCC is hosted on GitHub Pages. When Claude builds an updated version:</p>
+          <p style="margin-bottom:8px;">1. Download the new HTML file from Claude</p>
+          <p style="margin-bottom:8px;">2. Save as index.html in your local GitHub Desktop folder (replaces old file)</p>
+          <p style="margin-bottom:8px;">3. Open GitHub Desktop → Commit → Push Origin</p>
+          <p>4. Wait 60-90 seconds — both iPhone and desktop PWA update automatically</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ SYSTEM — TOOL ROLES ══ -->
+  <div class="page" id="page-sys-tools">
+    <div class="page-content">
+      <div class="page-header" style="border-left-color:#888888;"><div class="page-icon">🔧</div><div><div class="page-title" style="color:#aaaaaa;">Tool Roles</div><div class="page-sub">What each tool does — no overlap</div></div></div>
+
+      <div class="card" style="border-left:3px solid #88ff00;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;color:#88ff00;margin-bottom:8px;">Claude — This Project</div>
+        <div style="font-size:13px;color:var(--text-muted);line-height:1.8;">
+          <p style="margin-bottom:6px;">Deep thinking, document creation, system building, and analysis. Trade review partner — receives Webull exports and chart screenshots, fills Claude columns in trade log, generates coaching analysis. Weekly and monthly review compilation. Handbook and playbook creation and updates. Cross-document review and contradiction flagging. Daily diet and fitness coaching narrative at review intervals. HCC app development.</p>
+          <p style="color:#888888;font-size:11px;margin-top:8px;">Context lives in this HCC project. Start new threads here — memory carries full system context.</p>
+        </div>
+      </div>
+
+      <div class="card" style="border-left:3px solid #00ccff;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;color:#00ccff;margin-bottom:8px;">Gemini — Joint Gmail Account</div>
+        <div style="font-size:13px;color:var(--text-muted);line-height:1.8;">
+          <p style="margin-bottom:6px;">Daily operational dialogue and timed workflow triggers. Morning brief delivery at 6:45 AM. Trade prep gated Q&A session. Market close notification prompting big movers input. Weekly review notification Sunday evening. Monthly and quarterly review triggers. Google ecosystem integration — Calendar, Tasks, Drive. Verbal data relay for chart-based trade data entry.</p>
+          <p style="color:#888888;font-size:11px;margin-top:8px;">Runs independently of Claude. All Gemini scripts and prompts built in Claude, given to Gemini via David as relay.</p>
+        </div>
+      </div>
+
+      <div class="card" style="border-left:3px solid #ff6600;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;color:#ff6600;margin-bottom:8px;">HCC App — GitHub Pages PWA</div>
+        <div style="font-size:13px;color:var(--text-muted);line-height:1.8;">
+          <p style="margin-bottom:6px;">Primary daily interface and data entry point. Daily Briefing landing page with family schedule. David's Command Center with hard gate before trading. Daily Log for all domain logging — trading, diet, fitness, family. Domain navigation and reference. HCC Completion build tracking. When Google integrations are live — reads and writes to Calendar, Tasks, and Sheets directly.</p>
+          <p style="color:#888888;font-size:11px;margin-top:8px;">Hosted at GitHub Pages URL. Installed as PWA on iPhone home screen and Windows taskbar.</p>
+        </div>
+      </div>
+
+      <div class="card" style="border-left:3px solid #88ff00;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;color:#88ff00;margin-bottom:8px;">Google Sheets — Drive</div>
+        <div style="font-size:13px;color:var(--text-muted);line-height:1.8;">
+          <p style="margin-bottom:6px;">Data storage and warehouse. HCC Daily Log Sheet — one file, tabs per domain (Trading, David, Taylor, each child). Trading Performance Log — Daily Trade Log tab, Weekly/Monthly/YTD calculated by app. Market Performance Log — Big Movers and Sector Performance tabs. Claude reads Sheets for review and analysis. HCC writes to Sheets via Google API when integrations are live.</p>
+          <p style="color:#888888;font-size:11px;margin-top:8px;">Lives in trading Google account Drive. Connected to HCC via Google Cloud API key.</p>
+        </div>
+      </div>
+
+      <div class="card" style="border-left:3px solid #ffee00;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;color:#ffee00;margin-bottom:8px;">Google Tasks — Colorado Chiefs</div>
+        <div style="font-size:13px;color:var(--text-muted);line-height:1.8;">
+          <p>Life tasks only — one-off real world agenda items, errands, appointments, quick captures on the go. Not project tasks. Not repetitive workflow items. Short list, low noise. Lives in personal coloradochief Google account. Displays in HCC Daily Briefing and standalone Tasks page when integration is live.</p>
+        </div>
+      </div>
+
+      <div class="card" style="border-left:3px solid #ff44bb;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;color:#ff44bb;margin-bottom:8px;">Google Calendar — Joint Account</div>
+        <div style="font-size:13px;color:var(--text-muted);line-height:1.8;">
+          <p>Family schedule — shared with Taylor. School pickups, appointments, family events, kids activities, medical appointments. Displays in HCC Daily Briefing and standalone Calendar page when integration is live. Both David and Taylor can add events. Source of truth for family schedule.</p>
+        </div>
+      </div>
+
+      <div class="card" style="border-left:3px solid #888888;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;color:#888888;margin-bottom:8px;">Make.com — Phase 5</div>
+        <div style="font-size:13px;color:var(--text-muted);line-height:1.8;">
+          <p>Automation bridge. Connects Gemini outputs to Sheets automatically. Triggers workflows based on time or events. Evaluated after system structure is proven. Free tier likely sufficient for use case. Not active yet.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ SYSTEM — DATA & LOGGING ══ -->
+  <div class="page" id="page-sys-data">
+    <div class="page-content">
+      <div class="page-header" style="border-left-color:#888888;"><div class="page-icon">📊</div><div><div class="page-title" style="color:#aaaaaa;">Data & Logging</div><div class="page-sub">What gets logged where and how</div></div></div>
+
+      <div class="card">
+        <div class="section-hdr" style="color:#888888;">Google Sheet Structure</div>
+        <div style="font-size:13px;color:var(--text-muted);line-height:1.8;">
+          <p style="margin-bottom:10px;"><span style="color:#88ff00;font-weight:600;">Trading Performance Log</span> — Daily Trade Log tab (raw trade data, one row per ticker per session). App calculates Weekly, Monthly, YTD automatically. No manual compilation tabs needed.</p>
+          <p style="margin-bottom:10px;"><span style="color:#88ff00;font-weight:600;">Market Performance Log</span> — Big Movers tab + Sector Performance tab. Updated 1-3x per week. Contains trend dividers marking Bear/Bull market regimes.</p>
+          <p style="margin-bottom:10px;"><span style="color:#ff6600;font-weight:600;">HCC Daily Log</span> — one file, separate tabs per person. Trading tab, David tab (diet/fitness), Taylor tab, Adley, Evie, Callan, Cooper. HCC is the input interface, Sheets is storage.</p>
+          <p><span style="color:#888888;font-weight:600;">Morning Prep + Strategy Reference</span> — reference documents only, not spreadsheet tabs. Morning Prep lives as HCC checklist. Strategy Reference lives in Handbook.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="section-hdr" style="color:#888888;">Trade Log Column Structure</div>
+        <div style="font-size:13px;color:var(--text-muted);line-height:1.8;">
+          <p style="margin-bottom:8px;"><span style="color:#88ff00;font-weight:600;">Section 1 — Trade Context (David inputs):</span> Date, Day, Market Type, Market Condition, Ticker, Float, ETB/HTB, Catalyst</p>
+          <p style="margin-bottom:8px;"><span style="color:#88ff00;font-weight:600;">Section 2 — Technicals & Trade (David inputs):</span> VWAP, 100K/Min, Trade Type, Entry Type, Initial R:R, Executed R:R, # Trades, # Green, # Red, P&L, Wash Sale Y/N, Wash Sale $ Impact</p>
+          <p style="margin-bottom:8px;"><span style="color:#88ff00;font-weight:600;">Section 3 — Analysis (David inputs):</span> Entry timing, stop placement, what I did well, one improvement, best case P&L, sold appropriately, why I sold, my conclusion</p>
+          <p><span style="color:#00ccff;font-weight:600;">Claude columns:</span> Coach's Analysis, Wash Sale $ Impact calculation. Provided as copy-paste block during daily review session.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="section-hdr" style="color:#888888;">Diet & Fitness Log Fields</div>
+        <div style="font-size:13px;color:var(--text-muted);line-height:1.8;">
+          <p style="margin-bottom:8px;"><span style="color:#ff6600;font-weight:600;">Diet targets:</span> Calories 2,600-2,900 kcal · Protein 180-200g · Carbs 150-200g · Fat 70-90g · Sodium under 2,000mg · Added Sugar under 30g</p>
+          <p><span style="color:#00ccff;font-weight:600;">Fitness fields:</span> Exercise Y/N · Iso Holds Y/N · Stretch Y/N · Workout Day (Push/Pull/Bike/Hike/Run/Beaver Ranch) · Daily Steps · Flights of Stairs · Intensity Minutes · Body Battery</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="section-hdr" style="color:#888888;">Review Cycle</div>
+        <div style="font-size:13px;color:var(--text-muted);line-height:1.8;">
+          <p style="margin-bottom:8px;"><span style="color:#ffee00;font-weight:600;">Weekly</span> — Sunday evening. Claude reads all active domain logs from Sheets. Generates cross-domain review covering trading performance, diet/fitness progression, family focus areas. Includes projections based on current trajectory. Gemini Weekly Relay follows — key data fed back into Gemini to calibrate next week's prep.</p>
+          <p style="margin-bottom:8px;"><span style="color:#ffee00;font-weight:600;">Monthly</span> — last day of month. Full performance review all domains. Body and mind progression narrative for diet/fitness.</p>
+          <p style="margin-bottom:8px;"><span style="color:#ffee00;font-weight:600;">Quarterly</span> — YTD check-in. Trajectory analysis and projections.</p>
+          <p><span style="color:#ffee00;font-weight:600;">Year-end</span> — full annual review across all domains.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ SYSTEM — ERROR RECOVERY ══ -->
+  <div class="page" id="page-sys-undo">
+    <div class="page-content">
+      <div class="page-header" style="border-left-color:#888888;"><div class="page-icon">↩️</div><div><div class="page-title" style="color:#aaaaaa;">Error Recovery</div><div class="page-sub">Mistakes, undo, and data protection</div></div></div>
+
+      <div class="card">
+        <div class="section-hdr" style="color:#888888;">Trade Log Errors</div>
+        <div style="font-size:13px;color:var(--text-muted);line-height:1.8;">
+          <p style="margin-bottom:8px;"><span style="color:#ff0000;font-weight:600;">Before submit:</span> Review all fields before tapping Submit. Once submitted, data writes to Google Sheets.</p>
+          <p style="margin-bottom:8px;"><span style="color:#ff0000;font-weight:600;">After submit — minor error:</span> Open the Trading Performance Log in Google Sheets directly and edit the cell. Google Sheets saves instantly.</p>
+          <p style="margin-bottom:8px;"><span style="color:#ff0000;font-weight:600;">After submit — major error:</span> Google Sheets keeps full version history. File → Version History → See Version History. Roll back to any previous version.</p>
+          <p><span style="color:#ff0000;font-weight:600;">Soft delete (coming Phase 2C):</span> Rows will be marked as voided rather than deleted — data stays but doesn't count in calculations.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="section-hdr" style="color:#888888;">Calendar & Task Errors</div>
+        <div style="font-size:13px;color:var(--text-muted);line-height:1.8;">
+          <p style="margin-bottom:8px;"><span style="color:#00ccff;font-weight:600;">Deleted calendar event:</span> Goes to Google Calendar trash. Open Google Calendar → Other Calendars → Trash → Restore. Available for 30 days.</p>
+          <p style="margin-bottom:8px;"><span style="color:#00ccff;font-weight:600;">Deleted task:</span> Google Tasks doesn't have a trash — deletion is permanent. HCC will show a confirm dialog before deleting any task.</p>
+          <p><span style="color:#00ccff;font-weight:600;">Wrong event edit:</span> Google Calendar keeps edit history — right-click event → See edit history to restore previous version.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="section-hdr" style="color:#888888;">App Data (localStorage)</div>
+        <div style="font-size:13px;color:var(--text-muted);line-height:1.8;">
+          <p style="margin-bottom:8px;"><span style="color:#888888;font-weight:600;">Gate state:</span> Stored in browser localStorage with today's date as key. Resets automatically at midnight. If gate doesn't reset — clear browser cache or use a different browser session.</p>
+          <p style="margin-bottom:8px;"><span style="color:#888888;font-weight:600;">Checklist state:</span> HCC Completion checkbox states stored in localStorage. Persist between sessions. To reset — clear site data in browser settings.</p>
+          <p><span style="color:#888888;font-weight:600;">Form data:</span> Daily Log forms do not save drafts — if you navigate away before submitting, data is lost. Complete and submit each section before navigating.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ SYSTEM — INTEGRATIONS ══ -->
+  <div class="page" id="page-sys-integrations">
+    <div class="page-content">
+      <div class="page-header" style="border-left-color:#888888;"><div class="page-icon">🔗</div><div><div class="page-title" style="color:#aaaaaa;">Integrations</div><div class="page-sub">Google API connections and status</div></div></div>
+
+      <div class="card">
+        <div class="section-hdr" style="color:#888888;">Google Cloud Setup</div>
+        <div style="font-size:13px;color:var(--text-muted);line-height:1.8;">
+          <p style="margin-bottom:8px;"><span style="color:#88ff00;font-weight:600;">Project:</span> Hendry Command Center — created in Google Cloud Console</p>
+          <p style="margin-bottom:8px;"><span style="color:#88ff00;font-weight:600;">APIs enabled:</span> Google Sheets API · Google Calendar API · Google Tasks API</p>
+          <p style="margin-bottom:8px;"><span style="color:#88ff00;font-weight:600;">API Key:</span> Created and restricted to GitHub Pages URL. Stored securely — do not share or expose in code.</p>
+          <p><span style="color:#ff0000;font-weight:600;">Status:</span> API key exists — integrations not yet built into app. Phase 2A work.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="section-hdr" style="color:#888888;">Integration Status</div>
+        <div style="font-size:13px;color:var(--text-muted);line-height:1.8;">
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);">
+            <span>Google Sheets — live trading data</span>
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;padding:2px 8px;border-radius:4px;background:rgba(255,51,102,0.1);color:#ff0000;">PENDING</span>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);">
+            <span>Google Calendar — family schedule</span>
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;padding:2px 8px;border-radius:4px;background:rgba(255,51,102,0.1);color:#ff0000;">PENDING</span>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);">
+            <span>Google Tasks — Colorado Chiefs</span>
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;padding:2px 8px;border-radius:4px;background:rgba(255,51,102,0.1);color:#ff0000;">PENDING</span>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);">
+            <span>Spotify mini player</span>
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;padding:2px 8px;border-radius:4px;background:rgba(255,51,102,0.1);color:#ff0000;">PENDING</span>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);">
+            <span>Claude + Gemini deep links</span>
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;padding:2px 8px;border-radius:4px;background:rgba(255,51,102,0.1);color:#ff0000;">PENDING</span>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);">
+            <span>Garmin / Apple Health auto-log</span>
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;padding:2px 8px;border-radius:4px;background:rgba(136,136,136,0.1);color:#888888;">PHASE 5</span>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;">
+            <span>Make.com automation bridge</span>
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;padding:2px 8px;border-radius:4px;background:rgba(136,136,136,0.1);color:#888888;">PHASE 5</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="section-hdr" style="color:#888888;">When Integrations Go Live</div>
+        <div style="font-size:13px;color:var(--text-muted);line-height:1.8;">
+          <p style="margin-bottom:8px;">Switch GitHub repo to private — prevents public access to code containing API key.</p>
+          <p style="margin-bottom:8px;">Add password protection to app — restricts access before sensitive family and financial data flows through.</p>
+          <p>Consider custom domain — hendrycommandcenter.com (~$12/year) for permanent URL independent of GitHub.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ SYSTEM — PRIVACY & SECURITY ══ -->
+  <div class="page" id="page-sys-privacy">
+    <div class="page-content">
+      <div class="page-header" style="border-left-color:#888888;"><div class="page-icon">🔒</div><div><div class="page-title" style="color:#aaaaaa;">Privacy & Security</div><div class="page-sub">What's protected and what's planned</div></div></div>
+
+      <div class="card">
+        <div class="section-hdr" style="color:#888888;">Current Status</div>
+        <div style="font-size:13px;color:var(--text-muted);line-height:1.8;">
+          <p style="margin-bottom:8px;"><span style="color:#ffee00;font-weight:600;">GitHub repo:</span> Currently public. No sensitive data in code — only placeholder numbers. Safe until Google integrations go live.</p>
+          <p style="margin-bottom:8px;"><span style="color:#ffee00;font-weight:600;">API key:</span> Created and stored securely by David. Not in any shared document or exposed in app code. Restricted to GitHub Pages URL only.</p>
+          <p><span style="color:#ffee00;font-weight:600;">App data:</span> Only localStorage used — gate state and checklist state. No personal data stored in app currently.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="section-hdr" style="color:#888888;">Privacy Lockdown — Triggered When Integrations Go Live</div>
+        <div style="font-size:13px;color:var(--text-muted);line-height:1.8;">
+          <p style="margin-bottom:8px;">1. Switch GitHub repo to private ($4/month GitHub paid plan)</p>
+          <p style="margin-bottom:8px;">2. Add app-level password protection before real data flows</p>
+          <p style="margin-bottom:8px;">3. Domain-level password protection for Trading, Finances, and adult domains — restricts kids as they get access to HCC</p>
+          <p>4. Consider custom domain for permanent independent URL</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="section-hdr" style="color:#888888;">Sharing Access</div>
+        <div style="font-size:13px;color:var(--text-muted);line-height:1.8;">
+          <p style="margin-bottom:8px;"><span style="color:#ff44bb;font-weight:600;">Taylor:</span> Full access minus Trading financials if preferred. Share URL + password when ready.</p>
+          <p style="margin-bottom:8px;"><span style="color:#bb44ff;font-weight:600;">Kids:</span> Access only to their own domain, family schedule, and shared content. Trading, Finances, David personal domains password protected.</p>
+          <p><span style="color:#888888;font-weight:600;">No app store required:</span> HCC shares as a URL. Any device with a browser can install it as a PWA via Safari → Share → Add to Home Screen.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ SYSTEM — BUILD LOG ══ -->
+  <div class="page" id="page-sys-buildlog">
+    <div class="page-content">
+      <div class="page-header" style="border-left-color:#888888;"><div class="page-icon">🏗️</div><div><div class="page-title" style="color:#aaaaaa;">Build Log</div><div class="page-sub">What exists and when it was built</div></div></div>
+
+      <div class="card">
+        <div class="section-hdr" style="color:#888888;">Phase 1 — Complete</div>
+        <div style="font-size:12px;color:var(--text-muted);line-height:1.9;">
+          <div style="padding:5px 0;border-bottom:1px solid var(--border);display:flex;gap:10px;"><span style="color:#88ff00;flex-shrink:0;">✓</span><span>Life domains defined — Household, David, Taylor, Adley, Evie, Callan, Cooper, Finances, System</span></div>
+          <div style="padding:5px 0;border-bottom:1px solid var(--border);display:flex;gap:10px;"><span style="color:#88ff00;flex-shrink:0;">✓</span><span>Notion skeleton built (sidelined — HCC replaced it as primary interface)</span></div>
+          <div style="padding:5px 0;border-bottom:1px solid var(--border);display:flex;gap:10px;"><span style="color:#88ff00;flex-shrink:0;">✓</span><span>HCC app built in Summit Log visual DNA — dark gray base, per-domain neon accents</span></div>
+          <div style="padding:5px 0;border-bottom:1px solid var(--border);display:flex;gap:10px;"><span style="color:#88ff00;flex-shrink:0;">✓</span><span>Deployed to GitHub Pages — PWA installed on iPhone home screen and Windows taskbar</span></div>
+          <div style="padding:5px 0;border-bottom:1px solid var(--border);display:flex;gap:10px;"><span style="color:#88ff00;flex-shrink:0;">✓</span><span>Hard gate on David Command Center — resets daily via localStorage</span></div>
+          <div style="padding:5px 0;border-bottom:1px solid var(--border);display:flex;gap:10px;"><span style="color:#88ff00;flex-shrink:0;">✓</span><span>Full sidebar — Household, Family members, David sub-domains, System</span></div>
+          <div style="padding:5px 0;border-bottom:1px solid var(--border);display:flex;gap:10px;"><span style="color:#88ff00;flex-shrink:0;">✓</span><span>Neon accent color system — per-domain colors shift topbar and page headers</span></div>
+          <div style="padding:5px 0;border-bottom:1px solid var(--border);display:flex;gap:10px;"><span style="color:#88ff00;flex-shrink:0;">✓</span><span>Google Cloud API key — Sheets, Calendar, Tasks APIs enabled, key restricted to GitHub Pages</span></div>
+          <div style="padding:5px 0;border-bottom:1px solid var(--border);display:flex;gap:10px;"><span style="color:#88ff00;flex-shrink:0;">✓</span><span>Claude + Gemini sidebar buttons</span></div>
+          <div style="padding:5px 0;border-bottom:1px solid var(--border);display:flex;gap:10px;"><span style="color:#88ff00;flex-shrink:0;">✓</span><span>Daily Log page — Trading form (one trade at a time), Diet form with live meters, Fitness form with toggles</span></div>
+          <div style="padding:5px 0;border-bottom:1px solid var(--border);display:flex;gap:10px;"><span style="color:#88ff00;flex-shrink:0;">✓</span><span>HCC Completion — full phase-by-phase task checklist</span></div>
+          <div style="padding:5px 0;display:flex;gap:10px;"><span style="color:#88ff00;flex-shrink:0;">✓</span><span>System domain — App Instructions, Tool Roles, Data & Logging, Error Recovery, Integrations, Privacy, Build Log</span></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="section-hdr" style="color:#888888;">Phase 2A — Pending (Google Integrations)</div>
+        <div style="font-size:12px;color:var(--text-muted);line-height:1.9;">
+          <div style="padding:5px 0;border-bottom:1px solid var(--border);display:flex;gap:10px;"><span style="color:#ff0000;flex-shrink:0;">○</span><span>Google Sheets connection — live trading data in app</span></div>
+          <div style="padding:5px 0;border-bottom:1px solid var(--border);display:flex;gap:10px;"><span style="color:#ff0000;flex-shrink:0;">○</span><span>Google Calendar — Daily Briefing schedule + standalone Calendar page</span></div>
+          <div style="padding:5px 0;border-bottom:1px solid var(--border);display:flex;gap:10px;"><span style="color:#ff0000;flex-shrink:0;">○</span><span>Google Tasks — Colorado Chiefs list in app</span></div>
+          <div style="padding:5px 0;border-bottom:1px solid var(--border);display:flex;gap:10px;"><span style="color:#ff0000;flex-shrink:0;">○</span><span>Spotify mini player on David Command Center</span></div>
+          <div style="padding:5px 0;border-bottom:1px solid var(--border);display:flex;gap:10px;"><span style="color:#ff0000;flex-shrink:0;">○</span><span>Claude + Gemini deep link buttons (open apps not webpages)</span></div>
+          <div style="padding:5px 0;display:flex;gap:10px;"><span style="color:#ff0000;flex-shrink:0;">○</span><span>Privacy lockdown — private repo + password protection</span></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="section-hdr" style="color:#888888;">Phase 2B — Pending (Trading System)</div>
+        <div style="font-size:12px;color:var(--text-muted);line-height:1.9;">
+          <div style="padding:5px 0;border-bottom:1px solid var(--border);display:flex;gap:10px;"><span style="color:#ffee00;flex-shrink:0;">○</span><span>Trading Performance Log — Section 2 and 3 complete in Google Sheets</span></div>
+          <div style="padding:5px 0;border-bottom:1px solid var(--border);display:flex;gap:10px;"><span style="color:#ffee00;flex-shrink:0;">○</span><span>Market Performance Log — Big Movers + Sector Performance</span></div>
+          <div style="padding:5px 0;border-bottom:1px solid var(--border);display:flex;gap:10px;"><span style="color:#ffee00;flex-shrink:0;">○</span><span>Cross-document review — redundancies and contradictions flagged</span></div>
+          <div style="padding:5px 0;border-bottom:1px solid var(--border);display:flex;gap:10px;"><span style="color:#ffee00;flex-shrink:0;">○</span><span>PreTrade Protocol Sections 2 + 3 completed</span></div>
+          <div style="padding:5px 0;border-bottom:1px solid var(--border);display:flex;gap:10px;"><span style="color:#ffee00;flex-shrink:0;">○</span><span>Gemini morning prep redesign — 5 gated subsections</span></div>
+          <div style="padding:5px 0;border-bottom:1px solid var(--border);display:flex;gap:10px;"><span style="color:#ffee00;flex-shrink:0;">○</span><span>Morning risk assessment + position sizing score</span></div>
+          <div style="padding:5px 0;border-bottom:1px solid var(--border);display:flex;gap:10px;"><span style="color:#ffee00;flex-shrink:0;">○</span><span>Trading level system + gate metrics with timeframes</span></div>
+          <div style="padding:5px 0;border-bottom:1px solid var(--border);display:flex;gap:10px;"><span style="color:#ffee00;flex-shrink:0;">○</span><span>Trader Rehab Program in handbook</span></div>
+          <div style="padding:5px 0;border-bottom:1px solid var(--border);display:flex;gap:10px;"><span style="color:#ffee00;flex-shrink:0;">○</span><span>Workflow & Protocols finalized</span></div>
+          <div style="padding:5px 0;display:flex;gap:10px;"><span style="color:#ffee00;flex-shrink:0;">○</span><span>Weekly review, Gemini Weekly Relay, Monthly review built</span></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="section-hdr" style="color:#888888;">Phases 3-5 — Future</div>
+        <div style="font-size:12px;color:var(--text-muted);line-height:1.9;">
+          <div style="padding:5px 0;border-bottom:1px solid var(--border);display:flex;gap:10px;"><span style="color:#888888;flex-shrink:0;">○</span><span>Phase 2C — Daily Log HCC↔Sheets sync, review system all domains</span></div>
+          <div style="padding:5px 0;border-bottom:1px solid var(--border);display:flex;gap:10px;"><span style="color:#888888;flex-shrink:0;">○</span><span>Phase 3 — Taylor Hendry Photography domain complete</span></div>
+          <div style="padding:5px 0;border-bottom:1px solid var(--border);display:flex;gap:10px;"><span style="color:#888888;flex-shrink:0;">○</span><span>Phase 4 — Family domains, child development checklists, finances, life goals</span></div>
+          <div style="padding:5px 0;border-bottom:1px solid var(--border);display:flex;gap:10px;"><span style="color:#888888;flex-shrink:0;">○</span><span>Phase 5 — Make.com automation, Gemini triggers, Garmin/Apple Health auto-log</span></div>
+          <div style="padding:5px 0;display:flex;gap:10px;"><span style="color:#888888;flex-shrink:0;">○</span><span>Final — Life Roadmap video game level system built last</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</html>
 </body>
 </html>
