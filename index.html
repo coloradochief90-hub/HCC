@@ -54,11 +54,12 @@
 }
 
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;}
 html{scroll-behavior:smooth;}
-body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:block;font-size:14px;line-height:1.6;overflow-x:hidden;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;line-height:1.6;overflow-x:hidden;}
 
-/* SIDEBAR */
-.sidebar{width:var(--sidebar-w);height:100vh;background:var(--surface);border-right:1px solid var(--border2);display:flex;flex-direction:column;position:fixed;top:0;left:0;z-index:300;overflow-y:auto;overflow-x:hidden;transform:translateX(-100%);transition:transform 0.28s cubic-bezier(0.4,0,0.2,1);}
+/* SIDEBAR — always overlay, never pushes content */
+.sidebar{width:var(--sidebar-w);height:100vh;background:var(--surface);border-right:1px solid var(--border2);display:flex;flex-direction:column;position:fixed;top:0;left:0;z-index:400;overflow-y:auto;overflow-x:hidden;transform:translateX(-100%);transition:transform 0.28s cubic-bezier(0.4,0,0.2,1);}
 .sidebar.open{transform:translateX(0);}
 .sidebar-logo{padding:20px 20px 14px;border-bottom:1px solid var(--border2);}
 .sidebar-logo .mark{font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:3px;color:#88ff00;line-height:1;text-shadow:0 0 16px rgba(0,255,136,0.4);}
@@ -87,10 +88,10 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .overlay.visible{display:block;}
 
 /* MAIN */
-.main{display:block;min-height:100vh;overflow-x:hidden;width:100%;}
+.main{display:block;width:100%;min-height:100vh;}
 
 /* TOPBAR */
-.topbar{position:sticky;top:0;height:var(--topbar-h);background:var(--surface);border-bottom:1px solid var(--border2);padding:0 16px;display:flex;align-items:center;gap:12px;z-index:100;}
+.topbar{position:sticky;top:0;left:0;right:0;height:var(--topbar-h);background:var(--surface);border-bottom:1px solid var(--border2);padding:0 16px;display:flex;align-items:center;gap:12px;z-index:200;}
 .menu-btn{background:none;border:1px solid var(--border2);color:var(--text-muted);width:34px;height:34px;border-radius:7px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;transition:all 0.15s;flex-shrink:0;}.home-btn{background:none;border:1px solid var(--border2);color:var(--text-muted);width:34px;height:34px;border-radius:7px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;transition:all 0.15s;flex-shrink:0;}.home-btn:hover{color:var(--text);border-color:var(--accent);}
 .menu-btn:hover{color:var(--text);border-color:var(--border2);}
 .topbar-title{font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:2px;color:var(--accent);}
@@ -115,7 +116,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .meter-row-dl:last-child{margin-bottom:0;}
 
 /* DESKTOP */
-@media(min-width:768px){.sidebar{transform:translateX(0)!important;position:fixed;left:0;top:0;}.main{margin-left:265px;width:calc(100vw - 265px);}.menu-btn{display:none!important;}.overlay{display:none!important;}}
+/* Sidebar is overlay on all screen sizes — no desktop overrides needed */
 
 /* UNIVERSAL COMPONENTS */
 .page-content{padding:16px;}
