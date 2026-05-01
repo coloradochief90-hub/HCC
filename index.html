@@ -115,7 +115,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .meter-row-dl:last-child{margin-bottom:0;}
 
 /* DESKTOP */
-@media(min-width:768px){.sidebar{transform:translateX(0)!important;position:fixed;}.main{margin-left:265px;min-width:0;width:calc(100vw - 265px);}.menu-btn{display:none!important;}.overlay{display:none!important;}}
+@media(min-width:768px){.sidebar{transform:translateX(0)!important;position:fixed;left:0;top:0;}.main{margin-left:265px;flex:1;}.menu-btn{display:none!important;}.overlay{display:none!important;}}
 
 /* UNIVERSAL COMPONENTS */
 .page-content{padding:16px;}
@@ -383,7 +383,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 <div class="main">
   <div class="topbar">
     <button class="menu-btn" onclick="toggleSidebar()">☰</button>
-    <button class="home-btn" onclick="nav('briefing','#ff6600')" title="Daily Briefing">🏠</button>
+    <button class="home-btn" onclick="nav('briefing','#ff6600')" title="Home">🏠</button>
     <span class="topbar-title" id="topbar-title">Daily Briefing</span>
     <span class="topbar-date" id="topbar-date"></span>
   </div>
@@ -1007,6 +1007,19 @@ function toggleDomain(subId,chevId){
   document.getElementById(subId).classList.toggle('open');
   document.getElementById(chevId).classList.toggle('open');
 }
+function navNoHistory(id, color) {
+  currentPageId = id;
+  setAccent(color || '#ff6600');
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>{n.classList.remove('active');n.classList.remove('active-gold');});
+  const pg=document.getElementById('page-'+id);
+  if(pg)pg.classList.add('active');
+  const titles={'briefing':'Daily Briefing','david-cmd':'Command Center','trading':'Trading','handbook':'Handbook','performance':'Performance','datalog':'Data Log','workflow':'Workflow & Protocols','photography':'Taylor Hendry Photography','hrs':'Hendry Residential','ventures':'New Ventures','homebuild':'Home / Build','dailyops':'Daily Operations','lifegoals':'Life Goals','roadmap':'Life Roadmap','hcc':'HCC Completion','calendar':'Calendar','finances':'Finances','entity':'Entity','taylor':'Taylor','adley':'Adley','evie':'Evie','callan':'Callan','cooper':'Cooper','david':'David','daily-log':'Daily Log','sys-instructions':'App Instructions','sys-tools':'Tool Roles','sys-data':'Data & Logging','sys-undo':'Error Recovery','sys-integrations':'Integrations','sys-privacy':'Privacy & Security','sys-buildlog':'Build Log'};
+  document.getElementById('topbar-title').textContent=titles[id]||id;
+  closeSidebar();
+  window.scrollTo(0,0);
+}
+
 function toggleSidebar(){
   document.getElementById('sidebar').classList.toggle('open');
   document.getElementById('overlay').classList.toggle('visible');
