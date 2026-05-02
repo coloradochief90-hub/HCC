@@ -102,6 +102,12 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .page.active{display:block;}
 
 /* DAILY LOG FORMS */
+.log-section-hdr{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;margin-bottom:10px;padding:8px 14px;background:var(--surface);border:1px solid var(--border2);border-radius:8px;border-left:3px solid;}
+.log-confirm{display:none;border-radius:8px;padding:10px 14px;margin-bottom:10px;font-family:'IBM Plex Mono',monospace;font-size:10px;text-align:center;letter-spacing:1px;background:rgba(255,255,255,0.04);border:1px solid;}
+.log-card{background:var(--surface);border:1px solid var(--border2);border-radius:10px;padding:14px;margin-bottom:8px;}
+.log-card-hdr{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border);}
+.log-row-2{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.log-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;}
 .log-label{display:block;font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-muted);margin-bottom:4px;}
 .log-input{width:100%;background:var(--surface2);border:1px solid var(--border2);border-radius:6px;padding:8px 10px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none;transition:border-color 0.15s;}
 .log-input:focus{border-color:var(--accent);}
@@ -110,8 +116,22 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .log-textarea:focus{border-color:var(--accent);}
 .log-submit-btn{width:100%;padding:12px;background:transparent;border:1px solid;border-radius:8px;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;cursor:pointer;transition:all 0.15s;margin-top:4px;}
 .log-submit-btn:hover{opacity:0.8;transform:translateY(-1px);}
+.tog-group{display:flex;flex-wrap:wrap;gap:5px;}
+.tog-sm{padding:5px 10px;background:var(--surface2);border:1px solid var(--border2);border-radius:5px;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:1px;cursor:pointer;color:var(--text-muted);transition:all 0.15s;}
+.tog-sm.active{background:rgba(255,255,255,0.08);border-color:currentColor;font-weight:600;}
 .toggle-btn{padding:9px 6px;background:var(--surface2);border:1px solid var(--border2);border-radius:6px;color:var(--text-muted);font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:1px;cursor:pointer;transition:all 0.15s;text-align:center;}
 .toggle-btn.on{background:rgba(0,204,255,0.12);border-color:#00ccff;color:#00ccff;font-weight:600;}
+.fam-tog-row{display:flex;flex-direction:column;gap:6px;}
+.fam-tog{padding:10px 12px;background:var(--surface2);border:1px solid var(--border2);border-radius:8px;color:var(--text-muted);font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer;transition:all 0.15s;text-align:left;}
+.fam-tog.on{background:rgba(255,255,255,0.06);border-color:var(--fc,var(--accent));color:var(--fc,var(--accent));}
+/* Y/N toggle pairs */
+.yn-row{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);}
+.yn-row:last-child{border-bottom:none;}
+.yn-label{font-size:12px;color:var(--text-muted);flex:1;padding-right:10px;}
+.yn-pair{display:flex;gap:6px;flex-shrink:0;}
+.yn-btn{padding:5px 14px;border-radius:5px;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:1px;cursor:pointer;border:1px solid var(--border2);background:var(--surface2);color:var(--text-dim);transition:all 0.15s;}
+.yn-btn.yn-y.selected{background:rgba(136,255,0,0.12);border-color:#88ff00;color:#88ff00;font-weight:600;}
+.yn-btn.yn-n.selected{background:rgba(255,0,0,0.12);border-color:#ff0000;color:#ff0000;font-weight:600;}
 .meter-row-dl{display:flex;align-items:center;gap:8px;margin-bottom:7px;}
 .meter-row-dl:last-child{margin-bottom:0;}
 
@@ -319,15 +339,23 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
       <div class="nav-item" style="padding-left:36px;" onclick="nav('daily-log','#ff0000')"><span class="nav-dot" style="background:#ff0000"></span>Daily Log</div>
       <div class="nav-item domain-parent" style="padding-left:36px;" onclick="toggleDomain('trading-sub','chev-trading')"><span class="nav-dot" style="background:#88ff00"></span>Trading<span class="chevron" id="chev-trading">›</span></div>
       <div class="nav-sub" id="trading-sub">
-        <div class="nav-item" style="padding-left:52px;" onclick="nav('trading','#88ff00')"><span class="nav-dot" style="background:#88ff00"></span>Command Center</div>
-        <div class="nav-item" style="padding-left:52px;" onclick="nav('handbook','#88ff00')"><span class="nav-dot" style="background:#ffee00"></span>Handbook</div>
-        <div class="nav-item" style="padding-left:52px;" onclick="nav('performance','#88ff00')"><span class="nav-dot" style="background:#00ccff"></span>Performance</div>
-        <div class="nav-item" style="padding-left:52px;" onclick="nav('datalog','#88ff00')"><span class="nav-dot" style="background:#ff0000"></span>Data Log</div>
-        <div class="nav-item" style="padding-left:52px;" onclick="nav('workflow','#88ff00')"><span class="nav-dot"></span>Workflow & Protocols</div>
+        <div class="nav-item" style="padding-left:52px;" onclick="requireGate('trading','#88ff00')"><span class="nav-dot" style="background:#88ff00"></span>Command Center</div>
+        <div class="nav-item" style="padding-left:52px;" onclick="requireGate('handbook','#88ff00')"><span class="nav-dot" style="background:#ffee00"></span>Handbook</div>
+        <div class="nav-item" style="padding-left:52px;" onclick="requireGate('performance','#88ff00')"><span class="nav-dot" style="background:#00ccff"></span>Performance</div>
+        <div class="nav-item" style="padding-left:52px;" onclick="requireGate('datalog','#88ff00')"><span class="nav-dot" style="background:#ff0000"></span>Data Log</div>
+        <div class="nav-item" style="padding-left:52px;" onclick="requireGate('workflow','#88ff00')"><span class="nav-dot"></span>Workflow & Protocols</div>
       </div>
       <div class="nav-item" style="padding-left:36px;" onclick="nav('photography','#ff1493')"><span class="nav-dot" style="background:#ff1493"></span>Taylor Hendry Photography</div>
       <div class="nav-item" style="padding-left:36px;" onclick="nav('hrs','#00ccff')"><span class="nav-dot" style="background:#00ccff"></span>Hendry Residential</div>
       <div class="nav-item" style="padding-left:36px;" onclick="nav('ventures','#ffaa00')"><span class="nav-dot" style="background:#ffaa00"></span>New Ventures</div>
+      <div class="nav-item domain-parent" style="padding-left:36px;" onclick="toggleDomain('lc-sub','chev-lc')"><span class="nav-dot" style="background:#00ffcc"></span>Project Life Connect<span class="chevron" id="chev-lc">›</span></div>
+      <div class="nav-sub" id="lc-sub">
+        <div class="nav-item" style="padding-left:52px;" onclick="nav('lc-overview','#00ffcc')"><span class="nav-dot" style="background:#00ffcc"></span>Overview</div>
+        <div class="nav-item" style="padding-left:52px;" onclick="nav('lc-concept','#00ffcc')"><span class="nav-dot"></span>Concept & Vision</div>
+        <div class="nav-item" style="padding-left:52px;" onclick="nav('lc-roadmap','#00ffcc')"><span class="nav-dot"></span>Roadmap</div>
+        <div class="nav-item" style="padding-left:52px;" onclick="nav('lc-legal','#00ffcc')"><span class="nav-dot"></span>Legal & Protection</div>
+        <div class="nav-item" style="padding-left:52px;" onclick="nav('lc-notes','#00ffcc')"><span class="nav-dot"></span>Notes & Ideas</div>
+      </div>
       <div class="nav-item" style="padding-left:36px;" onclick="nav('homebuild','#00ffcc')"><span class="nav-dot" style="background:#00ffcc"></span>Home / Build</div>
       <div class="nav-item" style="padding-left:36px;" onclick="nav('dailyops','#dd00ff')"><span class="nav-dot" style="background:#dd00ff"></span>Daily Operations</div>
       <div class="nav-item" style="padding-left:36px;" onclick="nav('lifegoals','#ffee00')"><span class="nav-dot" style="background:#ffee00"></span>Life Goals</div>
@@ -538,74 +566,125 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 
   <!-- ══ DAVID COMMAND CENTER ══ -->
   <div class="page" id="page-david-cmd">
-    <div class="gate-passed-banner" id="gate-passed">✓ CLEARED FOR THE DAY — EXECUTE WITH DISCIPLINE</div>
     <div class="quote-section">
       <div class="quote-eyebrow">Today's Intention</div>
       <div class="quote-text">"The process is the destination. Every rep, every trade, every moment with your kids — done with full presence — that's the life."</div>
       <div class="quote-attr">— David Hendry</div>
     </div>
     <div class="page-content">
-      <!-- Personal Streaks -->
-      <div class="section-header-row"><div class="section-lbl">Personal State</div><span class="sec-badge badge-green">Phase 1</span></div>
-      <div class="streak-grid" style="margin-top:8px;">
-        <div class="streak-block"><div class="streak-label">Log Streak</div><div class="streak-val g">1</div><div class="streak-sub">days</div></div>
-        <div class="streak-block"><div class="streak-label">Fitness</div><div class="streak-val g">1</div><div class="streak-sub">goals hit</div></div>
-        <div class="streak-block"><div class="streak-label">Diet</div><div class="streak-val gold">0</div><div class="streak-sub">goals hit</div></div>
-        <div class="streak-block"><div class="streak-label">Best</div><div class="streak-val b">14</div><div class="streak-sub">all-time</div></div>
+
+      <!-- DOMAIN STREAKS OVERVIEW -->
+      <div class="section-header-row"><div class="section-lbl" style="color:#88ff00;">Streak Overview</div></div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:8px;margin-bottom:14px;">
+        <div style="background:var(--surface);border:1px solid var(--border2);border-radius:8px;padding:10px 6px;text-align:center;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:7px;letter-spacing:1px;text-transform:uppercase;color:var(--text-muted);margin-bottom:3px;">Log Streak</div>
+          <div id="cc-log-streak" style="font-family:'Bebas Neue',sans-serif;font-size:26px;color:#88ff00;line-height:1;">1</div>
+          <div style="font-size:8px;color:var(--text-dim);">days</div>
+        </div>
+        <div style="background:var(--surface);border:1px solid var(--border2);border-radius:8px;padding:10px 6px;text-align:center;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:7px;letter-spacing:1px;text-transform:uppercase;color:var(--text-muted);margin-bottom:3px;">Fitness</div>
+          <div id="cc-fit-streak" style="font-family:'Bebas Neue',sans-serif;font-size:26px;color:#88ff00;line-height:1;">1</div>
+          <div style="font-size:8px;color:var(--text-dim);">goals hit</div>
+        </div>
+        <div style="background:var(--surface);border:1px solid var(--border2);border-radius:8px;padding:10px 6px;text-align:center;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:7px;letter-spacing:1px;text-transform:uppercase;color:var(--text-muted);margin-bottom:3px;">Diet</div>
+          <div id="cc-diet-streak" style="font-family:'Bebas Neue',sans-serif;font-size:26px;color:#ffee00;line-height:1;">0</div>
+          <div style="font-size:8px;color:var(--text-dim);">goals hit</div>
+        </div>
+        <div style="background:var(--surface);border:1px solid var(--border2);border-radius:8px;padding:10px 6px;text-align:center;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:7px;letter-spacing:1px;text-transform:uppercase;color:var(--text-muted);margin-bottom:3px;">Best Ever</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:26px;color:#00ccff;line-height:1;">14</div>
+          <div style="font-size:8px;color:var(--text-dim);">all-time</div>
+        </div>
+        <div style="background:var(--surface);border:1px solid var(--border2);border-radius:8px;padding:10px 6px;text-align:center;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:7px;letter-spacing:1px;text-transform:uppercase;color:var(--text-muted);margin-bottom:3px;">Fit Miss</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:26px;color:#ff0000;line-height:1;">0</div>
+          <div style="font-size:8px;color:var(--text-dim);">in a row</div>
+        </div>
+        <div style="background:var(--surface);border:1px solid var(--border2);border-radius:8px;padding:10px 6px;text-align:center;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:7px;letter-spacing:1px;text-transform:uppercase;color:var(--text-muted);margin-bottom:3px;">Diet Miss</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:26px;color:#ff0000;line-height:1;">1</div>
+          <div style="font-size:8px;color:var(--text-dim);">in a row</div>
+        </div>
       </div>
 
-      <!-- Trading Snapshot -->
-      <div class="section-header-row" style="margin-top:6px;"><div class="section-lbl">Trading — Snapshot</div><span class="sec-badge badge-red">🐻 Bear</span></div>
-      <div style="margin-top:8px;">
-        <div class="t-snapshot">
-          <div class="t-snap-hdr"><span class="t-snap-lbl">Market Condition</span><span class="cond-pill pill-bear">Bear / Starved Relief</span></div>
-          <div class="snap-grid">
-            <div class="snap-block"><div class="snap-lbl">Rules Broken</div><div class="snap-val r">4</div></div>
-            <div class="snap-block"><div class="snap-lbl">Prev Day W%</div><div class="snap-val g">75%</div></div>
-            <div class="snap-block"><div class="snap-lbl">Week W%</div><div class="snap-val g">68.8%</div></div>
-            <div class="snap-block"><div class="snap-lbl">Week P&L</div><div class="snap-val g" style="font-size:16px;padding-top:3px;">+$66</div></div>
-            <div class="snap-block"><div class="snap-lbl">Loss Limit</div><div class="snap-val gold" style="font-size:16px;padding-top:3px;">$41.81</div></div>
-            <div class="snap-block"><div class="snap-lbl">Focus</div><div class="snap-val gold" style="font-size:16px;padding-top:3px;">R1/R2</div></div>
+      <!-- DOMAIN FOCUS CARDS -->
+      <div class="section-header-row" style="margin-bottom:8px;"><div class="section-lbl" style="color:#88ff00;">Domain Status</div></div>
+      <div style="margin-bottom:14px;">
+        <div class="domain-card" style="margin-bottom:6px;">
+          <div class="domain-card-top"><div class="domain-icon">📈</div><div class="domain-info"><div class="domain-name">Trading</div><div class="domain-focus">Phase 1 — Execution accuracy. Bear market. Complete gate to access.</div></div><div class="domain-status s-active">Active</div></div>
+          <div class="prog-row"><div class="prog-track"><div class="prog-fill" style="width:20%;background:#88ff00;"></div></div><div class="prog-frac">4/20</div><div class="prog-pct" style="color:#88ff00;">20%</div></div>
+        </div>
+        <div class="domain-card" style="margin-bottom:6px;">
+          <div class="domain-card-top"><div class="domain-icon">📷</div><div class="domain-info"><div class="domain-name">Photography</div><div class="domain-focus">Phase 3 — Begins after trading system complete.</div></div><div class="domain-status s-building">Building</div></div>
+          <div class="prog-row"><div class="prog-track"><div class="prog-fill" style="width:5%;background:#ff1493;"></div></div><div class="prog-frac">1/20</div><div class="prog-pct" style="color:#ff1493;">5%</div></div>
+        </div>
+        <div class="domain-card" style="margin-bottom:6px;">
+          <div class="domain-card-top"><div class="domain-icon">🏗️</div><div class="domain-info"><div class="domain-name">HCC Build</div><div class="domain-focus">Phase 2A active — Google integrations next.</div></div><div class="domain-status s-active">Active</div></div>
+          <div class="prog-row"><div class="prog-track"><div class="prog-fill" style="width:25%;background:#88ff00;"></div></div><div class="prog-frac">5/20</div><div class="prog-pct" style="color:#88ff00;">25%</div></div>
+        </div>
+      </div>
+
+      <!-- GATE PASSED BANNER -->
+      <div class="gate-passed-banner" id="gate-passed">✓ TRADING UNLOCKED — EXECUTE WITH DISCIPLINE</div>
+
+      <!-- DYNAMIC GATE -->
+      <div id="gate-section" style="background:var(--surface);border:1px solid var(--border2);border-radius:10px;padding:16px;margin-bottom:14px;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#88ff00;margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid var(--border);">Morning Check-In — Answer to Unlock Trading</div>
+
+        <!-- Q1 -->
+        <div class="gate-q" id="gq1">
+          <div class="gate-q-text">Your log streak is <span id="gq1-val" style="color:#88ff00;font-weight:600;">1 day</span>. Did you complete your log entry yesterday?</div>
+          <div class="yn-pair" style="margin-top:8px;">
+            <button class="yn-btn yn-y" id="gq1-y" onclick="ynSelect('gq1','y');checkGate()">YES</button>
+            <button class="yn-btn yn-n" id="gq1-n" onclick="ynSelect('gq1','n');checkGate()">NO</button>
           </div>
         </div>
-        <div class="fail-card">
-          <div class="fail-hdr"><div class="fail-hdr-lbl">Trading Focus — Current Failures</div></div>
-          <div class="fail-row"><span class="fail-tag tag-ls">Long Standing</span><span class="fail-text">Emotional re-entry after stop hit — not running Stop-and-Reset protocol</span></div>
-          <div class="fail-row"><span class="fail-tag tag-wk">This Week</span><span class="fail-text">MACD not confirmed on entry — entering on momentum alone</span></div>
-          <div class="fail-row"><span class="fail-tag tag-yd">Yesterday</span><span class="fail-text">Open spike entry before 9:45 AM EDT — too early before direction established</span></div>
+        <div style="height:1px;background:var(--border);margin:12px 0;"></div>
+
+        <!-- Q2 -->
+        <div class="gate-q" id="gq2">
+          <div class="gate-q-text">Your fitness streak is <span id="gq2-val" style="color:#88ff00;font-weight:600;">1 day</span>. Did you hit your fitness goal this morning?</div>
+          <div class="yn-pair" style="margin-top:8px;">
+            <button class="yn-btn yn-y" id="gq2-y" onclick="ynSelect('gq2','y');checkGate()">YES</button>
+            <button class="yn-btn yn-n" id="gq2-n" onclick="ynSelect('gq2','n');checkGate()">NO</button>
+          </div>
         </div>
+        <div style="height:1px;background:var(--border);margin:12px 0;"></div>
+
+        <!-- Q3 -->
+        <div class="gate-q" id="gq3">
+          <div class="gate-q-text">Your diet streak is <span id="gq3-val" style="color:#ffee00;font-weight:600;">0 days</span>. Are you committed to hitting your macro targets today?</div>
+          <div class="yn-pair" style="margin-top:8px;">
+            <button class="yn-btn yn-y" id="gq3-y" onclick="ynSelect('gq3','y');checkGate()">YES</button>
+            <button class="yn-btn yn-n" id="gq3-n" onclick="ynSelect('gq3','n');checkGate()">NO</button>
+          </div>
+        </div>
+        <div style="height:1px;background:var(--border);margin:12px 0;"></div>
+
+        <!-- Q4 -->
+        <div class="gate-q" id="gq4">
+          <div class="gate-q-text">Have you reviewed your current failure patterns and are you prepared to avoid them today?</div>
+          <div class="yn-pair" style="margin-top:8px;">
+            <button class="yn-btn yn-y" id="gq4-y" onclick="ynSelect('gq4','y');checkGate()">YES</button>
+            <button class="yn-btn yn-n" id="gq4-n" onclick="ynSelect('gq4','n');checkGate()">NO</button>
+          </div>
+        </div>
+        <div style="height:1px;background:var(--border);margin:12px 0;"></div>
+
+        <!-- Q5 -->
+        <div class="gate-q" id="gq5">
+          <div class="gate-q-text">Are you hydrated, body-activated, and mentally present — ready to execute with discipline?</div>
+          <div class="yn-pair" style="margin-top:8px;">
+            <button class="yn-btn yn-y" id="gq5-y" onclick="ynSelect('gq5','y');checkGate()">YES</button>
+            <button class="yn-btn yn-n" id="gq5-n" onclick="ynSelect('gq5','n');checkGate()">NO</button>
+          </div>
+        </div>
+
+        <div id="gate-status" style="margin-top:14px;font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--text-dim);text-align:center;letter-spacing:1px;">Answer all 5 questions to unlock trading</div>
+        <button id="gate-btn" class="gate-btn" style="margin-top:12px;display:none;" onclick="passGate()">UNLOCK TRADING</button>
       </div>
 
-      <!-- Domain Cards -->
-      <div class="section-header-row"><div class="section-lbl">Domain Focus</div></div>
-      <div class="domain-cards" style="margin-top:8px;">
-        <div class="domain-card" onclick="requireGate('trading','#88ff00')">
-          <div class="domain-card-top"><div class="domain-icon">📈</div><div class="domain-info"><div class="domain-name">Trading</div><div class="domain-focus">Phase 1 — Execution accuracy. Bear market. Loss limit $41.81.</div></div><div class="domain-status s-active">Active</div></div>
-          <div class="prog-row"><div class="prog-track"><div class="prog-fill" style="width:20%;background:#88ff00;"></div></div><div class="prog-frac">4 / 20</div><div class="prog-pct" style="color:#88ff00;">20%</div></div>
-        </div>
-        <div class="domain-card" onclick="requireGate('photography','#ff1493')">
-          <div class="domain-card-top"><div class="domain-icon">📷</div><div class="domain-info"><div class="domain-name">Taylor Hendry Photography</div><div class="domain-focus">Restructure in progress. Phase 3 after trading complete.</div></div><div class="domain-status s-building">Building</div></div>
-          <div class="prog-row"><div class="prog-track"><div class="prog-fill" style="width:5%;background:#ff1493;"></div></div><div class="prog-frac">1 / 20</div><div class="prog-pct" style="color:#ff1493;">5%</div></div>
-        </div>
-        <div class="domain-card" onclick="requireGate('hcc','#88ff00')">
-          <div class="domain-card-top"><div class="domain-icon">🏗️</div><div class="domain-info"><div class="domain-name">HCC Completion</div><div class="domain-focus">Active build — trading system, Google integrations, daily log.</div></div><div class="domain-status s-active">Active</div></div>
-          <div class="prog-row"><div class="prog-track"><div class="prog-fill" style="width:25%;background:#88ff00;"></div></div><div class="prog-frac">5 / 20</div><div class="prog-pct" style="color:#88ff00;">25%</div></div>
-        </div>
-        <div class="domain-card" onclick="requireGate('homebuild','#00ffcc')">
-          <div class="domain-card-top"><div class="domain-icon">🏡</div><div class="domain-info"><div class="domain-name">Home / Build</div><div class="domain-focus">On hold — unlocks when trading milestones are met.</div></div><div class="domain-status s-hold">On Hold</div></div>
-          <div class="prog-row"><div class="prog-track"><div class="prog-fill" style="width:0%;background:#14b8a6;"></div></div><div class="prog-frac">0 / 20</div><div class="prog-pct" style="color:#14b8a6;">0%</div></div>
-        </div>
-        <div class="domain-card" onclick="requireGate('roadmap','#ff6600')">
-          <div class="domain-card-top"><div class="domain-icon">🗺️</div><div class="domain-info"><div class="domain-name">Life Roadmap</div><div class="domain-focus">Built last — awaiting domain completions.</div></div><div class="domain-status s-hold">Pending</div></div>
-          <div class="prog-row"><div class="prog-track"><div class="prog-fill" style="width:0%;background:#fb923c;"></div></div><div class="prog-frac">0 / 20</div><div class="prog-pct" style="color:#fb923c;">0%</div></div>
-        </div>
-      </div>
-
-      <!-- Gate -->
-      <div class="gate-section" id="gate-section">
-        <div class="gate-text">You've reviewed your state and your domains.<br>Trade with discipline. Be present with your family.<br>Execute the process.</div>
-        <button class="gate-btn" id="gate-btn" onclick="passGate()">I'M READY — ENTER</button>
-      </div>
     </div>
   </div>
 
@@ -637,10 +716,10 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
       <div class="chart-card"><div class="chart-hdr"><span class="chart-title">Weekly P&L</span><span class="chart-badge">+$66.07</span></div><canvas id="pnlChart" height="120"></canvas></div>
       <div class="section-hdr">Quick Access</div>
       <div class="link-grid">
-        <div class="link-card" onclick="nav('handbook','#88ff00')"><div class="link-icon">📖</div><div class="link-title">Handbook</div><div class="link-sub">Playbook & strategy</div></div>
-        <div class="link-card" onclick="nav('datalog','#88ff00')"><div class="link-icon">📊</div><div class="link-title">Data Log</div><div class="link-sub">Trade log & movers</div></div>
-        <div class="link-card" onclick="nav('workflow','#88ff00')"><div class="link-icon">⚙️</div><div class="link-title">Workflow</div><div class="link-sub">Protocols & prompts</div></div>
-        <div class="link-card" onclick="nav('performance','#88ff00')"><div class="link-icon">📈</div><div class="link-title">Performance</div><div class="link-sub">Stats & reviews</div></div>
+        <div class="link-card" onclick="requireGate('handbook','#88ff00')"><div class="link-icon">📖</div><div class="link-title">Handbook</div><div class="link-sub">Playbook & strategy</div></div>
+        <div class="link-card" onclick="requireGate('datalog','#88ff00')"><div class="link-icon">📊</div><div class="link-title">Data Log</div><div class="link-sub">Trade log & movers</div></div>
+        <div class="link-card" onclick="requireGate('workflow','#88ff00')"><div class="link-icon">⚙️</div><div class="link-title">Workflow</div><div class="link-sub">Protocols & prompts</div></div>
+        <div class="link-card" onclick="requireGate('performance','#88ff00')"><div class="link-icon">📈</div><div class="link-title">Performance</div><div class="link-sub">Stats & reviews</div></div>
       </div>
     </div>
   </div>
@@ -766,30 +845,34 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
   <div class="page" id="page-david"><div class="placeholder"><div class="placeholder-icon">🧠</div><div class="placeholder-title">David — Personal</div><div class="placeholder-sub">Fitness, diet, mental/emotional, and personal growth.</div><span class="ph-phase badge-blue">Phase 4</span></div></div>
   <div class="page" id="page-daily-log">
     <div class="page-content">
-      <div class="page-header"><div class="page-icon">📝</div><div><div class="page-title" style="color:#ff0000;">Daily Log</div><div class="page-sub">Trading · Diet · Fitness — submit each section independently</div></div></div>
+      <div class="page-header"><div class="page-icon">📝</div><div><div class="page-title" style="color:#ff0000;">Daily Log</div><div class="page-sub">All domains — tap to log, submit to save</div></div></div>
 
-      <!-- ── TRADING LOG ── -->
+      <!-- ═══ TRADING ═══ -->
       <div style="margin-bottom:20px;">
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;color:#88ff00;margin-bottom:10px;padding:8px 14px;background:var(--surface);border:1px solid var(--border2);border-radius:8px;border-left:3px solid #88ff00;">📈 TRADE ENTRY — One trade at a time</div>
+        <div class="log-section-hdr" style="border-left-color:#88ff00;color:#88ff00;">📈 TRADE ENTRY <span style="font-size:11px;opacity:0.6;">— one trade at a time</span></div>
+        <div id="trade-submitted-msg" class="log-confirm" style="border-color:#88ff00;color:#88ff00;">✓ TRADE LOGGED — Form cleared for next trade</div>
 
-        <div id="trade-submitted-msg" style="display:none;background:rgba(0,255,136,0.08);border:1px solid #88ff00;border-radius:8px;padding:10px 14px;margin-bottom:10px;font-family:'IBM Plex Mono',monospace;font-size:10px;color:#88ff00;text-align:center;letter-spacing:1px;">✓ TRADE LOGGED — Form cleared for next trade</div>
-
-        <div style="background:var(--surface);border:1px solid var(--border2);border-radius:10px;padding:14px;margin-bottom:8px;">
-          <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-dim);margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border);">Trade Context</div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
+        <!-- TRADE CONTEXT -->
+        <div class="log-card">
+          <div class="log-card-hdr" style="color:#88ff00;">Trade Context</div>
+          <div class="log-row-2">
             <div><label class="log-label">Date</label><input type="date" class="log-input" id="t-date"></div>
             <div><label class="log-label">Day</label>
-              <select class="log-select" id="t-day">
-                <option value="">Select</option>
-                <option>Monday</option><option>Tuesday</option><option>Wednesday</option><option>Thursday</option><option>Friday</option>
-              </select>
+              <div class="tog-group" id="tg-day">
+                <button class="tog-sm" onclick="togGroup('tg-day',this)">Mon</button>
+                <button class="tog-sm" onclick="togGroup('tg-day',this)">Tue</button>
+                <button class="tog-sm" onclick="togGroup('tg-day',this)">Wed</button>
+                <button class="tog-sm" onclick="togGroup('tg-day',this)">Thu</button>
+                <button class="tog-sm" onclick="togGroup('tg-day',this)">Fri</button>
+              </div>
             </div>
           </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
+          <div class="log-row-2" style="margin-top:8px;">
             <div><label class="log-label">Market Type</label>
-              <select class="log-select" id="t-mtype">
-                <option value="">Select</option><option>Bull</option><option>Bear</option>
-              </select>
+              <div class="tog-group" id="tg-mtype">
+                <button class="tog-sm" style="color:#88ff00;" onclick="togGroup('tg-mtype',this)">Bull</button>
+                <button class="tog-sm" style="color:#ff0000;" onclick="togGroup('tg-mtype',this)">Bear</button>
+              </div>
             </div>
             <div><label class="log-label">Market Condition</label>
               <select class="log-select" id="t-mcond">
@@ -797,98 +880,129 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
               </select>
             </div>
           </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
+          <div class="log-row-2" style="margin-top:8px;">
             <div><label class="log-label">Ticker</label><input type="text" class="log-input" id="t-ticker" placeholder="AAPL" style="text-transform:uppercase;"></div>
             <div><label class="log-label">Float</label><input type="number" class="log-input" id="t-float" placeholder="4200000"></div>
           </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
+          <div class="log-row-2" style="margin-top:8px;">
             <div><label class="log-label">ETB / HTB</label>
-              <select class="log-select" id="t-etb">
-                <option value="">Select</option><option>ETB</option><option>HTB</option>
-              </select>
+              <div class="tog-group" id="tg-etb">
+                <button class="tog-sm" style="color:#88ff00;" onclick="togGroup('tg-etb',this)">ETB</button>
+                <button class="tog-sm" style="color:#ff0000;" onclick="togGroup('tg-etb',this)">HTB</button>
+              </div>
             </div>
-            <div><label class="log-label">Catalyst</label><input type="text" class="log-input" id="t-catalyst" placeholder="Earnings beat, PR..."></div>
+            <div><label class="log-label">Catalyst</label><input type="text" class="log-input" id="t-catalyst" placeholder="PR, Earnings..."></div>
           </div>
         </div>
 
-        <div style="background:var(--surface);border:1px solid var(--border2);border-radius:10px;padding:14px;margin-bottom:8px;">
-          <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-dim);margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border);">Technicals & Trade</div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
+        <!-- TECHNICALS -->
+        <div class="log-card">
+          <div class="log-card-hdr" style="color:#00ccff;">Technicals & Trade</div>
+          <div class="log-row-2">
             <div><label class="log-label">VWAP</label>
-              <select class="log-select" id="t-vwap"><option value="">Select</option><option>Above</option><option>Below</option></select>
+              <div class="tog-group" id="tg-vwap">
+                <button class="tog-sm" style="color:#88ff00;" onclick="togGroup('tg-vwap',this)">Above</button>
+                <button class="tog-sm" style="color:#ff0000;" onclick="togGroup('tg-vwap',this)">Below</button>
+              </div>
             </div>
             <div><label class="log-label">100K / Min</label>
-              <select class="log-select" id="t-100k"><option value="">Select</option><option>Above</option><option>Below</option></select>
+              <div class="tog-group" id="tg-100k">
+                <button class="tog-sm" style="color:#88ff00;" onclick="togGroup('tg-100k',this)">Above</button>
+                <button class="tog-sm" style="color:#ff0000;" onclick="togGroup('tg-100k',this)">Below</button>
+              </div>
             </div>
           </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
+          <div class="log-row-2" style="margin-top:8px;">
             <div><label class="log-label">Trade Type</label>
-              <select class="log-select" id="t-ttype"><option value="">Select</option><option>Channel</option><option>Scalp</option><option>Repricing Thesis</option></select>
+              <div class="tog-group" id="tg-ttype">
+                <button class="tog-sm" onclick="togGroup('tg-ttype',this)">Channel</button>
+                <button class="tog-sm" onclick="togGroup('tg-ttype',this)">Scalp</button>
+                <button class="tog-sm" onclick="togGroup('tg-ttype',this)">Repricing</button>
+              </div>
             </div>
             <div><label class="log-label">Entry Type</label>
-              <select class="log-select" id="t-etype"><option value="">Select</option><option>Breakout</option><option>Breakout Pullback</option><option>Cup & Handle</option><option>Support</option><option>VWAP Break</option><option>VWAP Support</option><option>W</option></select>
+              <select class="log-select" id="t-etype">
+                <option value="">Select</option><option>Breakout</option><option>Breakout Pullback</option><option>Cup & Handle</option><option>Support</option><option>VWAP Break</option><option>VWAP Support</option><option>W</option>
+              </select>
             </div>
           </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
+          <div class="log-row-2" style="margin-top:8px;">
             <div><label class="log-label">Initial R:R</label><input type="text" class="log-input" id="t-irr" placeholder="2:1"></div>
             <div><label class="log-label">Executed R:R</label><input type="text" class="log-input" id="t-err" placeholder="1.5:1"></div>
           </div>
-          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:8px;">
+          <div class="log-row-3" style="margin-top:8px;">
             <div><label class="log-label"># Trades</label><input type="number" class="log-input" id="t-ntrades" placeholder="3" min="0"></div>
             <div><label class="log-label"># Green</label><input type="number" class="log-input" id="t-ngreen" placeholder="2" min="0"></div>
             <div><label class="log-label"># Red</label><input type="number" class="log-input" id="t-nred" placeholder="1" min="0"></div>
           </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
-            <div><label class="log-label">P&L ($)</label><input type="number" class="log-input" id="t-pnl" placeholder="+25.40" step="0.01"></div>
+          <div class="log-row-2" style="margin-top:8px;">
+            <div><label class="log-label">P&L ($)</label><input type="number" class="log-input" id="t-pnl" placeholder="25.40" step="0.01"></div>
             <div><label class="log-label">Wash Sale</label>
-              <select class="log-select" id="t-wash"><option value="">Select</option><option>Y</option><option>N</option></select>
+              <div class="yn-pair" style="margin-top:4px;">
+                <button class="yn-btn yn-n" id="tg-wash-y" onclick="ynSelect('tg-wash','y')">YES</button>
+                <button class="yn-btn yn-y" id="tg-wash-n" onclick="ynSelect('tg-wash','n')">NO</button>
+              </div>
             </div>
           </div>
-          <div><label class="log-label">Wash Sale $ Impact</label><input type="number" class="log-input" id="t-washamt" placeholder="0.00" step="0.01"></div>
+          <div style="margin-top:8px;"><label class="log-label">Wash Sale $ Impact</label><input type="number" class="log-input" id="t-washamt" placeholder="0.00" step="0.01"></div>
         </div>
 
-        <div style="background:var(--surface);border:1px solid var(--border2);border-radius:10px;padding:14px;margin-bottom:8px;">
-          <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-dim);margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border);">Analysis — Your Review</div>
-          <div style="margin-bottom:8px;"><label class="log-label">Was my entry well timed?</label><textarea class="log-textarea" id="t-a1" placeholder="Yes / No — and why..."></textarea></div>
-          <div style="margin-bottom:8px;"><label class="log-label">Was my stop placed appropriately?</label><textarea class="log-textarea" id="t-a2" placeholder="Yes / No — basis..."></textarea></div>
-          <div style="margin-bottom:8px;"><label class="log-label">What did I do well?</label><textarea class="log-textarea" id="t-a3" placeholder="Execution, patience, discipline..."></textarea></div>
-          <div style="margin-bottom:8px;"><label class="log-label">One thing I could have done better?</label><textarea class="log-textarea" id="t-a4" placeholder="One specific improvement..."></textarea></div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
+        <!-- ANALYSIS -->
+        <div class="log-card">
+          <div class="log-card-hdr" style="color:#ffee00;">Analysis — Your Review</div>
+          <div class="log-row-2">
+            <div><label class="log-label">Entry well timed?</label>
+              <div class="tog-group" id="tg-a1">
+                <button class="tog-sm" style="color:#88ff00;" onclick="togGroup('tg-a1',this)">Yes</button>
+                <button class="tog-sm" style="color:#ff0000;" onclick="togGroup('tg-a1',this)">No</button>
+                <button class="tog-sm" onclick="togGroup('tg-a1',this)">Partial</button>
+              </div>
+            </div>
+            <div><label class="log-label">Stop appropriate?</label>
+              <div class="tog-group" id="tg-a2">
+                <button class="tog-sm" style="color:#88ff00;" onclick="togGroup('tg-a2',this)">Yes</button>
+                <button class="tog-sm" style="color:#ff0000;" onclick="togGroup('tg-a2',this)">No</button>
+                <button class="tog-sm" onclick="togGroup('tg-a2',this)">Partial</button>
+              </div>
+            </div>
+          </div>
+          <div style="margin-top:8px;"><label class="log-label">What I did well</label><textarea class="log-textarea" id="t-a3" placeholder="Execution, patience, read the tape..."></textarea></div>
+          <div style="margin-top:8px;"><label class="log-label">One improvement</label><textarea class="log-textarea" id="t-a4" placeholder="Specific and honest..."></textarea></div>
+          <div class="log-row-2" style="margin-top:8px;">
             <div><label class="log-label">Best Case P&L ($)</label><input type="number" class="log-input" id="t-bestpnl" placeholder="0.00" step="0.01"></div>
-            <div><label class="log-label">Sold Appropriately?</label>
-              <select class="log-select" id="t-sold"><option value="">Select</option><option>Yes — appropriate</option><option>No — sold early</option><option>No — held too long</option></select>
+            <div><label class="log-label">Sold appropriately?</label>
+              <div class="tog-group" id="tg-sold">
+                <button class="tog-sm" style="color:#88ff00;" onclick="togGroup('tg-sold',this)">Yes</button>
+                <button class="tog-sm" style="color:#ff0000;" onclick="togGroup('tg-sold',this)">Early</button>
+                <button class="tog-sm" style="color:#ffaa00;" onclick="togGroup('tg-sold',this)">Late</button>
+              </div>
             </div>
           </div>
-          <div style="margin-bottom:8px;"><label class="log-label">Why did I sell?</label><textarea class="log-textarea" id="t-a5" placeholder="Target hit, stop triggered, intuition..."></textarea></div>
-          <div style="margin-bottom:8px;"><label class="log-label">My Conclusion</label><textarea class="log-textarea" id="t-a6" placeholder="Overall takeaway from this trade..."></textarea></div>
+          <div style="margin-top:8px;"><label class="log-label">Why I sold</label><textarea class="log-textarea" id="t-a5" placeholder="Target hit, stop triggered, intuition..."></textarea></div>
+          <div style="margin-top:8px;"><label class="log-label">My conclusion</label><textarea class="log-textarea" id="t-a6" placeholder="Overall takeaway..."></textarea></div>
         </div>
-
         <button class="log-submit-btn" style="border-color:#88ff00;color:#88ff00;" onclick="submitTrade()">SUBMIT TRADE — LOG NEXT</button>
       </div>
 
-      <!-- ── DIET LOG ── -->
+      <!-- ═══ DIET ═══ -->
       <div style="margin-bottom:20px;">
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;color:#ff6600;margin-bottom:10px;padding:8px 14px;background:var(--surface);border:1px solid var(--border2);border-radius:8px;border-left:3px solid #ff6600;">🥗 DIET — Daily Macros</div>
-
-        <div id="diet-submitted-msg" style="display:none;background:rgba(255,119,0,0.08);border:1px solid #ff6600;border-radius:8px;padding:10px 14px;margin-bottom:10px;font-family:'IBM Plex Mono',monospace;font-size:10px;color:#ff6600;text-align:center;letter-spacing:1px;">✓ DIET LOGGED</div>
-
-        <div style="background:var(--surface);border:1px solid var(--border2);border-radius:10px;padding:14px;margin-bottom:8px;">
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
+        <div class="log-section-hdr" style="border-left-color:#ff6600;color:#ff6600;">🥗 DIET — Daily Macros</div>
+        <div id="diet-submitted-msg" class="log-confirm" style="border-color:#ff6600;color:#ff6600;">✓ DIET LOGGED</div>
+        <div class="log-card">
+          <div class="log-row-2">
             <div><label class="log-label">Calories</label><input type="number" class="log-input" id="d-cal" placeholder="2200"></div>
             <div><label class="log-label">Protein (g)</label><input type="number" class="log-input" id="d-pro" placeholder="180"></div>
           </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
+          <div class="log-row-2" style="margin-top:8px;">
             <div><label class="log-label">Carbs (g)</label><input type="number" class="log-input" id="d-carb" placeholder="175"></div>
             <div><label class="log-label">Fat (g)</label><input type="number" class="log-input" id="d-fat" placeholder="80"></div>
           </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;">
+          <div class="log-row-2" style="margin-top:8px;">
             <div><label class="log-label">Sodium (mg)</label><input type="number" class="log-input" id="d-sod" placeholder="1800"></div>
             <div><label class="log-label">Added Sugar (g)</label><input type="number" class="log-input" id="d-sug" placeholder="25"></div>
           </div>
-
-          <!-- LIVE MACRO METERS -->
-          <div id="diet-meters" style="display:none;">
-            <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-dim);margin-bottom:10px;padding-top:8px;border-top:1px solid var(--border);">vs Targets</div>
+          <div id="diet-meters" style="display:none;margin-top:10px;padding-top:10px;border-top:1px solid var(--border);">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-dim);margin-bottom:8px;">vs Targets</div>
             <div id="meter-cal" class="meter-row-dl"></div>
             <div id="meter-pro" class="meter-row-dl"></div>
             <div id="meter-carb" class="meter-row-dl"></div>
@@ -900,41 +1014,129 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
         <button class="log-submit-btn" style="border-color:#ff6600;color:#ff6600;" onclick="submitDiet()">LOG DIET</button>
       </div>
 
-      <!-- ── FITNESS LOG ── -->
+      <!-- ═══ FITNESS ═══ -->
       <div style="margin-bottom:20px;">
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;color:#00ccff;margin-bottom:10px;padding:8px 14px;background:var(--surface);border:1px solid var(--border2);border-radius:8px;border-left:3px solid #00ccff;">💪 FITNESS — Daily Activity</div>
-
-        <div id="fit-submitted-msg" style="display:none;background:rgba(0,204,255,0.08);border:1px solid #00ccff;border-radius:8px;padding:10px 14px;margin-bottom:10px;font-family:'IBM Plex Mono',monospace;font-size:10px;color:#00ccff;text-align:center;letter-spacing:1px;">✓ FITNESS LOGGED</div>
-
-        <div style="background:var(--surface);border:1px solid var(--border2);border-radius:10px;padding:14px;margin-bottom:8px;">
-          <!-- TOGGLE BUTTONS -->
-          <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-dim);margin-bottom:8px;">Goals</div>
+        <div class="log-section-hdr" style="border-left-color:#00ccff;color:#00ccff;">💪 FITNESS — Daily Activity</div>
+        <div id="fit-submitted-msg" class="log-confirm" style="border-color:#00ccff;color:#00ccff;">✓ FITNESS LOGGED</div>
+        <div class="log-card">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-dim);margin-bottom:8px;">Goals Hit Today</div>
           <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px;">
             <button class="toggle-btn" id="tog-exercise" onclick="toggleBtn('tog-exercise')">Exercise</button>
             <button class="toggle-btn" id="tog-iso" onclick="toggleBtn('tog-iso')">Iso Holds</button>
             <button class="toggle-btn" id="tog-stretch" onclick="toggleBtn('tog-stretch')">Stretch</button>
           </div>
-          <div style="margin-bottom:10px;"><label class="log-label">Workout Day</label>
-            <select class="log-select" id="f-wtype">
-              <option value="">Select or Rest Day</option>
-              <option>Push</option><option>Pull</option><option>Bike</option><option>Hike</option><option>Run</option><option>Beaver Ranch</option><option>Rest</option>
-            </select>
+          <div style="margin-bottom:10px;"><label class="log-label">Workout Type</label>
+            <div class="tog-group" id="tg-wtype">
+              <button class="tog-sm" onclick="togGroup('tg-wtype',this)">Push</button>
+              <button class="tog-sm" onclick="togGroup('tg-wtype',this)">Pull</button>
+              <button class="tog-sm" onclick="togGroup('tg-wtype',this)">Bike</button>
+              <button class="tog-sm" onclick="togGroup('tg-wtype',this)">Hike</button>
+              <button class="tog-sm" onclick="togGroup('tg-wtype',this)">Run</button>
+              <button class="tog-sm" onclick="togGroup('tg-wtype',this)">Beaver Ranch</button>
+              <button class="tog-sm" onclick="togGroup('tg-wtype',this)">Rest</button>
+            </div>
           </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
-            <div><label class="log-label">Daily Steps</label><input type="number" class="log-input" id="f-steps" placeholder="8500"></div>
-            <div><label class="log-label">Flights of Stairs</label><input type="number" class="log-input" id="f-flights" placeholder="4"></div>
+          <div class="log-row-2">
+            <div><label class="log-label">Steps</label><input type="number" class="log-input" id="f-steps" placeholder="8500"></div>
+            <div><label class="log-label">Flights</label><input type="number" class="log-input" id="f-flights" placeholder="4"></div>
           </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-            <div><label class="log-label">Intensity Minutes</label><input type="number" class="log-input" id="f-intensity" placeholder="35"></div>
+          <div class="log-row-2" style="margin-top:8px;">
+            <div><label class="log-label">Intensity Mins</label><input type="number" class="log-input" id="f-intensity" placeholder="35"></div>
             <div><label class="log-label">Body Battery</label><input type="number" class="log-input" id="f-battery" placeholder="72" min="0" max="100"></div>
           </div>
         </div>
         <button class="log-submit-btn" style="border-color:#00ccff;color:#00ccff;" onclick="submitFitness()">LOG FITNESS</button>
       </div>
 
+      <!-- ═══ TAYLOR ═══ -->
+      <div style="margin-bottom:20px;">
+        <div class="log-section-hdr" style="border-left-color:#ff44bb;color:#ff44bb;">👩 TAYLOR — Daily Log</div>
+        <div id="taylor-submitted-msg" class="log-confirm" style="border-color:#ff44bb;color:#ff44bb;">✓ TAYLOR LOGGED</div>
+        <div class="log-card">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-dim);margin-bottom:10px;">Did you today?</div>
+          <div class="fam-tog-row">
+            <button class="fam-tog" id="ft-hug" onclick="toggleFam('ft-hug')" style="--fc:#ff44bb">🤗 Hug & Kiss</button>
+            <button class="fam-tog" id="ft-love" onclick="toggleFam('ft-love')" style="--fc:#ff44bb">❤️ Said I Love You</button>
+            <button class="fam-tog" id="ft-ask" onclick="toggleFam('ft-ask')" style="--fc:#ff44bb">💬 Asked About Her Day</button>
+            <button class="fam-tog" id="ft-time" onclick="toggleFam('ft-time')" style="--fc:#ff44bb">⏱️ Quality Time Together</button>
+          </div>
+          <div style="margin-top:10px;"><label class="log-label">Notes</label><textarea class="log-textarea" id="taylor-notes" placeholder="Anything worth capturing..."></textarea></div>
+        </div>
+        <button class="log-submit-btn" style="border-color:#ff44bb;color:#ff44bb;" onclick="submitFam('taylor')">LOG TAYLOR</button>
+      </div>
+
+      <!-- ═══ ADLEY ═══ -->
+      <div style="margin-bottom:20px;">
+        <div class="log-section-hdr" style="border-left-color:#bb44ff;color:#bb44ff;">👧 ADLEY — Daily Log</div>
+        <div id="adley-submitted-msg" class="log-confirm" style="border-color:#bb44ff;color:#bb44ff;">✓ ADLEY LOGGED</div>
+        <div class="log-card">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-dim);margin-bottom:6px;">Goals Met Today</div>
+          <div style="font-size:10px;color:#6b7280;margin-bottom:10px;">Tap each goal that was met</div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div class="yn-row"><span class="yn-label">😴 Sleep 9-11hrs + Bed 9:30</span><div class="yn-pair"><button class="yn-btn yn-y" id="fa-sleep-y" onclick="ynSelect('fa-sleep','y')">YES</button><button class="yn-btn yn-n" id="fa-sleep-n" onclick="ynSelect('fa-sleep','n')">NO</button></div></div>
+            <div class="yn-row"><span class="yn-label">🥗 Nutrition 1400-1800cal</span><div class="yn-pair"><button class="yn-btn yn-y" id="fa-nutrition-y" onclick="ynSelect('fa-nutrition','y')">YES</button><button class="yn-btn yn-n" id="fa-nutrition-n" onclick="ynSelect('fa-nutrition','n')">NO</button></div></div>
+            <div class="yn-row"><span class="yn-label">🏃 Activity 60min + Weight-bearing</span><div class="yn-pair"><button class="yn-btn yn-y" id="fa-activity-y" onclick="ynSelect('fa-activity','y')">YES</button><button class="yn-btn yn-n" id="fa-activity-n" onclick="ynSelect('fa-activity','n')">NO</button></div></div>
+            <div class="yn-row"><span class="yn-label">🌱 Development — Positive body talk</span><div class="yn-pair"><button class="yn-btn yn-y" id="fa-dev-y" onclick="ynSelect('fa-dev','y')">YES</button><button class="yn-btn yn-n" id="fa-dev-n" onclick="ynSelect('fa-dev','n')">NO</button></div></div>
+          </div>
+          <div style="margin-top:10px;"><label class="log-label">Notes</label><textarea class="log-textarea" id="adley-notes" placeholder="Observations, milestones, focus areas..."></textarea></div>
+        </div>
+        <button class="log-submit-btn" style="border-color:#bb44ff;color:#bb44ff;" onclick="submitFam('adley')">LOG ADLEY</button>
+      </div>
+
+      <!-- ═══ EVIE ═══ -->
+      <div style="margin-bottom:20px;">
+        <div class="log-section-hdr" style="border-left-color:#ff99cc;color:#ff99cc;">👧 EVIE — Daily Log</div>
+        <div id="evie-submitted-msg" class="log-confirm" style="border-color:#ff99cc;color:#ff99cc;">✓ EVIE LOGGED</div>
+        <div class="log-card">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-dim);margin-bottom:6px;">Goals Met Today</div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div class="yn-row"><span class="yn-label">😴 Sleep 10-13hrs + Bed 7:30</span><div class="yn-pair"><button class="yn-btn yn-y" id="fe-sleep-y" onclick="ynSelect('fe-sleep','y')">YES</button><button class="yn-btn yn-n" id="fe-sleep-n" onclick="ynSelect('fe-sleep','n')">NO</button></div></div>
+            <div class="yn-row"><span class="yn-label">🥗 Nutrition 1200-1400cal</span><div class="yn-pair"><button class="yn-btn yn-y" id="fe-nutrition-y" onclick="ynSelect('fe-nutrition','y')">YES</button><button class="yn-btn yn-n" id="fe-nutrition-n" onclick="ynSelect('fe-nutrition','n')">NO</button></div></div>
+            <div class="yn-row"><span class="yn-label">🏃 Activity 3+ hrs + Outside</span><div class="yn-pair"><button class="yn-btn yn-y" id="fe-activity-y" onclick="ynSelect('fe-activity','y')">YES</button><button class="yn-btn yn-n" id="fe-activity-n" onclick="ynSelect('fe-activity','n')">NO</button></div></div>
+            <div class="yn-row"><span class="yn-label">🌱 Development — Imaginative play</span><div class="yn-pair"><button class="yn-btn yn-y" id="fe-dev-y" onclick="ynSelect('fe-dev','y')">YES</button><button class="yn-btn yn-n" id="fe-dev-n" onclick="ynSelect('fe-dev','n')">NO</button></div></div>
+          </div>
+          <div style="margin-top:10px;"><label class="log-label">Notes</label><textarea class="log-textarea" id="evie-notes" placeholder="Observations, milestones, focus areas..."></textarea></div>
+        </div>
+        <button class="log-submit-btn" style="border-color:#ff99cc;color:#ff99cc;" onclick="submitFam('evie')">LOG EVIE</button>
+      </div>
+
+      <!-- ═══ CALLAN ═══ -->
+      <div style="margin-bottom:20px;">
+        <div class="log-section-hdr" style="border-left-color:#0099ff;color:#0099ff;">👦 CALLAN — Daily Log</div>
+        <div id="callan-submitted-msg" class="log-confirm" style="border-color:#0099ff;color:#0099ff;">✓ CALLAN LOGGED</div>
+        <div class="log-card">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-dim);margin-bottom:6px;">Goals Met Today</div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div class="yn-row"><span class="yn-label">😴 Sleep 11-14hrs + Nap + Bed 8</span><div class="yn-pair"><button class="yn-btn yn-y" id="fc-sleep-y" onclick="ynSelect('fc-sleep','y')">YES</button><button class="yn-btn yn-n" id="fc-sleep-n" onclick="ynSelect('fc-sleep','n')">NO</button></div></div>
+            <div class="yn-row"><span class="yn-label">🥗 Nutrition 1000-1400cal</span><div class="yn-pair"><button class="yn-btn yn-y" id="fc-nutrition-y" onclick="ynSelect('fc-nutrition','y')">YES</button><button class="yn-btn yn-n" id="fc-nutrition-n" onclick="ynSelect('fc-nutrition','n')">NO</button></div></div>
+            <div class="yn-row"><span class="yn-label">🏃 Activity 3+ hrs + Outside</span><div class="yn-pair"><button class="yn-btn yn-y" id="fc-activity-y" onclick="ynSelect('fc-activity','y')">YES</button><button class="yn-btn yn-n" id="fc-activity-n" onclick="ynSelect('fc-activity','n')">NO</button></div></div>
+            <div class="yn-row"><span class="yn-label">🗣️ Development — Language + Dad play</span><div class="yn-pair"><button class="yn-btn yn-y" id="fc-dev-y" onclick="ynSelect('fc-dev','y')">YES</button><button class="yn-btn yn-n" id="fc-dev-n" onclick="ynSelect('fc-dev','n')">NO</button></div></div>
+          </div>
+          <div style="margin-top:10px;"><label class="log-label">Notes</label><textarea class="log-textarea" id="callan-notes" placeholder="Observations, milestones, focus areas..."></textarea></div>
+        </div>
+        <button class="log-submit-btn" style="border-color:#0099ff;color:#0099ff;" onclick="submitFam('callan')">LOG CALLAN</button>
+      </div>
+
+      <!-- ═══ COOPER ═══ -->
+      <div style="margin-bottom:20px;">
+        <div class="log-section-hdr" style="border-left-color:#ffee00;color:#ffee00;">👦 COOPER — Daily Log</div>
+        <div id="cooper-submitted-msg" class="log-confirm" style="border-color:#ffee00;color:#ffee00;">✓ COOPER LOGGED</div>
+        <div class="log-card">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-dim);margin-bottom:6px;">Goals Met Today</div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div class="yn-row"><span class="yn-label">😴 Sleep 11-14hrs + Nap + Bed 8</span><div class="yn-pair"><button class="yn-btn yn-y" id="fco-sleep-y" onclick="ynSelect('fco-sleep','y')">YES</button><button class="yn-btn yn-n" id="fco-sleep-n" onclick="ynSelect('fco-sleep','n')">NO</button></div></div>
+            <div class="yn-row"><span class="yn-label">🥗 Nutrition 1000-1400cal</span><div class="yn-pair"><button class="yn-btn yn-y" id="fco-nutrition-y" onclick="ynSelect('fco-nutrition','y')">YES</button><button class="yn-btn yn-n" id="fco-nutrition-n" onclick="ynSelect('fco-nutrition','n')">NO</button></div></div>
+            <div class="yn-row"><span class="yn-label">🏃 Activity 3+ hrs + Outside</span><div class="yn-pair"><button class="yn-btn yn-y" id="fco-activity-y" onclick="ynSelect('fco-activity','y')">YES</button><button class="yn-btn yn-n" id="fco-activity-n" onclick="ynSelect('fco-activity','n')">NO</button></div></div>
+            <div class="yn-row"><span class="yn-label">🗣️ Development — Language + Dad play</span><div class="yn-pair"><button class="yn-btn yn-y" id="fco-dev-y" onclick="ynSelect('fco-dev','y')">YES</button><button class="yn-btn yn-n" id="fco-dev-n" onclick="ynSelect('fco-dev','n')">NO</button></div></div>
+          </div>
+          <div style="margin-top:10px;"><label class="log-label">Notes</label><textarea class="log-textarea" id="cooper-notes" placeholder="Observations, milestones, focus areas..."></textarea></div>
+        </div>
+        <button class="log-submit-btn" style="border-color:#ffee00;color:#ffee00;" onclick="submitFam('cooper')">LOG COOPER</button>
+      </div>
+
     </div>
   </div>
-</div>
+
 
 <script>
 // DATE
@@ -957,33 +1159,51 @@ function hexToRgb(hex){
   return r+','+g+','+b;
 }
 
-// GATE
+// GATE — dynamic 5-question, persists per day
 const todayKey='gate_'+d.getFullYear()+'_'+d.getMonth()+'_'+d.getDate();
 let gatePassed=localStorage.getItem(todayKey)==='passed';
-if(gatePassed){
-  const banner=document.getElementById('gate-passed');
-  if(banner) banner.style.display='block';
+
+function checkGate() {
+  let count=0;
+  for(let i=1;i<=5;i++){
+    const y=document.getElementById('gq'+i+'-y');
+    const n=document.getElementById('gq'+i+'-n');
+    if((y&&y.classList.contains('selected'))||(n&&n.classList.contains('selected'))) count++;
+  }
+  const statusEl=document.getElementById('gate-status');
   const btn=document.getElementById('gate-btn');
-  if(btn){btn.textContent='✓ CLEARED';btn.disabled=true;}
+  if(count===5){
+    if(statusEl) statusEl.textContent='All 5 answered — tap to unlock trading.';
+    if(btn) btn.style.display='block';
+  } else {
+    if(statusEl) statusEl.textContent=count+'/5 answered — complete all to unlock trading.';
+    if(btn) btn.style.display='none';
+  }
 }
 
 function passGate(){
   gatePassed=true;
   localStorage.setItem(todayKey,'passed');
-  const btn=document.getElementById('gate-btn');
-  btn.textContent='✓ CLEARED';btn.disabled=true;
+  const gs=document.getElementById('gate-section');
+  if(gs) gs.style.display='none';
   const banner=document.getElementById('gate-passed');
-  banner.style.display='block';
+  if(banner) banner.style.display='block';
   window.scrollTo(0,0);
 }
 
 function requireGate(id,color){
   if(!gatePassed){
-    const gs=document.getElementById('gate-section');if(gs){gs.scrollIntoView();}
-    const btn=document.getElementById('gate-btn');
-    btn.style.transform='scale(0.97)';
-    setTimeout(()=>{btn.style.transform='';},300);
+    const gs=document.getElementById('gate-section');
+    if(gs) gs.scrollIntoView();
   } else nav(id,color);
+}
+
+// Init gate state on load
+if(gatePassed){
+  const gs=document.getElementById('gate-section');
+  if(gs) gs.style.display='none';
+  const banner=document.getElementById('gate-passed');
+  if(banner) banner.style.display='block';
 }
 
 // NAVIGATION
@@ -993,7 +1213,7 @@ function nav(id,color){
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
   const pg=document.getElementById('page-'+id);
   if(pg) pg.classList.add('active');
-  const titles={
+  const titles={'lc-overview':'Life Connect — Overview','lc-concept':'Concept & Vision','lc-roadmap':'Roadmap','lc-legal':'Legal & Protection','lc-notes':'Notes & Ideas',
     'briefing':'Daily Briefing','david-cmd':'Command Center','trading':'Trading',
     'handbook':'Handbook','performance':'Performance','datalog':'Data Log',
     'workflow':'Workflow & Protocols','photography':'Taylor Hendry Photography',
@@ -1018,7 +1238,7 @@ function navNoHistory(id, color) {
   document.querySelectorAll('.nav-item').forEach(n=>{n.classList.remove('active');n.classList.remove('active-gold');});
   const pg=document.getElementById('page-'+id);
   if(pg)pg.classList.add('active');
-  const titles={'briefing':'Daily Briefing','david-cmd':'Command Center','trading':'Trading','handbook':'Handbook','performance':'Performance','datalog':'Data Log','workflow':'Workflow & Protocols','photography':'Taylor Hendry Photography','hrs':'Hendry Residential','ventures':'New Ventures','homebuild':'Home / Build','dailyops':'Daily Operations','lifegoals':'Life Goals','roadmap':'Life Roadmap','hcc':'HCC Completion','calendar':'Calendar','finances':'Finances','entity':'Entity','taylor':'Taylor','adley':'Adley','evie':'Evie','callan':'Callan','cooper':'Cooper','david':'David','daily-log':'Daily Log','sys-instructions':'App Instructions','sys-tools':'Tool Roles','sys-data':'Data & Logging','sys-undo':'Error Recovery','sys-integrations':'Integrations','sys-privacy':'Privacy & Security','sys-buildlog':'Build Log'};
+  const titles={'lc-overview':'Life Connect — Overview','lc-concept':'Concept & Vision','lc-roadmap':'Roadmap','lc-legal':'Legal & Protection','lc-notes':'Notes & Ideas','briefing':'Daily Briefing','david-cmd':'Command Center','trading':'Trading','handbook':'Handbook','performance':'Performance','datalog':'Data Log','workflow':'Workflow & Protocols','photography':'Taylor Hendry Photography','hrs':'Hendry Residential','ventures':'New Ventures','homebuild':'Home / Build','dailyops':'Daily Operations','lifegoals':'Life Goals','roadmap':'Life Roadmap','hcc':'HCC Completion','calendar':'Calendar','finances':'Finances','entity':'Entity','taylor':'Taylor','adley':'Adley','evie':'Evie','callan':'Callan','cooper':'Cooper','david':'David','daily-log':'Daily Log','sys-instructions':'App Instructions','sys-tools':'Tool Roles','sys-data':'Data & Logging','sys-undo':'Error Recovery','sys-integrations':'Integrations','sys-privacy':'Privacy & Security','sys-buildlog':'Build Log'};
   document.getElementById('topbar-title').textContent=titles[id]||id;
   closeSidebar();
   window.scrollTo(0,0);
@@ -1049,7 +1269,41 @@ window.addEventListener('load',()=>{
 });
 
 // DAILY LOG FUNCTIONS
-const MACRO_TARGETS = {cal:2750,pro:190,carb:175,fat:80,sod:2000,sug:30};
+// Y/N toggle pair function
+function ynSelect(baseId, choice) {
+  const yBtn = document.getElementById(baseId+'-y');
+  const nBtn = document.getElementById(baseId+'-n');
+  if(!yBtn || !nBtn) return;
+  yBtn.classList.remove('selected');
+  nBtn.classList.remove('selected');
+  if(choice==='y') yBtn.classList.add('selected');
+  else nBtn.classList.add('selected');
+}
+
+// Toggle group — single select within a group
+function togGroup(groupId, btn) {
+  const group = document.getElementById(groupId);
+  if(!group) return;
+  group.querySelectorAll('.tog-sm').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function togGroupVal(groupId) {
+  const group = document.getElementById(groupId);
+  if(!group) return '';
+  const active = group.querySelector('.tog-sm.active');
+  return active ? active.textContent.trim() : '';
+}
+
+function toggleBtn(id) {
+  const btn = document.getElementById(id);
+  btn.classList.toggle('on');
+}
+
+function toggleFam(id) {
+  const btn = document.getElementById(id);
+  if(btn) btn.classList.toggle('on');
+}
 const MACRO_COLORS = {cal:'#88ff00',pro:'#00ccff',carb:'#ffee00',fat:'#ff6600',sod:'#ff0000',sug:'#bb44ff'};
 const MACRO_LABELS = {cal:'Calories',pro:'Protein',carb:'Carbs',fat:'Fat',sod:'Sodium',sug:'Sugar'};
 const MACRO_UNITS = {cal:'kcal',pro:'g',carb:'g',fat:'g',sod:'mg',sug:'g'};
@@ -1100,31 +1354,37 @@ function toggleBtn(id) {
 }
 
 function submitTrade() {
-  // Clear all trade fields
-  ['t-date','t-ticker','t-float','t-catalyst','t-irr','t-err','t-ntrades','t-ngreen','t-nred','t-pnl','t-washamt','t-bestpnl','t-a1','t-a2','t-a3','t-a4','t-a5','t-a6'].forEach(id => {
-    const el = document.getElementById(id);
-    if(el) el.value = '';
+  ['t-date','t-ticker','t-float','t-catalyst','t-irr','t-err','t-ntrades','t-ngreen','t-nred','t-pnl','t-washamt','t-bestpnl','t-a3','t-a4','t-a5','t-a6'].forEach(id => {
+    const el = document.getElementById(id); if(el) el.value = '';
   });
-  ['t-day','t-mtype','t-mcond','t-etb','t-vwap','t-100k','t-ttype','t-etype','t-wash','t-sold'].forEach(id => {
-    const el = document.getElementById(id);
-    if(el) el.value = '';
+  ['t-mcond','t-etype'].forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
+  ['tg-day','tg-mtype','tg-etb','tg-vwap','tg-100k','tg-ttype','tg-wash','tg-a1','tg-a2','tg-sold'].forEach(id => {
+    const g=document.getElementById(id); if(g) g.querySelectorAll('.tog-sm').forEach(b=>b.classList.remove('active'));
   });
-  const msg = document.getElementById('trade-submitted-msg');
-  msg.style.display = 'block';
-  setTimeout(() => msg.style.display = 'none', 3000);
+  const msg=document.getElementById('trade-submitted-msg');
+  if(msg){msg.style.display='block';setTimeout(()=>msg.style.display='none',3000);}
   window.scrollTo(0,0);
 }
 
 function submitDiet() {
-  const msg = document.getElementById('diet-submitted-msg');
-  msg.style.display = 'block';
-  setTimeout(() => msg.style.display = 'none', 3000);
+  const msg=document.getElementById('diet-submitted-msg');
+  if(msg){msg.style.display='block';setTimeout(()=>msg.style.display='none',3000);}
 }
 
 function submitFitness() {
-  const msg = document.getElementById('fit-submitted-msg');
-  msg.style.display = 'block';
-  setTimeout(() => msg.style.display = 'none', 3000);
+  ['tog-exercise','tog-iso','tog-stretch'].forEach(id=>{const b=document.getElementById(id);if(b)b.classList.remove('on');});
+  const g=document.getElementById('tg-wtype'); if(g) g.querySelectorAll('.tog-sm').forEach(b=>b.classList.remove('active'));
+  ['f-steps','f-flights','f-intensity','f-battery'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  const msg=document.getElementById('fit-submitted-msg');
+  if(msg){msg.style.display='block';setTimeout(()=>msg.style.display='none',3000);}
+}
+
+function submitFam(name) {
+  const prefixes={taylor:['ft-'],adley:['fa-'],evie:['fe-'],callan:['fc-'],cooper:['fco-']};
+  (prefixes[name]||[]).forEach(p=>{document.querySelectorAll('[id^="'+p+'"]').forEach(b=>b.classList.remove('on'));});
+  const notes=document.getElementById(name+'-notes'); if(notes) notes.value='';
+  const msg=document.getElementById(name+'-submitted-msg');
+  if(msg){msg.style.display='block';setTimeout(()=>msg.style.display='none',3000);}
 }
 
 // Auto-fill today's date in trade form
@@ -1632,5 +1892,283 @@ setAccent('#ff6600');
     </div>
   </div>
 </html>
+  <!-- ══ LIFE CONNECT — OVERVIEW ══ -->
+  <div class="page" id="page-lc-overview">
+    <div class="page-content">
+      <div class="page-header" style="border-left-color:#00ffcc;">
+        <div class="page-icon">🌐</div>
+        <div>
+          <div class="page-title" style="color:#00ffcc;">Project Life Connect</div>
+          <div class="page-sub">Commercial life OS — bridges Apple, Google, Microsoft, and everything else</div>
+        </div>
+      </div>
+
+      <div class="card" style="border-left:3px solid #00ffcc;margin-bottom:12px;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;color:#00ffcc;margin-bottom:8px;">The One-Line Pitch</div>
+        <div style="font-size:14px;color:var(--text);line-height:1.7;">"One app that reads and writes across everything you already use — Google, Apple, Microsoft, Garmin, and more — organized around your actual life."</div>
+      </div>
+
+      <div class="card" style="margin-bottom:12px;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#00ffcc;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border);">The Core Problem</div>
+        <div style="font-size:13px;color:var(--text-muted);line-height:1.8;">Most people's digital lives are fragmented across 3-5 ecosystems that don't communicate. iPhone with Apple Health, Google Calendar shared with family, Gmail, OneDrive from work, Garmin watch, banking apps. None of it talks to each other. Every app is an island. There is no single place to see and manage your full life.</div>
+      </div>
+
+      <div class="card" style="margin-bottom:12px;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#00ffcc;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border);">The Solution</div>
+        <div style="font-size:13px;color:var(--text-muted);line-height:1.8;">Life Connect sits on top of what users already have. It doesn't replace Google Calendar or Apple Health — it connects them all into one intelligent interface. The app reads and writes across every platform simultaneously. Zero migration. Zero data loss. The user's data stays in systems they already trust and pay for.</div>
+      </div>
+
+      <div class="card" style="margin-bottom:12px;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#00ffcc;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border);">Key Differentiators</div>
+        <div style="font-size:13px;color:var(--text-muted);line-height:1.9;">
+          <div style="padding:5px 0;border-bottom:1px solid var(--border);display:flex;gap:10px;"><span style="color:#00ffcc;flex-shrink:0;">→</span><span><strong style="color:var(--text);">Existing infrastructure as the backend.</strong> User's own Google Drive, iCloud, or OneDrive stores their data. No data liability. No per-user storage cost. Instant trust.</span></div>
+          <div style="padding:5px 0;border-bottom:1px solid var(--border);display:flex;gap:10px;"><span style="color:#00ffcc;flex-shrink:0;">→</span><span><strong style="color:var(--text);">Bidirectional sync.</strong> Not just a dashboard — reads AND writes back to source systems. Add to Google Calendar, check off tasks, log health data — all from one place.</span></div>
+          <div style="padding:5px 0;border-bottom:1px solid var(--border);display:flex;gap:10px;"><span style="color:#00ffcc;flex-shrink:0;">→</span><span><strong style="color:var(--text);">Intelligent onboarding.</strong> Q&A setup that detects what the user already uses and configures the app around their existing ecosystem automatically.</span></div>
+          <div style="padding:5px 0;border-bottom:1px solid var(--border);display:flex;gap:10px;"><span style="color:#00ffcc;flex-shrink:0;">→</span><span><strong style="color:var(--text);">Life-domain organization.</strong> Not organized by app — organized by life. Family. Health. Work. Finances. Trading. Kids. Personal growth. Each domain pulls from whatever tools feed it.</span></div>
+          <div style="padding:5px 0;display:flex;gap:10px;"><span style="color:#00ffcc;flex-shrink:0;">→</span><span><strong style="color:var(--text);">AI layer built in.</strong> Review, coaching, analysis, and insights powered by AI — accessible within the same system where the data lives.</span></div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:12px;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#00ffcc;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border);">Target Market</div>
+        <div style="font-size:13px;color:var(--text-muted);line-height:1.9;">
+          <div style="padding:5px 0;border-bottom:1px solid var(--border);display:flex;gap:10px;"><span style="color:#00ffcc;flex-shrink:0;">→</span><span><strong style="color:var(--text);">Families</strong> — shared calendar, kids development tracking, household management, spouse coordination</span></div>
+          <div style="padding:5px 0;border-bottom:1px solid var(--border);display:flex;gap:10px;"><span style="color:#00ffcc;flex-shrink:0;">→</span><span><strong style="color:var(--text);">Professionals</strong> — cross-platform work/life integration, performance tracking, goal management</span></div>
+          <div style="padding:5px 0;border-bottom:1px solid var(--border);display:flex;gap:10px;"><span style="color:#00ffcc;flex-shrink:0;">→</span><span><strong style="color:var(--text);">Health-focused users</strong> — fitness, nutrition, sleep, readiness scoring across Garmin, Apple Health, Google Fit</span></div>
+          <div style="padding:5px 0;display:flex;gap:10px;"><span style="color:#00ffcc;flex-shrink:0;">→</span><span><strong style="color:var(--text);">Mixed-ecosystem users</strong> — the majority who use partial Apple + partial Google + partial Microsoft and have no unified view</span></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#00ffcc;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border);">Pricing Tiers</div>
+        <div style="font-size:13px;color:var(--text-muted);line-height:1.9;">
+          <div style="padding:8px 0;border-bottom:1px solid var(--border);"><strong style="color:#88ff00;">Trial</strong> — 30 days free, full access, no credit card required</div>
+          <div style="padding:8px 0;border-bottom:1px solid var(--border);"><strong style="color:#ffee00;">Light</strong> — Core integrations, 3 domains, basic logging. ~$4.99/month</div>
+          <div style="padding:8px 0;"><strong style="color:#00ffcc;">Pro</strong> — All integrations, unlimited domains, AI layer, family sharing, advanced analytics. ~$12.99/month</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ LIFE CONNECT — CONCEPT & VISION ══ -->
+  <div class="page" id="page-lc-concept">
+    <div class="page-content">
+      <div class="page-header" style="border-left-color:#00ffcc;"><div class="page-icon">💡</div><div><div class="page-title" style="color:#00ffcc;">Concept & Vision</div><div class="page-sub">What it is, how it works, where it goes</div></div></div>
+
+      <div class="card" style="margin-bottom:12px;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#00ffcc;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border);">Onboarding Flow</div>
+        <div style="font-size:13px;color:var(--text-muted);line-height:1.9;">
+          <div style="padding:5px 0;border-bottom:1px solid var(--border);display:flex;gap:10px;"><span style="color:#00ffcc;font-weight:600;flex-shrink:0;">Step 1</span><span>Q&A detects what ecosystem the user lives in — Apple, Google, Microsoft, or mixed</span></div>
+          <div style="padding:5px 0;border-bottom:1px solid var(--border);display:flex;gap:10px;"><span style="color:#00ffcc;font-weight:600;flex-shrink:0;">Step 2</span><span>User selects their life domains — Family, Health, Work, Finance, Personal, Kids, etc.</span></div>
+          <div style="padding:5px 0;border-bottom:1px solid var(--border);display:flex;gap:10px;"><span style="color:#00ffcc;font-weight:600;flex-shrink:0;">Step 3</span><span>App connects to their existing accounts — Google OAuth, Apple Sign-In, Microsoft login</span></div>
+          <div style="padding:5px 0;border-bottom:1px solid var(--border);display:flex;gap:10px;"><span style="color:#00ffcc;font-weight:600;flex-shrink:0;">Step 4</span><span>System auto-configures based on detected tools and chosen domains</span></div>
+          <div style="padding:5px 0;display:flex;gap:10px;"><span style="color:#00ffcc;font-weight:600;flex-shrink:0;">Step 5</span><span>User is in their personalized Life Connect in under 10 minutes, with real data already populating</span></div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:12px;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#00ffcc;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border);">Integration Architecture</div>
+        <div style="font-size:13px;color:var(--text-muted);line-height:1.9;">
+          <div style="padding:5px 0;border-bottom:1px solid var(--border);display:flex;gap:10px;"><span style="color:#00ffcc;flex-shrink:0;">→</span><span><strong style="color:var(--text);">Google</strong> — Calendar (read/write), Drive/Sheets (storage), Tasks (read/write), Gmail (read), Fit (read)</span></div>
+          <div style="padding:5px 0;border-bottom:1px solid var(--border);display:flex;gap:10px;"><span style="color:#00ffcc;flex-shrink:0;">→</span><span><strong style="color:var(--text);">Apple</strong> — Health (read via HealthKit), Calendar (read/write), iCloud Drive (storage), Sign-In</span></div>
+          <div style="padding:5px 0;border-bottom:1px solid var(--border);display:flex;gap:10px;"><span style="color:#00ffcc;flex-shrink:0;">→</span><span><strong style="color:var(--text);">Microsoft</strong> — Outlook Calendar (read/write), OneDrive (storage), Teams, To-Do</span></div>
+          <div style="padding:5px 0;border-bottom:1px solid var(--border);display:flex;gap:10px;"><span style="color:#00ffcc;flex-shrink:0;">→</span><span><strong style="color:var(--text);">Garmin / Fitbit / Whoop</strong> — health metrics, body battery, sleep, HRV (read)</span></div>
+          <div style="padding:5px 0;display:flex;gap:10px;"><span style="color:#00ffcc;flex-shrink:0;">→</span><span><strong style="color:var(--text);">Financial</strong> — Plaid API bridges most major banks for read-only financial data</span></div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:12px;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#00ffcc;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border);">Why Existing Infrastructure is the Edge</div>
+        <div style="font-size:13px;color:var(--text-muted);line-height:1.8;">User data lives in their own Google Drive, iCloud, or OneDrive. Life Connect never stores sensitive personal data on its own servers — it only stores connection tokens and preferences. This eliminates data liability, GDPR complexity per user, and per-user storage costs. It also eliminates the #1 objection to new productivity apps — "I don't want to move all my data." There is nothing to move. The user's existing infrastructure becomes the backend.</div>
+      </div>
+
+      <div class="card">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#00ffcc;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border);">Long-Term Vision</div>
+        <div style="font-size:13px;color:var(--text-muted);line-height:1.8;">Life Connect becomes the universal cockpit for personal and family life. As the user base grows, the AI layer gets smarter — pattern recognition across anonymized aggregate data to surface insights individual users can't see themselves. Enterprise version for small businesses. White-label version for health coaches, financial advisors, and life coaches to deploy to their clients. The platform that makes fragmented digital lives whole.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ LIFE CONNECT — ROADMAP ══ -->
+  <div class="page" id="page-lc-roadmap">
+    <div class="page-content">
+      <div class="page-header" style="border-left-color:#00ffcc;"><div class="page-icon">🗺️</div><div><div class="page-title" style="color:#00ffcc;">Roadmap & Timeline</div><div class="page-sub">18-month path from HCC to commercial product</div></div></div>
+
+      <div style="background:var(--surface);border:1px solid var(--border2);border-radius:10px;padding:12px 14px;margin-bottom:14px;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#ffee00;margin-bottom:4px;">Current Status</div>
+        <div style="font-size:13px;color:var(--text-muted);">HCC PWA built and in daily use. Proof of concept validated. Google API key created. Trading, diet, fitness, and family logging built. Phase 2A integrations next.</div>
+      </div>
+
+      <!-- Phase 1 -->
+      <div style="background:var(--surface);border:1px solid var(--border2);border-radius:10px;overflow:hidden;margin-bottom:10px;">
+        <div style="padding:10px 14px;background:rgba(0,255,204,0.06);border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;color:#00ffcc;">Phase 1 — HCC Completion + Validation</div>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;padding:2px 8px;border-radius:4px;background:rgba(0,255,204,0.1);color:#00ffcc;">Months 1-3</span>
+        </div>
+        <div style="font-size:12px;color:var(--text-muted);line-height:1.9;padding:12px 14px;">
+          <div style="padding:4px 0;border-bottom:1px solid var(--border);display:flex;gap:8px;"><span style="color:#00ffcc;">→</span> Finish Google Sheets, Calendar, Tasks integrations in HCC</div>
+          <div style="padding:4px 0;border-bottom:1px solid var(--border);display:flex;gap:8px;"><span style="color:#00ffcc;">→</span> Spotify, deep links, privacy lockdown</div>
+          <div style="padding:4px 0;border-bottom:1px solid var(--border);display:flex;gap:8px;"><span style="color:#00ffcc;">→</span> Complete trading system, daily log sync, review processes</div>
+          <div style="padding:4px 0;border-bottom:1px solid var(--border);display:flex;gap:8px;"><span style="color:#00ffcc;">→</span> Use HCC daily — trade through it, log through it, live in it</div>
+          <div style="padding:4px 0;display:flex;gap:8px;"><span style="color:#00ffcc;">→</span> Begin learning React Native basics via Expo</div>
+        </div>
+      </div>
+
+      <!-- Phase 2 -->
+      <div style="background:var(--surface);border:1px solid var(--border2);border-radius:10px;overflow:hidden;margin-bottom:10px;">
+        <div style="padding:10px 14px;background:rgba(0,255,204,0.04);border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;color:#00ffcc;">Phase 2 — Architecture Foundation</div>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;padding:2px 8px;border-radius:4px;background:rgba(0,255,204,0.1);color:#00ffcc;">Months 3-6</span>
+        </div>
+        <div style="font-size:12px;color:var(--text-muted);line-height:1.9;padding:12px 14px;">
+          <div style="padding:4px 0;border-bottom:1px solid var(--border);display:flex;gap:8px;"><span style="color:#00ffcc;">→</span> Authentication system — user accounts, secure login, session management</div>
+          <div style="padding:4px 0;border-bottom:1px solid var(--border);display:flex;gap:8px;"><span style="color:#00ffcc;">→</span> Multi-tenancy — per-user data isolation, preference storage (Supabase)</div>
+          <div style="padding:4px 0;border-bottom:1px solid var(--border);display:flex;gap:8px;"><span style="color:#00ffcc;">→</span> OAuth flow for Google, Apple Sign-In, Microsoft login</div>
+          <div style="padding:4px 0;border-bottom:1px solid var(--border);display:flex;gap:8px;"><span style="color:#00ffcc;">→</span> Onboarding Q&A that auto-configures app per user ecosystem</div>
+          <div style="padding:4px 0;display:flex;gap:8px;"><span style="color:#00ffcc;">→</span> Backend API layer (Vercel/Railway) — connects app to user's existing services</div>
+        </div>
+      </div>
+
+      <!-- Phase 3 -->
+      <div style="background:var(--surface);border:1px solid var(--border2);border-radius:10px;overflow:hidden;margin-bottom:10px;">
+        <div style="padding:10px 14px;background:rgba(0,255,204,0.04);border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;color:#00ffcc;">Phase 3 — Core Integrations</div>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;padding:2px 8px;border-radius:4px;background:rgba(0,255,204,0.1);color:#00ffcc;">Months 6-9</span>
+        </div>
+        <div style="font-size:12px;color:var(--text-muted);line-height:1.9;padding:12px 14px;">
+          <div style="padding:4px 0;border-bottom:1px solid var(--border);display:flex;gap:8px;"><span style="color:#00ffcc;">→</span> Google full integration (Calendar, Drive, Tasks, Fit) — port from HCC work</div>
+          <div style="padding:4px 0;border-bottom:1px solid var(--border);display:flex;gap:8px;"><span style="color:#00ffcc;">→</span> Apple HealthKit integration — requires native iOS code</div>
+          <div style="padding:4px 0;border-bottom:1px solid var(--border);display:flex;gap:8px;"><span style="color:#00ffcc;">→</span> Microsoft Outlook + OneDrive integration</div>
+          <div style="padding:4px 0;border-bottom:1px solid var(--border);display:flex;gap:8px;"><span style="color:#00ffcc;">→</span> Garmin / Fitbit health data integration</div>
+          <div style="padding:4px 0;display:flex;gap:8px;"><span style="color:#00ffcc;">→</span> Plaid financial data integration (read-only)</div>
+        </div>
+      </div>
+
+      <!-- Phase 4 -->
+      <div style="background:var(--surface);border:1px solid var(--border2);border-radius:10px;overflow:hidden;margin-bottom:10px;">
+        <div style="padding:10px 14px;background:rgba(0,255,204,0.04);border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;color:#00ffcc;">Phase 4 — Native Mobile App</div>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;padding:2px 8px;border-radius:4px;background:rgba(0,255,204,0.1);color:#00ffcc;">Months 9-13</span>
+        </div>
+        <div style="font-size:12px;color:var(--text-muted);line-height:1.9;padding:12px 14px;">
+          <div style="padding:4px 0;border-bottom:1px solid var(--border);display:flex;gap:8px;"><span style="color:#00ffcc;">→</span> React Native via Expo — one codebase for iOS and Android</div>
+          <div style="padding:4px 0;border-bottom:1px solid var(--border);display:flex;gap:8px;"><span style="color:#00ffcc;">→</span> Push notifications — daily briefing, reminders, review triggers</div>
+          <div style="padding:4px 0;border-bottom:1px solid var(--border);display:flex;gap:8px;"><span style="color:#00ffcc;">→</span> Background sync — data updates even when app is closed</div>
+          <div style="padding:4px 0;border-bottom:1px solid var(--border);display:flex;gap:8px;"><span style="color:#00ffcc;">→</span> Apple HealthKit native access — steps, sleep, HRV auto-populate</div>
+          <div style="padding:4px 0;display:flex;gap:8px;"><span style="color:#00ffcc;">→</span> App Store and Google Play submission prep</div>
+        </div>
+      </div>
+
+      <!-- Phase 5 -->
+      <div style="background:var(--surface);border:1px solid var(--border2);border-radius:10px;overflow:hidden;margin-bottom:10px;">
+        <div style="padding:10px 14px;background:rgba(0,255,204,0.04);border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;color:#00ffcc;">Phase 5 — Beta & Launch</div>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;padding:2px 8px;border-radius:4px;background:rgba(0,255,204,0.1);color:#00ffcc;">Months 13-18</span>
+        </div>
+        <div style="font-size:12px;color:var(--text-muted);line-height:1.9;padding:12px 14px;">
+          <div style="padding:4px 0;border-bottom:1px solid var(--border);display:flex;gap:8px;"><span style="color:#00ffcc;">→</span> David as first beta user — full daily use across all domains</div>
+          <div style="padding:4px 0;border-bottom:1px solid var(--border);display:flex;gap:8px;"><span style="color:#00ffcc;">→</span> Invite 10-20 beta users across different ecosystem profiles</div>
+          <div style="padding:4px 0;border-bottom:1px solid var(--border);display:flex;gap:8px;"><span style="color:#00ffcc;">→</span> Fix everything that breaks under real-world use</div>
+          <div style="padding:4px 0;border-bottom:1px solid var(--border);display:flex;gap:8px;"><span style="color:#00ffcc;">→</span> Payment processing — Stripe subscription management</div>
+          <div style="padding:4px 0;border-bottom:1px solid var(--border);display:flex;gap:8px;"><span style="color:#00ffcc;">→</span> Privacy policy, terms of service, App Store guidelines compliance</div>
+          <div style="padding:4px 0;display:flex;gap:8px;"><span style="color:#00ffcc;">→</span> Public launch — App Store + Google Play + web version</div>
+        </div>
+      </div>
+
+      <!-- Cost breakdown -->
+      <div style="background:var(--surface);border:1px solid var(--border2);border-radius:10px;overflow:hidden;">
+        <div style="padding:10px 14px;border-bottom:1px solid var(--border);">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;color:#00ffcc;">Monthly Cost Estimate</div>
+        </div>
+        <div style="font-size:12px;color:var(--text-muted);line-height:1.9;padding:12px 14px;">
+          <div style="padding:4px 0;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;"><span>Database (Supabase)</span><span style="color:#00ffcc;">$0-25/mo</span></div>
+          <div style="padding:4px 0;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;"><span>App hosting (Vercel/Railway)</span><span style="color:#00ffcc;">~$20/mo</span></div>
+          <div style="padding:4px 0;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;"><span>Claude API (AI layer)</span><span style="color:#00ffcc;">$50-200/mo</span></div>
+          <div style="padding:4px 0;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;"><span>Apple Developer Account</span><span style="color:#00ffcc;">$99/yr</span></div>
+          <div style="padding:4px 0;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;"><span>Google Play Account</span><span style="color:#00ffcc;">$25 one-time</span></div>
+          <div style="padding:4px 0;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;"><span>Domain + GitHub private</span><span style="color:#00ffcc;">~$16/mo</span></div>
+          <div style="padding:4px 0;display:flex;justify-content:space-between;font-weight:600;"><span style="color:var(--text);">Total monthly burn</span><span style="color:#00ffcc;font-size:14px;">$150-350/mo</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ LIFE CONNECT — LEGAL ══ -->
+  <div class="page" id="page-lc-legal">
+    <div class="page-content">
+      <div class="page-header" style="border-left-color:#00ffcc;"><div class="page-icon">⚖️</div><div><div class="page-title" style="color:#00ffcc;">Legal & Protection</div><div class="page-sub">Patents, API terms, privacy, and risks</div></div></div>
+
+      <div class="card" style="margin-bottom:12px;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#00ffcc;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border);">Idea Protection — Current Status</div>
+        <div style="font-size:13px;color:var(--text-muted);line-height:1.8;">Conversations with Claude are private and not shared with other users. However, conversations are not a form of legal IP protection. The concept itself (unified life OS bridging ecosystems) is not patentable in the abstract — the specific implementation, onboarding methodology, and architecture are what can be protected. The best protection right now is execution speed.</div>
+      </div>
+
+      <div class="card" style="margin-bottom:12px;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#00ffcc;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border);">Patent Strategy</div>
+        <div style="font-size:13px;color:var(--text-muted);line-height:1.8;">When a working prototype exists: file a provisional patent application (~$320 USPTO fee for small entity). This grants 12 months of "patent pending" status. Potentially patentable: the Q&A onboarding system that auto-configures a personal OS based on detected user infrastructure, combined with the bidirectional sync architecture across competing ecosystems. Consult a patent attorney when prototype is ready.</div>
+      </div>
+
+      <div class="card" style="margin-bottom:12px;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#00ffcc;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border);">Big Company Relationships</div>
+        <div style="font-size:13px;color:var(--text-muted);line-height:1.9;">
+          <div style="padding:5px 0;border-bottom:1px solid var(--border);display:flex;gap:10px;"><span style="color:#88ff00;font-weight:600;">Google</span><span>Most open. APIs well-documented. Actively encourages ecosystem building. Low risk.</span></div>
+          <div style="padding:5px 0;border-bottom:1px solid var(--border);display:flex;gap:10px;"><span style="color:#ffee00;font-weight:600;">Microsoft</span><span>Increasingly open under Nadella. Cross-platform strategy aligns with concept. Low-medium risk.</span></div>
+          <div style="padding:5px 0;display:flex;gap:10px;"><span style="color:#ff0000;font-weight:600;">Apple</span><span>Most restrictive. History of rejecting apps that replicate core iOS features. HealthKit requires native code. App Store approval is the highest risk. Design carefully around their guidelines.</span></div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:12px;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#00ffcc;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border);">Legal Requirements at Launch</div>
+        <div style="font-size:13px;color:var(--text-muted);line-height:1.9;">
+          <div style="padding:4px 0;border-bottom:1px solid var(--border);display:flex;gap:8px;"><span style="color:#00ffcc;">→</span><span>Privacy policy — required by App Store, Google Play, and GDPR/CCPA</span></div>
+          <div style="padding:4px 0;border-bottom:1px solid var(--border);display:flex;gap:8px;"><span style="color:#00ffcc;">→</span><span>Terms of service — protects the business from user misuse claims</span></div>
+          <div style="padding:4px 0;border-bottom:1px solid var(--border);display:flex;gap:8px;"><span style="color:#00ffcc;">→</span><span>LLC formation recommended before accepting payments (~$50-500 depending on state)</span></div>
+          <div style="padding:4px 0;border-bottom:1px solid var(--border);display:flex;gap:8px;"><span style="color:#00ffcc;">→</span><span>Data processing agreements for EU users if marketing internationally</span></div>
+          <div style="padding:4px 0;display:flex;gap:8px;"><span style="color:#00ffcc;">→</span><span>Stripe terms compliance for payment processing</span></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#00ffcc;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border);">Key Risk: Existing Infrastructure as Backend</div>
+        <div style="font-size:13px;color:var(--text-muted);line-height:1.8;">The biggest risk of the "user's own storage" model is API dependency. If Google changes its API terms, restricts third-party access, or charges for previously free endpoints, it directly impacts the product. Mitigation: build on the most stable, well-documented APIs. Diversify so no single platform is a single point of failure. Keep the app functional in read-only mode even if write access is restricted.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ LIFE CONNECT — NOTES ══ -->
+  <div class="page" id="page-lc-notes">
+    <div class="page-content">
+      <div class="page-header" style="border-left-color:#00ffcc;"><div class="page-icon">📋</div><div><div class="page-title" style="color:#00ffcc;">Notes & Ideas</div><div class="page-sub">Ongoing thoughts, features, and decisions</div></div></div>
+
+      <div class="card" style="margin-bottom:12px;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#00ffcc;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border);">Origin</div>
+        <div style="font-size:13px;color:var(--text-muted);line-height:1.8;">Concept emerged from building HCC — a personal PWA life management system. The realization that the problem HCC solves (fragmented life across multiple ecosystems) is universal, not personal. The approach of using existing user infrastructure as the backend rather than building proprietary storage is the core architectural insight. David Hendry is the first user and the product designer by lived experience.</div>
+      </div>
+
+      <div class="card" style="margin-bottom:12px;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#00ffcc;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border);">Feature Ideas — Backlog</div>
+        <div style="font-size:13px;color:var(--text-muted);line-height:1.9;">
+          <div style="padding:4px 0;border-bottom:1px solid var(--border);display:flex;gap:8px;"><span style="color:#00ffcc;">→</span><span>White-label version for coaches and advisors to deploy to clients</span></div>
+          <div style="padding:4px 0;border-bottom:1px solid var(--border);display:flex;gap:8px;"><span style="color:#00ffcc;">→</span><span>Enterprise tier for small business teams</span></div>
+          <div style="padding:4px 0;border-bottom:1px solid var(--border);display:flex;gap:8px;"><span style="color:#00ffcc;">→</span><span>AI-generated weekly life review across all domains</span></div>
+          <div style="padding:4px 0;border-bottom:1px solid var(--border);display:flex;gap:8px;"><span style="color:#00ffcc;">→</span><span>Family sharing with role-based access — parent vs child view</span></div>
+          <div style="padding:4px 0;border-bottom:1px solid var(--border);display:flex;gap:8px;"><span style="color:#00ffcc;">→</span><span>Aggregate anonymized insights — "users like you" pattern recognition</span></div>
+          <div style="padding:4px 0;border-bottom:1px solid var(--border);display:flex;gap:8px;"><span style="color:#00ffcc;">→</span><span>Widget system for home screen quick-access to key metrics</span></div>
+          <div style="padding:4px 0;display:flex;gap:8px;"><span style="color:#00ffcc;">→</span><span>Customizable domain templates — starter packs for families, athletes, traders, parents</span></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#00ffcc;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border);">Decision Log</div>
+        <div style="font-size:13px;color:var(--text-muted);line-height:1.9;">
+          <div style="padding:4px 0;border-bottom:1px solid var(--border);display:flex;gap:8px;"><span style="color:#ffee00;font-weight:600;flex-shrink:0;">Decision</span><span>Not pivoting from HCC to commercial build yet — finish HCC first, validate daily use, learn React Native in parallel</span></div>
+          <div style="padding:4px 0;border-bottom:1px solid var(--border);display:flex;gap:8px;"><span style="color:#ffee00;font-weight:600;flex-shrink:0;">Decision</span><span>User's own storage as backend is non-negotiable core architecture — not optional feature</span></div>
+          <div style="padding:4px 0;border-bottom:1px solid var(--border);display:flex;gap:8px;"><span style="color:#ffee00;font-weight:600;flex-shrink:0;">Decision</span><span>React Native via Expo for native mobile — one codebase, iOS + Android</span></div>
+          <div style="padding:4px 0;display:flex;gap:8px;"><span style="color:#ffee00;font-weight:600;flex-shrink:0;">Open</span><span>Technical co-founder vs solo build — no prospects currently, reassess at 90-day HCC mark</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </body>
 </html>
