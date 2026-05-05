@@ -101,6 +101,24 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .page{display:none;}
 .page.active{display:block;}
 
+/* TRADING COMMAND CENTER */
+.tc-section{background:var(--surface);border:1px solid var(--border2);border-radius:10px;overflow:hidden;margin-bottom:12px;}
+.tc-section-hdr{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;padding:10px 14px;border-bottom:1px solid var(--border);background:rgba(255,255,255,0.02);}
+.tc-subsection{padding:12px 14px;border-bottom:1px solid var(--border);}
+.tc-subsection:last-child{border-bottom:none;}
+.tc-sub-label{font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:2px;text-transform:uppercase;font-weight:600;margin-bottom:10px;}
+.tc-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);}
+.tc-row:last-child{border-bottom:none;}
+.tc-label{font-size:12px;color:var(--text-muted);flex:1;line-height:1.4;}
+.tc-select{background:var(--surface2);border:1px solid var(--border2);border-radius:6px;padding:6px 8px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:11px;outline:none;appearance:none;min-width:160px;max-width:180px;flex-shrink:0;}
+.morning-tog{padding:10px 8px;background:var(--surface2);border:1px solid var(--border2);border-radius:8px;color:var(--text-muted);font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer;transition:all 0.15s;text-align:center;}
+.morning-tog.on{background:rgba(136,255,0,0.1);border-color:#88ff00;color:#88ff00;font-weight:600;}
+.verdict-btn{width:100%;padding:10px 14px;background:var(--surface2);border:1px solid var(--border2);border-radius:8px;color:var(--text-muted);font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;transition:all 0.15s;text-align:left;}
+.verdict-btn.selected{background:rgba(255,255,255,0.06);font-weight:600;}
+.verdict-display{width:100%;padding:10px 14px;background:var(--surface2);border:1px solid var(--border2);border-radius:8px;color:var(--text-dim);font-family:'DM Sans',sans-serif;font-size:13px;transition:all 0.3s;display:flex;justify-content:space-between;align-items:center;}
+.verdict-display.active{background:rgba(255,255,255,0.06);font-weight:600;border-color:currentColor;}
+.verdict-range{font-family:'IBM Plex Mono',monospace;font-size:9px;opacity:0.6;font-weight:400;flex-shrink:0;margin-left:8px;}
+
 /* DAILY LOG FORMS */
 .log-section-hdr{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;margin-bottom:10px;padding:8px 14px;background:var(--surface);border:1px solid var(--border2);border-radius:8px;border-left:3px solid;}
 .log-confirm{display:none;border-radius:8px;padding:10px 14px;margin-bottom:10px;font-family:'IBM Plex Mono',monospace;font-size:10px;text-align:center;letter-spacing:1px;background:rgba(255,255,255,0.04);border:1px solid;}
@@ -132,6 +150,18 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .yn-btn{padding:5px 14px;border-radius:5px;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:1px;cursor:pointer;border:1px solid var(--border2);background:var(--surface2);color:var(--text-dim);transition:all 0.15s;}
 .yn-btn.yn-y.selected{background:rgba(136,255,0,0.12);border-color:#88ff00;color:#88ff00;font-weight:600;}
 .yn-btn.yn-n.selected{background:rgba(255,0,0,0.12);border-color:#ff0000;color:#ff0000;font-weight:600;}
+.wb-btn{padding:8px 4px;border:1px solid var(--border2);border-radius:8px;background:var(--surface2);cursor:pointer;transition:all 0.15s;text-align:center;font-family:'DM Sans',sans-serif;font-size:10px;}
+.wb-btn.selected{opacity:1;transform:scale(1.05);}
+.wb-btn:not(.selected){opacity:0.45;}
+/* Setup rank buttons inside sizing box */
+.sr-btn{width:100%;display:flex;align-items:center;justify-content:space-between;padding:9px 12px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:8px;cursor:pointer;transition:all 0.15s;gap:8px;}
+.sr-btn.selected{background:rgba(255,255,255,0.07);border-color:rgba(136,255,0,0.3);}
+.sr-left{display:flex;align-items:center;gap:8px;flex:1;min-width:0;}
+.sr-rank{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:1px;flex-shrink:0;}
+.sr-desc{font-size:11px;color:#6a7a8a;text-align:left;line-height:1.3;}
+.sr-right{display:flex;flex-direction:column;align-items:flex-end;flex-shrink:0;}
+.sr-pct{font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:1px;opacity:0.6;}
+.sr-amt{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:1px;line-height:1;}
 .meter-row-dl{display:flex;align-items:center;gap:8px;margin-bottom:7px;}
 .meter-row-dl:last-child{margin-bottom:0;}
 
@@ -691,34 +721,368 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
   <!-- ══ TRADING COMMAND CENTER ══ -->
   <div class="page" id="page-trading">
     <div class="page-content">
-      <div class="page-header"><div class="page-icon">📈</div><div><div class="page-title">Trading</div><div class="page-sub">Command Center — Phase 1 Execution Accuracy</div></div></div>
-      <div style="background:var(--surface);border:1px solid rgba(255,0,0,0.25);border-radius:10px;padding:14px 16px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
-        <div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-dim);margin-bottom:3px;">Market Condition</div><div style="font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:2px;color:#ff0000;">🐻 Bear / Starved Relief</div></div>
-        <span class="cond-pill pill-bear">● Bear Active</span>
+      <div class="page-header" style="border-left-color:#88ff00;">
+        <div class="page-icon">📈</div>
+        <div><div class="page-title" style="color:#88ff00;">Trading Command Center</div>
+        <div class="page-sub">Fill in order — sizing calculates automatically</div></div>
       </div>
-      <div class="stat-grid">
-        <div class="stat-card"><div class="stat-label">Loss Limit Today</div><div class="stat-value gold">$41.81</div><div class="stat-sub">Resets Sunday</div></div>
-        <div class="stat-card"><div class="stat-label">Week P&L</div><div class="stat-value green">+$66.07</div><div class="stat-sub">4 sessions</div></div>
-        <div class="stat-card"><div class="stat-label">Win Rate WTD</div><div class="stat-value blue">68.8%</div><div class="stat-sub">11W / 5L</div></div>
-        <div class="stat-card"><div class="stat-label">Setup Priority</div><div class="stat-value" style="color:#88ff00;">R1 / R2</div><div class="stat-sub">Today's focus</div></div>
+
+      <!-- ══ SIZING OUTPUT + SETUP RANK — consolidated ══ -->
+      <div id="sizing-output" style="background:linear-gradient(135deg,#0a1a0a,#0e200e);border:2px solid #88ff00;border-radius:12px;padding:16px;margin-bottom:16px;">
+        <!-- Main number -->
+        <div style="text-align:center;margin-bottom:14px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#5a7a5a;margin-bottom:4px;">Today's Position Ceiling</div>
+          <div id="sizing-number" style="font-family:'Bebas Neue',sans-serif;font-size:52px;letter-spacing:2px;color:#88ff00;line-height:1;text-shadow:0 0 20px rgba(136,255,0,0.3);">—</div>
+          <div id="sizing-breakdown" style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:#5a7a5a;margin-top:5px;line-height:1.8;">Complete sections below</div>
+          <div id="sizing-warning" style="display:none;margin-top:8px;padding:6px 12px;background:rgba(255,0,0,0.1);border:1px solid #ff0000;border-radius:6px;font-family:'IBM Plex Mono',monospace;font-size:9px;color:#ff0000;letter-spacing:1px;"></div>
+        </div>
+        <!-- Setup rank — inline inside ceiling box -->
+        <div style="border-top:1px solid rgba(136,255,0,0.15);padding-top:12px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:2px;text-transform:uppercase;color:#5a7a5a;margin-bottom:8px;">Select Setup Before Each Trade</div>
+          <div style="display:flex;flex-direction:column;gap:5px;">
+            <button class="sr-btn" id="sr-1" onclick="setSetupRank('1',this)">
+              <div class="sr-left"><span class="sr-rank" style="color:#88ff00;">R1</span><span class="sr-desc">Low Float + Real Catalyst + No Dilution</span></div>
+              <div class="sr-right"><span class="sr-pct" style="color:#88ff00;">100%</span><span id="sr-1-amt" class="sr-amt" style="color:#88ff00;">—</span></div>
+            </button>
+            <button class="sr-btn" id="sr-2" onclick="setSetupRank('2',this)">
+              <div class="sr-left"><span class="sr-rank" style="color:#88ff00;">R2</span><span class="sr-desc">Channel / Structure at Confirmed Support</span></div>
+              <div class="sr-right"><span class="sr-pct" style="color:#88ff00;">85%</span><span id="sr-2-amt" class="sr-amt" style="color:#88ff00;">—</span></div>
+            </button>
+            <button class="sr-btn" id="sr-3" onclick="setSetupRank('3',this)">
+              <div class="sr-left"><span class="sr-rank" style="color:#ffee00;">R3</span><span class="sr-desc">Catalyst Continuation / Momentum</span></div>
+              <div class="sr-right"><span class="sr-pct" style="color:#ffee00;">75%</span><span id="sr-3-amt" class="sr-amt" style="color:#ffee00;">—</span></div>
+            </button>
+            <button class="sr-btn" id="sr-4" onclick="setSetupRank('4',this)">
+              <div class="sr-left"><span class="sr-rank" style="color:#ff6600;">R4</span><span class="sr-desc">Pure Momentum Scalp</span></div>
+              <div class="sr-right"><span class="sr-pct" style="color:#ff6600;">50%</span><span id="sr-4-amt" class="sr-amt" style="color:#ff6600;">—</span></div>
+            </button>
+          </div>
+        </div>
       </div>
-      <div class="section-hdr">Pre-Session Checklist</div>
-      <button class="reset-btn" onclick="resetChecklist()">Reset</button>
-      <div class="checklist" id="checklist">
-        <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><span class="check-text">Hydration — water before anything else</span><span class="check-tag tag-david">David</span></div>
-        <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><span class="check-text">Body activation — pushups, squats, 2-min walk</span><span class="check-tag tag-david">David</span></div>
-        <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><span class="check-text">Mantra read out loud</span><span class="check-tag tag-david">David</span></div>
-        <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><span class="check-text">Morning brief reviewed</span><span class="check-tag tag-gemini">Gemini</span></div>
-        <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><span class="check-text">Gemini trade prep — all gates passed</span><span class="check-tag tag-gemini">Gemini</span></div>
-        <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><span class="check-text">Loss limit confirmed from memory</span><span class="check-tag tag-david">David</span></div>
-        <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><span class="check-text">Stop-and-Reset protocol recited</span><span class="check-tag tag-david">David</span></div>
+
+      <!-- ══ MORNING CHECKLIST ══ -->
+      <div class="tc-section">
+        <div class="tc-section-hdr" style="color:#88ff00;">☑ Morning Checklist <span id="chk-status" style="font-size:11px;opacity:0.6;font-family:'DM Sans',sans-serif;font-weight:400;margin-left:6px;">0/4</span></div>
+        <div style="padding:12px 14px;display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+          <button class="morning-tog" id="mc-water" onclick="toggleMorning('mc-water')">💧 20oz Water</button>
+          <button class="morning-tog" id="mc-coffee" onclick="toggleMorning('mc-coffee')">☕ Coffee</button>
+          <button class="morning-tog" id="mc-food" onclick="toggleMorning('mc-food')">🍳 Food</button>
+          <button class="morning-tog" id="mc-activate" onclick="toggleMorning('mc-activate')">⚡ Physical Activation</button>
+        </div>
       </div>
-      <div class="chart-card"><div class="chart-hdr"><span class="chart-title">Weekly P&L</span><span class="chart-badge">+$66.07</span></div><canvas id="pnlChart" height="120"></canvas></div>
-      <div class="section-hdr">Quick Access</div>
+
+      <!-- ══ WEEKLY TREND REFERENCE ══ -->
+      <div class="tc-section">
+        <div class="tc-section-hdr" style="color:#00ccff;">📊 Weekly Trend Reference <span style="font-size:11px;font-family:'DM Sans',sans-serif;font-weight:400;opacity:0.5;margin-left:6px;">Set Sunday in Workflow</span></div>
+        <div style="padding:12px 14px;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
+            <div style="text-align:center;padding:8px;background:var(--surface2);border-radius:6px;border:1px solid var(--border2);">
+              <div style="font-family:'IBM Plex Mono',monospace;font-size:7px;letter-spacing:1px;text-transform:uppercase;color:#5a6a7a;margin-bottom:3px;">S&P 20wk MA</div>
+              <div id="wd-sp-ma" style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:#5a6a7a;">—</div>
+            </div>
+            <div style="text-align:center;padding:8px;background:var(--surface2);border-radius:6px;border:1px solid var(--border2);">
+              <div style="font-family:'IBM Plex Mono',monospace;font-size:7px;letter-spacing:1px;text-transform:uppercase;color:#5a6a7a;margin-bottom:3px;">S&P HH/HL</div>
+              <div id="wd-sp-hl" style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:#5a6a7a;">—</div>
+            </div>
+            <div style="text-align:center;padding:8px;background:var(--surface2);border-radius:6px;border:1px solid var(--border2);">
+              <div style="font-family:'IBM Plex Mono',monospace;font-size:7px;letter-spacing:1px;text-transform:uppercase;color:#5a6a7a;margin-bottom:3px;">Russell 20wk MA</div>
+              <div id="wd-rut-ma" style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:#5a6a7a;">—</div>
+            </div>
+            <div style="text-align:center;padding:8px;background:var(--surface2);border-radius:6px;border:1px solid var(--border2);">
+              <div style="font-family:'IBM Plex Mono',monospace;font-size:7px;letter-spacing:1px;text-transform:uppercase;color:#5a6a7a;margin-bottom:3px;">Russell HH/HL</div>
+              <div id="wd-rut-hl" style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:#5a6a7a;">—</div>
+            </div>
+          </div>
+          <div style="text-align:center;padding:10px;background:var(--surface2);border-radius:6px;border:1px solid var(--border2);">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:7px;letter-spacing:1px;text-transform:uppercase;color:#5a6a7a;margin-bottom:3px;">Weekly Conclusion</div>
+            <div id="wd-conclusion" style="font-family:'DM Sans',sans-serif;font-size:12px;color:#5a6a7a;">No weekly analysis — complete Sunday review in Workflow</div>
+          </div>
+          <div style="text-align:center;margin-top:5px;"><span id="wd-date" style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:#3a4a5a;"></span></div>
+        </div>
+      </div>
+
+      <!-- ══ MACRO CONDITIONS ══ -->
+      <div class="tc-section">
+        <div class="tc-section-hdr" style="color:#ffaa00;">🌍 Macro Market Conditions</div>
+
+        <!-- Geopolitical / Headlines -->
+        <div class="tc-subsection" style="border-color:#ffaa0022;">
+          <div class="tc-sub-label" style="color:#ffaa00;">Geopolitical & Headlines <span style="color:#5a6a7a;font-weight:400;">— Read before scoring</span></div>
+          <div class="tc-row"><label class="tc-label">Overnight developments</label>
+            <div class="tog-group" id="tg-geo">
+              <button class="tog-sm" onclick="tcTog('tg-geo',this,0)">None</button>
+              <button class="tog-sm" style="color:#88ff00;" onclick="tcTog('tg-geo',this,1)">Minor +</button>
+              <button class="tog-sm" style="color:#ff6600;" onclick="tcTog('tg-geo',this,-1)">Minor −</button>
+              <button class="tog-sm" style="color:#00ccff;" onclick="tcTog('tg-geo',this,2)">Major +</button>
+              <button class="tog-sm" style="color:#ff0000;" onclick="tcTog('tg-geo',this,-2)">Major −</button>
+            </div>
+          </div>
+          <div class="tc-row"><label class="tc-label">Scheduled macro events today</label>
+            <div class="tog-group" id="tg-events">
+              <button class="tog-sm" onclick="tcTog('tg-events',this,0)">None</button>
+              <button class="tog-sm" style="color:#ffaa00;" onclick="tcTog('tg-events',this,-0.5)">Minor</button>
+              <button class="tog-sm" style="color:#ff0000;" onclick="tcTog('tg-events',this,-1.5)">Major</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- S&P 500 -->
+        <div class="tc-subsection" style="border-color:#ffaa0022;">
+          <div class="tc-sub-label" style="color:#ffaa00;">S&P 500</div>
+          <div class="tc-row"><label class="tc-label">Previous close</label>
+            <div class="tog-group" id="tg-sp-close">
+              <button class="tog-sm" style="color:#88ff00;" onclick="tcTog('tg-sp-close',this,1)">▲ Up</button>
+              <button class="tog-sm" onclick="tcTog('tg-sp-close',this,0)">— Flat</button>
+              <button class="tog-sm" style="color:#ff0000;" onclick="tcTog('tg-sp-close',this,-1)">▼ Down</button>
+            </div>
+          </div>
+          <div class="tc-row"><label class="tc-label">Trend — 20-day MA</label>
+            <div class="tog-group" id="tg-sp-trend">
+              <button class="tog-sm" style="color:#88ff00;" onclick="tcTog('tg-sp-trend',this,2)">↑ Above — Uptrend</button>
+              <button class="tog-sm" style="color:#ff0000;" onclick="tcTog('tg-sp-trend',this,-2)">↓ Below — Downtrend</button>
+            </div>
+          </div>
+          <div class="tc-row"><label class="tc-label">Futures direction</label>
+            <div class="tog-group" id="tg-sp-fut">
+              <button class="tog-sm" style="color:#88ff00;" onclick="tcTog('tg-sp-fut',this,2)">▲ Up</button>
+              <button class="tog-sm" onclick="tcTog('tg-sp-fut',this,0)">— Flat</button>
+              <button class="tog-sm" style="color:#ff0000;" onclick="tcTog('tg-sp-fut',this,-2)">▼ Down</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- VIX -->
+        <div class="tc-subsection" style="border-color:#ffaa0022;">
+          <div class="tc-sub-label" style="color:#ffaa00;">VIX</div>
+          <div class="tc-row"><label class="tc-label">Price tier</label>
+            <div class="tog-group" id="tg-vix-tier">
+              <button class="tog-sm" onclick="tcTog('tg-vix-tier',this,0)">Below 15</button>
+              <button class="tog-sm" style="color:#88ff00;" onclick="tcTog('tg-vix-tier',this,2)">15–25</button>
+              <button class="tog-sm" style="color:#ffaa00;" onclick="tcTog('tg-vix-tier',this,0)">25–40</button>
+              <button class="tog-sm" style="color:#ff0000;" onclick="tcTog('tg-vix-tier',this,-3)">Above 40</button>
+            </div>
+          </div>
+          <div class="tc-row"><label class="tc-label">Direction</label>
+            <div class="tog-group" id="tg-vix-dir">
+              <button class="tog-sm" style="color:#88ff00;" onclick="tcTog('tg-vix-dir',this,1)">↓ Falling</button>
+              <button class="tog-sm" onclick="tcTog('tg-vix-dir',this,0)">→ Stable</button>
+              <button class="tog-sm" style="color:#ffaa00;" onclick="tcTog('tg-vix-dir',this,-1)">↑ Rising</button>
+              <button class="tog-sm" style="color:#ff0000;" onclick="tcTog('tg-vix-dir',this,-2)">⚡ Spiking</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Oil & Bitcoin -->
+        <div class="tc-subsection" style="border-color:#ffaa0022;">
+          <div class="tc-sub-label" style="color:#ffaa00;">Oil & Bitcoin</div>
+          <div class="tc-row"><label class="tc-label">Oil direction</label>
+            <div class="tog-group" id="tg-oil">
+              <button class="tog-sm" style="color:#ff6600;" onclick="tcTog('tg-oil',this,-1)">▲ Rising</button>
+              <button class="tog-sm" onclick="tcTog('tg-oil',this,0)">— Stable</button>
+              <button class="tog-sm" style="color:#ffaa00;" onclick="tcTog('tg-oil',this,-1)">▼ Falling</button>
+            </div>
+          </div>
+          <div class="tc-row"><label class="tc-label">Bitcoin trend</label>
+            <div class="tog-group" id="tg-btc">
+              <button class="tog-sm" style="color:#88ff00;" onclick="tcTog('tg-btc',this,2)">▲ Rising</button>
+              <button class="tog-sm" onclick="tcTog('tg-btc',this,0)">— Ranging</button>
+              <button class="tog-sm" style="color:#ff0000;" onclick="tcTog('tg-btc',this,-2)">▼ Falling</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Macro Score + Verdict -->
+        <div class="tc-subsection" style="border-color:#ffaa0022;">
+          <div class="tc-sub-label" style="color:#ffaa00;">Macro Score</div>
+          <div style="text-align:center;padding:8px 0 4px;">
+            <div id="macro-score-num" style="font-family:'Bebas Neue',sans-serif;font-size:42px;color:#5a6a7a;line-height:1;">—</div>
+            <div id="macro-score-label" style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:#5a6a7a;letter-spacing:1px;margin-top:2px;">Complete inputs above</div>
+          </div>
+          <div style="background:var(--surface2);border-radius:6px;height:8px;overflow:hidden;margin:8px 0;">
+            <div id="macro-score-bar" style="height:100%;width:50%;background:#5a6a7a;border-radius:6px;transition:width 0.4s ease,background 0.4s ease;"></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:8px;color:#3a4a5a;margin-bottom:12px;">
+            <span>Bear</span><span>Neutral</span><span>Bull</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:5px;">
+            <div class="verdict-display" id="mv-ro-enth">🚀 Risk-On with Enthusiasm <span class="verdict-range">Ceiling $600</span></div>
+            <div class="verdict-display" id="mv-ro">✅ Risk-On <span class="verdict-range">Ceiling $500</span></div>
+            <div class="verdict-display" id="mv-muted">⚠️ Muted <span class="verdict-range">Ceiling $400</span></div>
+            <div class="verdict-display" id="mv-roff">🔴 Risk-Off <span class="verdict-range">Ceiling $200</span></div>
+            <div class="verdict-display" id="mv-extreme">☠️ Extreme Risk-Off <span class="verdict-range">Sideline</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ SMALL CAP CONDITIONS ══ -->
+      <div class="tc-section">
+        <div class="tc-section-hdr" style="color:#ff44bb;">📉 Small Cap Conditions</div>
+        <div class="tc-subsection" style="border-color:#ff44bb22;">
+          <div class="tc-sub-label" style="color:#ff44bb;">Russell 2000</div>
+          <div class="tc-row"><label class="tc-label">Previous close</label>
+            <div class="tog-group" id="tg-rut-close">
+              <button class="tog-sm" style="color:#88ff00;" onclick="tcTog('tg-rut-close',this,1)">▲ Up</button>
+              <button class="tog-sm" onclick="tcTog('tg-rut-close',this,0)">— Flat</button>
+              <button class="tog-sm" style="color:#ff0000;" onclick="tcTog('tg-rut-close',this,-1)">▼ Down</button>
+            </div>
+          </div>
+          <div class="tc-row"><label class="tc-label">Trend — 20-day MA</label>
+            <div class="tog-group" id="tg-rut-trend">
+              <button class="tog-sm" style="color:#88ff00;" onclick="tcTog('tg-rut-trend',this,2)">↑ Above — Uptrend</button>
+              <button class="tog-sm" style="color:#ff0000;" onclick="tcTog('tg-rut-trend',this,-2)">↓ Below — Downtrend</button>
+            </div>
+          </div>
+          <div class="tc-row"><label class="tc-label">Futures direction</label>
+            <div class="tog-group" id="tg-rut-fut">
+              <button class="tog-sm" style="color:#88ff00;" onclick="tcTog('tg-rut-fut',this,2)">▲ Up</button>
+              <button class="tog-sm" onclick="tcTog('tg-rut-fut',this,0)">— Flat</button>
+              <button class="tog-sm" style="color:#ff0000;" onclick="tcTog('tg-rut-fut',this,-2)">▼ Down</button>
+            </div>
+          </div>
+          <div class="tc-row"><label class="tc-label">Russell vs S&P</label>
+            <div class="tog-group" id="tg-rut-vs-sp">
+              <button class="tog-sm" style="color:#88ff00;" onclick="tcTog('tg-rut-vs-sp',this,2)">Leading</button>
+              <button class="tog-sm" onclick="tcTog('tg-rut-vs-sp',this,0)">In Sync</button>
+              <button class="tog-sm" style="color:#ff0000;" onclick="tcTog('tg-rut-vs-sp',this,-2)">Lagging</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Small Cap Score + Verdict -->
+        <div class="tc-subsection" style="border-color:#ff44bb22;">
+          <div class="tc-sub-label" style="color:#ff44bb;">Small Cap Score</div>
+          <div style="text-align:center;padding:8px 0 4px;">
+            <div id="sc-score-num" style="font-family:'Bebas Neue',sans-serif;font-size:42px;color:#5a6a7a;line-height:1;">—</div>
+            <div id="sc-score-label" style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:#5a6a7a;letter-spacing:1px;margin-top:2px;">Complete inputs above</div>
+          </div>
+          <div style="background:var(--surface2);border-radius:6px;height:8px;overflow:hidden;margin:8px 0;">
+            <div id="sc-score-bar" style="height:100%;width:50%;background:#5a6a7a;border-radius:6px;transition:width 0.4s ease,background 0.4s ease;"></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:8px;color:#3a4a5a;margin-bottom:12px;">
+            <span>Hostile</span><span>Neutral</span><span>Favorable</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:5px;">
+            <div class="verdict-display" id="scv-high">⚡ Highly Favorable <span class="verdict-range">+$100 to ceiling</span></div>
+            <div class="verdict-display" id="scv-fav">✅ Favorable <span class="verdict-range">+$50 to ceiling</span></div>
+            <div class="verdict-display" id="scv-muted">⚠️ Muted <span class="verdict-range">No adjustment</span></div>
+            <div class="verdict-display" id="scv-unfav">🔴 Unfavorable <span class="verdict-range">−$100 from ceiling</span></div>
+            <div class="verdict-display" id="scv-hostile">☠️ Hostile <span class="verdict-range">Sideline</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ PERSONAL READINESS ══ -->
+      <div class="tc-section">
+        <div class="tc-section-hdr" style="color:#00aaff;">🧠 Personal Readiness <span style="font-size:11px;font-family:'DM Sans',sans-serif;font-weight:400;opacity:0.6;margin-left:6px;">reduces ceiling</span></div>
+        <div class="tc-subsection" style="border-color:#00aaff22;">
+          <div class="tc-row"><label class="tc-label">Sleep quality</label>
+            <div class="tog-group" id="tg-sleep">
+              <button class="tog-sm" style="color:#ff0000;" onclick="tcReadiness('tg-sleep',this,0.5)">Terrible</button>
+              <button class="tog-sm" style="color:#ff6600;" onclick="tcReadiness('tg-sleep',this,0.75)">Poor</button>
+              <button class="tog-sm" style="color:#ffee00;" onclick="tcReadiness('tg-sleep',this,1)">Fair</button>
+              <button class="tog-sm" style="color:#88ff00;" onclick="tcReadiness('tg-sleep',this,1)">Good</button>
+              <button class="tog-sm" style="color:#00ccff;" onclick="tcReadiness('tg-sleep',this,1)">Great</button>
+            </div>
+          </div>
+          <div class="tc-row"><label class="tc-label">Times woken up</label>
+            <div class="tog-group" id="tg-woken">
+              <button class="tog-sm" style="color:#00ccff;" onclick="tcReadiness('tg-woken',this,1)">0</button>
+              <button class="tog-sm" style="color:#88ff00;" onclick="tcReadiness('tg-woken',this,1)">1</button>
+              <button class="tog-sm" style="color:#ffee00;" onclick="tcReadiness('tg-woken',this,1)">2</button>
+              <button class="tog-sm" style="color:#ff6600;" onclick="tcReadiness('tg-woken',this,0.75)">3</button>
+              <button class="tog-sm" style="color:#ff0000;" onclick="tcReadiness('tg-woken',this,0.5)">4+</button>
+            </div>
+          </div>
+          <div class="tc-row">
+            <label class="tc-label">Body Battery <span style="color:#5a6a7a;font-size:10px;">(baseline 85)</span></label>
+            <input type="number" id="r-battery" min="0" max="100" placeholder="72" oninput="calcSizing()" style="width:64px;background:var(--surface2);border:1px solid var(--border2);border-radius:6px;padding:6px 8px;color:#88ff00;font-family:'Bebas Neue',sans-serif;font-size:18px;outline:none;text-align:center;">
+          </div>
+          <div class="tc-row" style="background:rgba(0,170,255,0.04);border-radius:6px;padding:8px;">
+            <label class="tc-label" style="color:#00aaff;">Yesterday's Activity <span style="color:#5a6a7a;">(auto — pending sync)</span></label>
+            <span id="r-activity-val" style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5a6a7a;">—</span>
+          </div>
+          <div class="tc-row" style="background:rgba(0,170,255,0.04);border-radius:6px;padding:8px;">
+            <label class="tc-label" style="color:#00aaff;">Yesterday's Nutrition <span style="color:#5a6a7a;">(auto — pending sync)</span></label>
+            <span id="r-nutrition-val" style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5a6a7a;">—</span>
+          </div>
+          <div class="tc-row"><label class="tc-label">How do I feel?</label>
+            <div class="tog-group" id="tg-feel">
+              <button class="tog-sm" style="color:#ff0000;" onclick="tcReadiness('tg-feel',this,0.5)">Drained</button>
+              <button class="tog-sm" style="color:#ff6600;" onclick="tcReadiness('tg-feel',this,0.75)">Sluggish</button>
+              <button class="tog-sm" style="color:#ffee00;" onclick="tcReadiness('tg-feel',this,1)">Functional</button>
+              <button class="tog-sm" style="color:#88ff00;" onclick="tcReadiness('tg-feel',this,1)">Sharp</button>
+              <button class="tog-sm" style="color:#00ccff;" onclick="tcReadiness('tg-feel',this,1)">Locked In</button>
+            </div>
+          </div>
+          <!-- Readiness output -->
+          <div style="margin-top:12px;padding:10px;background:rgba(0,170,255,0.06);border:1px solid rgba(0,170,255,0.2);border-radius:8px;text-align:center;">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:2px;text-transform:uppercase;color:#00aaff;margin-bottom:3px;">Readiness Modifier</div>
+            <div id="readiness-mod" style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:#00aaff;">—</div>
+            <div id="readiness-label" style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:#5a6a7a;margin-top:2px;">Select sleep and feel</div>
+          </div>
+        </div>
+      </div>
+
+
+
+      <!-- ══ WEBULL SENTIMENT CORROBORATION ══ -->
+      <div class="tc-section">
+        <div class="tc-section-hdr" style="color:#9966ff;">👁 Webull Sentiment <span style="font-size:11px;font-family:'DM Sans',sans-serif;font-weight:400;opacity:0.6;margin-left:6px;">corroborating check only</span></div>
+        <div class="tc-subsection" style="border-color:#9966ff22;">
+          <div class="tc-sub-label" style="color:#9966ff;">Select Webull sentiment reading</div>
+          <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:10px;">
+            <button class="wb-btn" id="wb-10" onclick="setWebull(10)" style="background:rgba(255,0,0,0.15);border-color:#ff0000;color:#ff0000;">
+              <span style="font-family:'Bebas Neue',sans-serif;font-size:18px;display:block;">10</span>
+              <span style="font-size:8px;opacity:0.8;">Ext Fear</span>
+            </button>
+            <button class="wb-btn" id="wb-20" onclick="setWebull(20)" style="background:rgba(255,51,0,0.12);border-color:#ff3300;color:#ff3300;">
+              <span style="font-family:'Bebas Neue',sans-serif;font-size:18px;display:block;">20</span>
+              <span style="font-size:8px;opacity:0.8;">Fear</span>
+            </button>
+            <button class="wb-btn" id="wb-30" onclick="setWebull(30)" style="background:rgba(255,102,0,0.12);border-color:#ff6600;color:#ff6600;">
+              <span style="font-family:'Bebas Neue',sans-serif;font-size:18px;display:block;">30</span>
+              <span style="font-size:8px;opacity:0.8;">Bearish</span>
+            </button>
+            <button class="wb-btn" id="wb-40" onclick="setWebull(40)" style="background:rgba(255,170,0,0.12);border-color:#ffaa00;color:#ffaa00;">
+              <span style="font-family:'Bebas Neue',sans-serif;font-size:18px;display:block;">40</span>
+              <span style="font-size:8px;opacity:0.8;">Cautious</span>
+            </button>
+            <button class="wb-btn" id="wb-50" onclick="setWebull(50)" style="background:rgba(255,238,0,0.08);border-color:#ffee00;color:#ffee00;">
+              <span style="font-family:'Bebas Neue',sans-serif;font-size:18px;display:block;">50</span>
+              <span style="font-size:8px;opacity:0.8;">Neutral</span>
+            </button>
+            <button class="wb-btn" id="wb-60" onclick="setWebull(60)" style="background:rgba(170,238,0,0.08);border-color:#aaee00;color:#aaee00;">
+              <span style="font-family:'Bebas Neue',sans-serif;font-size:18px;display:block;">60</span>
+              <span style="font-size:8px;opacity:0.8;">Mild Bull</span>
+            </button>
+            <button class="wb-btn" id="wb-70" onclick="setWebull(70)" style="background:rgba(136,255,0,0.08);border-color:#88ff00;color:#88ff00;">
+              <span style="font-family:'Bebas Neue',sans-serif;font-size:18px;display:block;">70</span>
+              <span style="font-size:8px;opacity:0.8;">Bullish</span>
+            </button>
+            <button class="wb-btn" id="wb-80" onclick="setWebull(80)" style="background:rgba(0,255,136,0.08);border-color:#00ff88;color:#00ff88;">
+              <span style="font-family:'Bebas Neue',sans-serif;font-size:18px;display:block;">80</span>
+              <span style="font-size:8px;opacity:0.8;">Greed</span>
+            </button>
+            <button class="wb-btn" id="wb-90" onclick="setWebull(90)" style="background:rgba(0,204,255,0.08);border-color:#00ccff;color:#00ccff;">
+              <span style="font-family:'Bebas Neue',sans-serif;font-size:18px;display:block;">90</span>
+              <span style="font-size:8px;opacity:0.8;">High Greed</span>
+            </button>
+            <button class="wb-btn" id="wb-100" onclick="setWebull(100)" style="background:rgba(0,170,255,0.12);border-color:#00aaff;color:#00aaff;">
+              <span style="font-family:'Bebas Neue',sans-serif;font-size:18px;display:block;">100</span>
+              <span style="font-size:8px;opacity:0.8;">Ext Greed</span>
+            </button>
+          </div>
+          <div id="webull-selected" style="text-align:center;font-family:'IBM Plex Mono',monospace;font-size:9px;color:#5a6a7a;letter-spacing:1px;margin-bottom:8px;">No selection</div>
+          <div id="webull-signal" style="display:none;padding:10px 12px;border-radius:8px;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:1px;text-align:center;border-left:3px solid;"></div>
+        </div>
+      </div>
+
+      <!-- ══ QUICK LINKS ══ -->
+      <div class="section-hdr" style="color:#88ff00;margin-top:8px;">Quick Access</div>
       <div class="link-grid">
         <div class="link-card" onclick="requireGate('handbook','#88ff00')"><div class="link-icon">📖</div><div class="link-title">Handbook</div><div class="link-sub">Playbook & strategy</div></div>
         <div class="link-card" onclick="requireGate('datalog','#88ff00')"><div class="link-icon">📊</div><div class="link-title">Data Log</div><div class="link-sub">Trade log & movers</div></div>
-        <div class="link-card" onclick="requireGate('workflow','#88ff00')"><div class="link-icon">⚙️</div><div class="link-title">Workflow</div><div class="link-sub">Protocols & prompts</div></div>
+        <div class="link-card" onclick="requireGate('workflow','#88ff00')"><div class="link-icon">⚙️</div><div class="link-title">Workflow</div><div class="link-sub">Protocols & review</div></div>
         <div class="link-card" onclick="requireGate('performance','#88ff00')"><div class="link-icon">📈</div><div class="link-title">Performance</div><div class="link-sub">Stats & reviews</div></div>
       </div>
     </div>
@@ -829,7 +1193,62 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
   <div class="page" id="page-handbook"><div class="placeholder"><div class="placeholder-icon">📖</div><div class="placeholder-title">Trading Handbook</div><div class="placeholder-sub">Playbook, entry sequence, market conditions, and strategy.</div><span class="ph-phase badge-gold">Phase 2</span></div></div>
   <div class="page" id="page-performance"><div class="placeholder"><div class="placeholder-icon">📈</div><div class="placeholder-title">Performance</div><div class="placeholder-sub">Weekly, monthly, YTD reviews and win rate analysis.</div><span class="ph-phase badge-gold">Phase 2</span></div></div>
   <div class="page" id="page-datalog"><div class="placeholder"><div class="placeholder-icon">📊</div><div class="placeholder-title">Data Log</div><div class="placeholder-sub">Trade log and big movers — linked from Google Sheets.</div><span class="ph-phase badge-gold">Phase 2</span></div></div>
-  <div class="page" id="page-workflow"><div class="placeholder"><div class="placeholder-icon">⚙️</div><div class="placeholder-title">Workflow & Protocols</div><div class="placeholder-sub">Daily workflow, prompts, and Gemini scripts.</div><span class="ph-phase badge-gold">Phase 2</span></div></div>
+  <div class="page" id="page-workflow">
+    <div class="page-content">
+      <div class="page-header" style="border-left-color:#88ff00;">
+        <div class="page-icon">⚙️</div>
+        <div><div class="page-title" style="color:#88ff00;">Workflow & Protocols</div>
+        <div class="page-sub">Weekly review, daily protocols, and process guides</div></div>
+      </div>
+
+      <!-- WEEKLY TREND ANALYSIS — entered Sunday -->
+      <div class="tc-section">
+        <div class="tc-section-hdr" style="color:#00ccff;">📊 Weekly Trend Analysis <span style="font-size:11px;font-family:'DM Sans',sans-serif;font-weight:400;opacity:0.6;">— Enter every Sunday</span></div>
+        <div class="tc-subsection" style="border-color:#00ccff22;">
+          <div class="tc-sub-label" style="color:#00ccff;">S&P 500 Weekly</div>
+          <div class="tc-row"><label class="tc-label">Above or below 20-week MA?</label>
+            <select class="tc-select" id="wr-sp-ma">
+              <option value="">Select</option><option>Above</option><option>Below</option>
+            </select></div>
+          <div class="tc-row"><label class="tc-label">Higher highs and higher lows intact?</label>
+            <select class="tc-select" id="wr-sp-hl">
+              <option value="">Select</option><option>Intact</option><option>Broken</option><option>Mixed</option>
+            </select></div>
+        </div>
+        <div class="tc-subsection" style="border-color:#00ccff22;">
+          <div class="tc-sub-label" style="color:#00ccff;">Russell 2000 Weekly</div>
+          <div class="tc-row"><label class="tc-label">Above or below 20-week MA?</label>
+            <select class="tc-select" id="wr-rut-ma">
+              <option value="">Select</option><option>Above</option><option>Below</option>
+            </select></div>
+          <div class="tc-row"><label class="tc-label">Higher highs and higher lows intact?</label>
+            <select class="tc-select" id="wr-rut-hl">
+              <option value="">Select</option><option>Intact</option><option>Broken</option><option>Mixed</option>
+            </select></div>
+        </div>
+        <div class="tc-subsection" style="border-color:#00ccff22;">
+          <div class="tc-sub-label" style="color:#00ccff;">Weekly Conclusion</div>
+          <div style="display:flex;flex-direction:column;gap:6px;">
+            <button class="verdict-btn" id="wc-both-bull" onclick="setWeeklyConclusion('both-bull','Both bullish — broad uptrend intact, small cap structure healthy',this)" style="border-color:#88ff00;color:#88ff00;">✅ Both bullish — broad uptrend intact</button>
+            <button class="verdict-btn" id="wc-sp-bull-rut-mixed" onclick="setWeeklyConclusion('sp-bull-rut-mixed','S&P bullish, Russell mixed/broken — large cap leading, small cap lagging, caution',this)" style="border-color:#ffee00;color:#ffee00;">⚠️ S&P bullish, Russell mixed/broken — caution</button>
+            <button class="verdict-btn" id="wc-both-mixed" onclick="setWeeklyConclusion('both-mixed','Both mixed — consolidation phase, no directional conviction',this)" style="border-color:#ffaa00;color:#ffaa00;">🔄 Both mixed — no directional conviction</button>
+            <button class="verdict-btn" id="wc-sp-mixed-rut-broken" onclick="setWeeklyConclusion('sp-mixed-rut-broken','S&P mixed/broken, Russell broken — deteriorating environment, risk-off bias',this)" style="border-color:#ff6600;color:#ff6600;">📉 S&P mixed/broken, Russell broken — risk-off bias</button>
+            <button class="verdict-btn" id="wc-both-broken" onclick="setWeeklyConclusion('both-broken','Both broken — structural downtrend, maximum caution',this)" style="border-color:#ff0000;color:#ff0000;">☠️ Both broken — structural downtrend, max caution</button>
+          </div>
+        </div>
+        <div class="tc-subsection" style="border-color:#00ccff22;">
+          <button class="log-submit-btn" style="border-color:#00ccff;color:#00ccff;" onclick="saveWeeklyTrend()">SAVE WEEKLY ANALYSIS — APPLY TO TRADING CMD</button>
+          <div id="weekly-saved-msg" style="display:none;margin-top:8px;text-align:center;font-family:'IBM Plex Mono',monospace;font-size:10px;color:#00ccff;letter-spacing:1px;">✓ Saved — visible in Trading Command Center all week</div>
+        </div>
+      </div>
+
+      <!-- Placeholder for more workflow content -->
+      <div style="background:var(--surface);border:1px solid var(--border2);border-radius:10px;padding:20px;text-align:center;margin-top:8px;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-dim);margin-bottom:6px;">More Protocols</div>
+        <div style="font-size:13px;color:var(--text-dim);">Daily workflow guides, review prompts, and process documentation — Phase 2B</div>
+      </div>
+    </div>
+  </div>
   <div class="page" id="page-photography"><div class="placeholder"><div class="placeholder-icon">📷</div><div class="placeholder-title">Taylor Hendry Photography</div><div class="placeholder-sub">Business overview, clients, and marketing.</div><span class="ph-phase badge-green">Phase 3</span></div></div>
   <div class="page" id="page-hrs"><div class="placeholder"><div class="placeholder-icon">🔧</div><div class="placeholder-title">Hendry Residential Services</div><div class="placeholder-sub">Overview, clients, and reactivation planning.</div><span class="ph-phase badge-blue">Phase 4</span></div></div>
   <div class="page" id="page-ventures"><div class="placeholder"><div class="placeholder-icon">🚀</div><div class="placeholder-title">New Ventures</div><div class="placeholder-sub">Photography sales, stock photography, print-on-demand,<br>digital products, drone photography/videography.</div><span class="ph-phase" style="background:rgba(107,114,128,0.1);color:var(--text-muted);">Idle — When Ready</span></div></div>
@@ -1268,6 +1687,504 @@ window.addEventListener('load',()=>{
   new Chart(ctx.getContext('2d'),{type:'bar',data:{labels:['Mon','Tue','Wed','Thu'],datasets:[{data:[31.97,-8.21,22.14,20.17],backgroundColor:['rgba(34,197,94,0.5)','rgba(255,0,0,0.5)','rgba(34,197,94,0.5)','rgba(34,197,94,0.5)'],borderColor:['#22c55e','#ff0000','#22c55e','#22c55e'],borderWidth:1,borderRadius:4}]},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>(c.raw>=0?'+':'')+'$'+c.raw.toFixed(2)}}},scales:{x:{grid:{color:'rgba(255,255,255,0.03)'},ticks:{color:'#6b7280',font:{family:'IBM Plex Mono',size:10}}},y:{grid:{color:'rgba(255,255,255,0.03)'},ticks:{color:'#6b7280',font:{family:'IBM Plex Mono',size:10},callback:v=>'$'+v}}}}});
 });
 
+let weeklyConclusion = {val:'', label:''};
+
+function setWeeklyConclusion(val, label, btn) {
+  weeklyConclusion = {val, label};
+  document.querySelectorAll('#page-workflow .verdict-btn').forEach(b => b.classList.remove('selected'));
+  if(btn) btn.classList.add('selected');
+}
+
+function saveWeeklyTrend() {
+  const data = {
+    spMA: document.getElementById('wr-sp-ma')?.value || '',
+    spHL: document.getElementById('wr-sp-hl')?.value || '',
+    rutMA: document.getElementById('wr-rut-ma')?.value || '',
+    rutHL: document.getElementById('wr-rut-hl')?.value || '',
+    conclusion: weeklyConclusion.label || '',
+    conclusionVal: weeklyConclusion.val || '',
+    date: new Date().toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'})
+  };
+  localStorage.setItem('weekly_trend', JSON.stringify(data));
+  loadWeeklyDisplay();
+  const msg = document.getElementById('weekly-saved-msg');
+  if(msg) { msg.style.display='block'; setTimeout(()=>msg.style.display='none', 3000); }
+}
+
+// ── TRADING COMMAND CENTER ──
+
+// Load weekly trend data from localStorage and display in TC
+function loadWeeklyDisplay() {
+  const saved = localStorage.getItem('weekly_trend');
+  if(!saved) return;
+  try {
+    const w = JSON.parse(saved);
+    const spMA = document.getElementById('wd-sp-ma');
+    const spHL = document.getElementById('wd-sp-hl');
+    const rutMA = document.getElementById('wd-rut-ma');
+    const rutHL = document.getElementById('wd-rut-hl');
+    const conc = document.getElementById('wd-conclusion');
+    const dt = document.getElementById('wd-date');
+
+    const colorMA = v => v==='Above' ? '#88ff00' : v==='Below' ? '#ff0000' : '#ffee00';
+    const colorHL = v => v==='Intact' ? '#88ff00' : v==='Broken' ? '#ff0000' : '#ffee00';
+
+    if(spMA) { spMA.textContent = w.spMA||'—'; spMA.style.color = colorMA(w.spMA); }
+    if(spHL) { spHL.textContent = w.spHL||'—'; spHL.style.color = colorHL(w.spHL); }
+    if(rutMA) { rutMA.textContent = w.rutMA||'—'; rutMA.style.color = colorMA(w.rutMA); }
+    if(rutHL) { rutHL.textContent = w.rutHL||'—'; rutHL.style.color = colorHL(w.rutHL); }
+    if(conc) { conc.textContent = w.conclusion||'—'; conc.style.color = '#e8eaf0'; }
+    if(dt && w.date) { dt.textContent = 'Entered: ' + w.date; }
+  } catch(e) {}
+}
+
+function calcMacroScore() {
+  const ids = ['m-spy-fut','m-rut-rel','m-close','m-vix-lvl','m-vix-dir','m-oil','m-btc'];
+  let total = 0;
+  let filled = 0;
+  ids.forEach(id => {
+    const el = document.getElementById(id);
+    if(el && el.value !== '') {
+      total += parseFloat(el.value) || 0;
+      filled++;
+    }
+  });
+
+  const numEl = document.getElementById('macro-score-num');
+  const labelEl = document.getElementById('macro-score-label');
+  const barEl = document.getElementById('macro-score-bar');
+
+  if(filled === 0) {
+    if(numEl) { numEl.textContent='—'; numEl.style.color='#5a6a7a'; }
+    if(labelEl) { labelEl.textContent='Complete inputs above'; labelEl.style.color='#5a6a7a'; }
+    if(barEl) { barEl.style.width='50%'; barEl.style.background='#5a6a7a'; }
+    // Clear all macro verdicts
+    ['mv-ro-enth','mv-ro','mv-muted','mv-roff','mv-extreme'].forEach(id => {
+      const el = document.getElementById(id);
+      if(el) { el.classList.remove('active'); el.style.color=''; el.style.borderColor=''; }
+    });
+    tcVerdicts.macro = null;
+    calcSizing();
+    return;
+  }
+
+  // Normalize score to bar percentage (range -14 to +14)
+  const pct = Math.round(((total + 14) / 28) * 100);
+  const clampedPct = Math.max(0, Math.min(100, pct));
+
+  let color, label, macroVerdict;
+  if(total >= 10)      { color='#88ff00'; label='Risk-On with Enthusiasm'; macroVerdict='ro-enth'; }
+  else if(total >= 4)  { color='#aaee00'; label='Risk-On'; macroVerdict='ro'; }
+  else if(total >= -3) { color='#ffee00'; label='Muted'; macroVerdict='muted'; }
+  else if(total >= -9) { color='#ff6600'; label='Risk-Off'; macroVerdict='roff'; }
+  else                 { color='#ff0000'; label='Extreme Risk-Off'; macroVerdict='extreme'; }
+
+  if(numEl) { numEl.textContent=(total>0?'+':'')+total; numEl.style.color=color; }
+  if(labelEl) { labelEl.textContent=label+' ('+filled+'/7)'; labelEl.style.color=color; }
+  if(barEl) { barEl.style.width=clampedPct+'%'; barEl.style.background=color; }
+
+  // Auto-highlight the correct verdict row
+  ['mv-ro-enth','mv-ro','mv-muted','mv-roff','mv-extreme'].forEach(id => {
+    const el = document.getElementById(id);
+    if(!el) return;
+    const isActive = id === 'mv-'+macroVerdict;
+    el.classList.toggle('active', isActive);
+    el.style.color = isActive ? color : '';
+    el.style.borderColor = isActive ? color : '';
+  });
+
+  tcVerdicts.macro = macroVerdict;
+  calcSizing();
+}
+
+function calcSmallCapScore() {
+  const ids = ['sc-iwm','sc-catalyst','sc-orderbook'];
+  let total = 0;
+  let filled = 0;
+  ids.forEach(id => {
+    const el = document.getElementById(id);
+    if(el && el.value !== '') {
+      total += parseFloat(el.value) || 0;
+      filled++;
+    }
+  });
+
+  if(filled === 0) {
+    ['scv-high','scv-fav','scv-muted','scv-unfav','scv-hostile'].forEach(id => {
+      const el = document.getElementById(id);
+      if(el) { el.classList.remove('active'); el.style.color=''; el.style.borderColor=''; }
+    });
+    tcVerdicts.sc = null;
+    calcSizing();
+    return;
+  }
+
+  let scVerdict, color;
+  if(total >= 6)       { scVerdict='high';    color='#88ff00'; }
+  else if(total >= 2)  { scVerdict='fav';     color='#aaee00'; }
+  else if(total >= 0)  { scVerdict='muted';   color='#ffee00'; }
+  else if(total >= -2) { scVerdict='unfav';   color='#ff6600'; }
+  else                 { scVerdict='hostile'; color='#ff0000'; }
+
+  ['scv-high','scv-fav','scv-muted','scv-unfav','scv-hostile'].forEach(id => {
+    const el = document.getElementById(id);
+    if(!el) return;
+    const isActive = id === 'scv-'+scVerdict;
+    el.classList.toggle('active', isActive);
+    el.style.color = isActive ? color : '';
+    el.style.borderColor = isActive ? color : '';
+  });
+
+  tcVerdicts.sc = scVerdict;
+  calcSizing();
+}
+let tcVerdicts = {macro: null, sc: null, setup: null};
+let tcReadinessMods = {sleep: null, feel: null};
+let webullSentiment = null;
+
+// ── TOGGLE HELPERS ──
+function tcTog(groupId, btn, score) {
+  const g = document.getElementById(groupId);
+  if(!g) return;
+  g.querySelectorAll('.tog-sm').forEach(b => { b.classList.remove('active'); delete b._score; });
+  btn.classList.add('active');
+  btn._score = score;
+  if(groupId.startsWith('tg-rut')) calcSmallCapScore();
+  else calcMacroScore();
+}
+
+function tcReadiness(groupId, btn, mod) {
+  const g = document.getElementById(groupId);
+  if(!g) return;
+  g.querySelectorAll('.tog-sm').forEach(b => { b.classList.remove('active'); delete b._mod; });
+  btn.classList.add('active');
+  btn._mod = mod;
+  if(groupId === 'tg-sleep') tcReadinessMods.sleep = mod;
+  if(groupId === 'tg-feel') tcReadinessMods.feel = mod;
+  if(groupId === 'tg-woken') tcReadinessMods.woken = mod;
+  updateReadinessDisplay();
+  calcSizing();
+}
+
+function getTogScore(groupId) {
+  const g = document.getElementById(groupId);
+  if(!g) return null;
+  const a = g.querySelector('.tog-sm.active');
+  return a ? (a._score !== undefined ? a._score : null) : null;
+}
+
+function getReadinessMod() {
+  // Take the worst of sleep and feel modifiers
+  const sleep = tcReadinessMods.sleep;
+  const woken = tcReadinessMods.woken;
+  const feel  = tcReadinessMods.feel;
+  const mods  = [sleep, woken, feel].filter(v => v !== null);
+  if(mods.length === 0) return null;
+  return Math.min(...mods);
+}
+
+function updateReadinessDisplay() {
+  const mod = getReadinessMod();
+  const modEl = document.getElementById('readiness-mod');
+  const lblEl = document.getElementById('readiness-label');
+  if(!modEl) return;
+  if(mod === null) { modEl.textContent='—'; modEl.style.color='#5a6a7a'; if(lblEl) lblEl.textContent='Select sleep and feel'; return; }
+  const pct = Math.round(mod * 100);
+  const color = mod >= 1 ? '#88ff00' : mod >= 0.75 ? '#ffee00' : '#ff0000';
+  const label = mod >= 1 ? 'Full capacity' : mod >= 0.75 ? 'Reduced — Sluggish' : 'Significantly reduced — Drained';
+  modEl.textContent = pct + '%';
+  modEl.style.color = color;
+  if(lblEl) { lblEl.textContent = label; lblEl.style.color = color; }
+}
+
+function toggleMorning(id) {
+  const btn = document.getElementById(id);
+  if(!btn) return;
+  btn.classList.toggle('on');
+  const count = ['mc-water','mc-coffee','mc-food','mc-activate']
+    .filter(i => document.getElementById(i)?.classList.contains('on')).length;
+  const s = document.getElementById('chk-status');
+  if(s) s.textContent = count + '/4';
+}
+
+function setSetupRank(val, btn) {
+  tcVerdicts.setup = val;
+  document.querySelectorAll('#sr-1,#sr-2,#sr-3,#sr-4').forEach(b => b.classList.remove('selected'));
+  if(btn) btn.classList.add('selected');
+  calcSizing();
+}
+
+function setWebull(val) {
+  webullSentiment = val;
+  // Clear all, highlight selected
+  [10,20,30,40,50,60,70,80,90,100].forEach(v => {
+    const b = document.getElementById('wb-'+v);
+    if(b) b.classList.toggle('selected', v === val);
+  });
+
+  const labels = {
+    10:'Extreme Fear',20:'Fear',30:'Bearish',40:'Cautious',50:'Neutral',
+    60:'Mildly Bullish',70:'Bullish',80:'Greed',90:'High Greed',100:'Extreme Greed'
+  };
+  const selEl = document.getElementById('webull-selected');
+  if(selEl) selEl.textContent = 'Webull: ' + val + ' — ' + (labels[val]||'');
+
+  // Corroboration logic
+  const sig = document.getElementById('webull-signal');
+  if(!sig) return;
+
+  const macro = tcVerdicts.macro;
+  const macroIsBull  = ['ro-enth','ro'].includes(macro);
+  const macroIsMuted = macro === 'muted';
+  const macroIsBear  = ['roff','extreme'].includes(macro);
+
+  const wbBull = val >= 60;
+  const wbNeut = val >= 40 && val < 60;
+  const wbBear = val < 40;
+
+  let msg, color;
+
+  if(!macro) {
+    sig.style.display = 'none'; return;
+  }
+
+  if((macroIsBull && wbBull) || (macroIsMuted && wbNeut) || (macroIsBear && wbBear)) {
+    msg = '✓ Confirms your assessment — proceed with confidence';
+    color = '#88ff00';
+  } else if(wbNeut) {
+    msg = '→ Webull neutral — no additional signal either way';
+    color = '#8899aa';
+  } else if(macroIsBull && wbBear) {
+    msg = '⚠️ Divergence — Webull shows fear while macro reads bullish. Wait for confirmation or reduce size.';
+    color = '#ffaa00';
+  } else if(macroIsBear && wbBull) {
+    msg = '⚠️ Divergence — Webull shows greed while macro reads bearish. Could be blind optimism. Stay cautious.';
+    color = '#ffaa00';
+  } else {
+    msg = '→ Partial divergence — factor into your judgment';
+    color = '#ffaa00';
+  }
+
+  sig.style.display = 'block';
+  sig.style.background = color === '#88ff00' ? 'rgba(136,255,0,0.06)' : color === '#8899aa' ? 'rgba(255,255,255,0.04)' : 'rgba(255,170,0,0.08)';
+  sig.style.borderLeftColor = color;
+  sig.style.color = color;
+  sig.textContent = msg;
+}
+
+// ── MACRO SCORING ──
+function calcMacroScore() {
+  const geo     = getTogScore('tg-geo');
+  const events  = getTogScore('tg-events');
+  const spClose = getTogScore('tg-sp-close');
+  const spTrend = getTogScore('tg-sp-trend');
+  const spFut   = getTogScore('tg-sp-fut');
+  const vixTier = getTogScore('tg-vix-tier');
+  const vixDir  = getTogScore('tg-vix-dir');
+  const oil     = getTogScore('tg-oil');
+  const btc     = getTogScore('tg-btc');
+
+  const inputs = [geo, events, spClose, spTrend, spFut, vixTier, vixDir, oil, btc];
+  const filled = inputs.filter(v => v !== null).length;
+
+  if(filled === 0) {
+    resetGauge('macro');
+    tcVerdicts.macro = null;
+    updateSetupAmounts();
+    calcSizing();
+    return;
+  }
+
+  const total = inputs.reduce((s,v) => s + (v !== null ? v : 0), 0);
+
+  // Range approx: max ~14, min ~-16
+  const pct = Math.max(0, Math.min(100, Math.round(((total + 16) / 30) * 100)));
+
+  let color, label, verdict;
+  if(total >= 8)       { color='#88ff00'; label='Risk-On with Enthusiasm'; verdict='ro-enth'; }
+  else if(total >= 3)  { color='#aaee00'; label='Risk-On';                 verdict='ro'; }
+  else if(total >= -2) { color='#ffee00'; label='Muted';                   verdict='muted'; }
+  else if(total >= -8) { color='#ff6600'; label='Risk-Off';                verdict='roff'; }
+  else                 { color='#ff0000'; label='Extreme Risk-Off';         verdict='extreme'; }
+
+  updateGauge('macro', total, filled, inputs.length, pct, color, label);
+  highlightVerdict(['mv-ro-enth','mv-ro','mv-muted','mv-roff','mv-extreme'], 'mv-'+verdict, color);
+  tcVerdicts.macro = verdict;
+  updateSetupAmounts();
+  calcSizing();
+}
+
+// ── SMALL CAP SCORING ──
+function calcSmallCapScore() {
+  const rutClose = getTogScore('tg-rut-close');
+  const rutTrend = getTogScore('tg-rut-trend');
+  const rutFut   = getTogScore('tg-rut-fut');
+  const rutVsSp  = getTogScore('tg-rut-vs-sp');
+
+  const inputs = [rutClose, rutTrend, rutFut, rutVsSp];
+  const filled = inputs.filter(v => v !== null).length;
+
+  if(filled === 0) {
+    resetGauge('sc');
+    tcVerdicts.sc = null;
+    calcSizing();
+    return;
+  }
+
+  const total = inputs.reduce((s,v) => s + (v !== null ? v : 0), 0);
+  const pct = Math.max(0, Math.min(100, Math.round(((total + 7) / 14) * 100)));
+
+  let color, label, verdict;
+  if(total >= 5)       { color='#88ff00'; label='Highly Favorable'; verdict='high'; }
+  else if(total >= 2)  { color='#aaee00'; label='Favorable';        verdict='fav'; }
+  else if(total >= -1) { color='#ffee00'; label='Muted';            verdict='muted'; }
+  else if(total >= -4) { color='#ff6600'; label='Unfavorable';      verdict='unfav'; }
+  else                 { color='#ff0000'; label='Hostile';           verdict='hostile'; }
+
+  updateGauge('sc', total, filled, inputs.length, pct, color, label);
+  highlightVerdict(['scv-high','scv-fav','scv-muted','scv-unfav','scv-hostile'], 'scv-'+verdict, color);
+  tcVerdicts.sc = verdict;
+  calcSizing();
+}
+
+// ── GAUGE HELPERS ──
+function updateGauge(type, total, filled, max, pct, color, label) {
+  const pre = type === 'macro';
+  const n = document.getElementById(pre ? 'macro-score-num' : 'sc-score-num');
+  const l = document.getElementById(pre ? 'macro-score-label' : 'sc-score-label');
+  const b = document.getElementById(pre ? 'macro-score-bar' : 'sc-score-bar');
+  if(n){n.textContent=(total>0?'+':'')+total;n.style.color=color;}
+  if(l){l.textContent=label+' ('+filled+'/'+max+')';l.style.color=color;}
+  if(b){b.style.width=pct+'%';b.style.background=color;}
+}
+
+function resetGauge(type) {
+  const pre = type === 'macro';
+  const n = document.getElementById(pre ? 'macro-score-num' : 'sc-score-num');
+  const l = document.getElementById(pre ? 'macro-score-label' : 'sc-score-label');
+  const b = document.getElementById(pre ? 'macro-score-bar' : 'sc-score-bar');
+  if(n){n.textContent='—';n.style.color='#5a6a7a';}
+  if(l){l.textContent='Complete inputs above';l.style.color='#5a6a7a';}
+  if(b){b.style.width='50%';b.style.background='#5a6a7a';}
+  const ids = pre
+    ? ['mv-ro-enth','mv-ro','mv-muted','mv-roff','mv-extreme']
+    : ['scv-high','scv-fav','scv-muted','scv-unfav','scv-hostile'];
+  ids.forEach(id => {
+    const el = document.getElementById(id);
+    if(el){el.classList.remove('active');el.style.color='';el.style.borderColor='';}
+  });
+}
+
+function highlightVerdict(allIds, activeId, color) {
+  allIds.forEach(id => {
+    const el = document.getElementById(id);
+    if(!el) return;
+    const on = id === activeId;
+    el.classList.toggle('active', on);
+    el.style.color = on ? color : '';
+    el.style.borderColor = on ? color : '';
+  });
+}
+
+// ── SETUP AMOUNTS ──
+function updateSetupAmounts() {
+  const macroCeilings = {'ro-enth':600,'ro':500,'muted':400,'roff':200,'extreme':0};
+  const scAdj = {'high':100,'fav':50,'muted':0,'unfav':-100,'hostile':null};
+  const macroCeil = macroCeilings[tcVerdicts.macro] || null;
+  const scAdjVal  = tcVerdicts.sc ? scAdj[tcVerdicts.sc] : 0;
+  const rankMods = {'1':1.0,'2':0.85,'3':0.75,'4':0.50};
+
+  ['1','2','3','4'].forEach(r => {
+    const el = document.getElementById('sr-'+r+'-amt');
+    if(!el) return;
+    if(!macroCeil || scAdjVal === null) { el.textContent = 'Sideline'; return; }
+    const effectiveCeil = Math.max(0, macroCeil + (scAdjVal || 0));
+    if(effectiveCeil === 0) { el.textContent = 'Sideline'; return; }
+    el.textContent = '$' + Math.round(effectiveCeil * rankMods[r]);
+  });
+}
+
+// ── MAIN SIZING CALCULATION ──
+function calcSizing() {
+  const macro = tcVerdicts.macro;
+  const sc    = tcVerdicts.sc;
+  const setup = tcVerdicts.setup;
+  const readMod = getReadinessMod();
+
+  const numEl   = document.getElementById('sizing-number');
+  const breakEl = document.getElementById('sizing-breakdown');
+  const warnEl  = document.getElementById('sizing-warning');
+
+  if(warnEl) warnEl.style.display = 'none';
+  if(numEl) numEl.style.fontSize = '52px';
+
+  // ── SIDELINE CONDITIONS ──
+  if(macro === 'extreme') {
+    if(numEl){numEl.textContent='SIDELINE';numEl.style.fontSize='34px';}
+    if(breakEl) breakEl.textContent='Extreme Risk-Off — no trading today';
+    if(warnEl){warnEl.style.display='block';warnEl.textContent='⚠️ EXTREME RISK-OFF — OVERRIDES EVERYTHING';}
+    updateSetupAmounts(); return;
+  }
+  if(sc === 'hostile') {
+    if(numEl){numEl.textContent='SIDELINE';numEl.style.fontSize='34px';}
+    if(breakEl) breakEl.textContent='Hostile small cap environment — sit out';
+    if(warnEl){warnEl.style.display='block';warnEl.textContent='⚠️ HOSTILE SMALL CAP — SIT OUT';}
+    updateSetupAmounts(); return;
+  }
+  if(macro === 'roff' && sc === 'unfav') {
+    if(numEl){numEl.textContent='SIDELINE';numEl.style.fontSize='34px';}
+    if(breakEl) breakEl.textContent='Risk-Off + Unfavorable small cap = sideline';
+    if(warnEl){warnEl.style.display='block';warnEl.textContent='⚠️ COMBINED CONDITIONS — SIDELINE';}
+    updateSetupAmounts(); return;
+  }
+
+  if(!macro) {
+    if(numEl) numEl.textContent='—';
+    if(breakEl) breakEl.textContent='Complete macro conditions to calculate';
+    return;
+  }
+
+  // ── STEP 1: Macro ceiling ──
+  const macroCeilings = {'ro-enth':600,'ro':500,'muted':400,'roff':200};
+  const macroCeil = macroCeilings[macro] || 400;
+
+  // ── STEP 2: Small cap adjustment ──
+  const scAdj = {'high':100,'fav':50,'muted':0,'unfav':-100};
+  const scAdjVal = sc ? (scAdj[sc] !== undefined ? scAdj[sc] : 0) : 0;
+  const envCeiling = Math.max(0, macroCeil + scAdjVal);
+
+  // ── STEP 3: Readiness reduces ceiling ──
+  const readModVal = readMod !== null ? readMod : 1;
+  const readCeiling = Math.round(envCeiling * readModVal);
+
+  updateSetupAmounts();
+
+  if(!setup) {
+    if(numEl) numEl.textContent = '$' + readCeiling;
+    const macroLabels = {'ro-enth':'Risk-On Enthusiasm','ro':'Risk-On','muted':'Muted','roff':'Risk-Off'};
+    const scLabels = {'high':'Highly Fav +$100','fav':'Favorable +$50','muted':'Muted $0','unfav':'Unfavorable −$100'};
+    let bd = macroLabels[macro]+' $'+macroCeil;
+    if(sc && sc !== 'muted') bd += ' → SC '+scLabels[sc]+' → $'+envCeiling;
+    if(readMod !== null && readMod < 1) bd += ' → Readiness '+Math.round(readMod*100)+'% → $'+readCeiling;
+    if(breakEl) breakEl.textContent = bd + ' — select setup rank';
+    return;
+  }
+
+  // ── STEP 4: Setup rank % of readiness-adjusted ceiling ──
+  const rankMods = {'1':1.0,'2':0.85,'3':0.75,'4':0.50};
+  const final = Math.round(readCeiling * (rankMods[setup] || 1));
+
+  if(numEl) numEl.textContent = '$' + final;
+
+  const mL = {'ro-enth':'Risk-On Enthusiasm','ro':'Risk-On','muted':'Muted','roff':'Risk-Off'};
+  const sL = {'high':'+$100','fav':'+$50','muted':'$0','unfav':'−$100'};
+  let bd = mL[macro]+' $'+macroCeil;
+  if(sc && sc !== 'muted') bd += ' → SC '+sL[sc]+' = $'+envCeiling;
+  if(readMod !== null && readMod < 1) bd += ' → Readiness '+Math.round(readMod*100)+'% = $'+readCeiling;
+  bd += ' → R'+setup+' = $'+final;
+  if(breakEl) breakEl.textContent = bd;
+}
+
 // DAILY LOG FUNCTIONS
 // Y/N toggle pair function
 function ynSelect(baseId, choice) {
@@ -1533,7 +2450,10 @@ function fetchWeatherLive(){loadWeatherJSONP();}
 function loadWeatherByCity(){}
 
 // Init on load
-window.addEventListener('load', initWeather);
+window.addEventListener('load', () => {
+  initWeather();
+  loadWeeklyDisplay();
+});
 
 // PWA
 const manifest={name:"Hendry Command Center",short_name:"HCC",start_url:".",display:"standalone",background_color:"#111318",theme_color:"#111318",icons:[{src:"data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23111318' rx='20'/><text y='68' x='50' text-anchor='middle' font-size='55' font-family='serif' fill='%23e8eaf0'>H</text></svg>",sizes:"192x192",type:"image/svg+xml"}]};
