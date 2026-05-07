@@ -4352,31 +4352,31 @@ function initWeekMenu() {
 
   slots.forEach(function(slot, i) {
     var cell = document.createElement('div');
-    cell.style.cssText = 'position:relative;border-radius:12px;overflow:hidden;';
+    cell.style.cssText = 'position:relative;border-radius:10px;overflow:hidden;min-height:0;';
 
     if(slot && (slot.img || slot.url)) {
       // Filled slot — show image as link
       var link = document.createElement('a');
       link.href = slot.url || '#';
       link.target = '_blank';
-      link.style.cssText = 'display:block;text-decoration:none;';
+      link.style.cssText = 'display:block;text-decoration:none;height:100%;position:relative;border-radius:10px;overflow:hidden;';
 
       var img = document.createElement('img');
-      img.style.cssText = 'width:100%;height:150px;object-fit:cover;display:block;border-radius:12px;';
+      img.style.cssText = 'width:100%;height:100%;object-fit:cover;object-position:center;display:block;position:absolute;top:0;left:0;';
       img.alt = slot.title || 'Recipe';
       if(slot.img) {
         img.src = slot.img;
         img.onerror = function() {
           this.style.display = 'none';
           var fb = document.createElement('div');
-          fb.style.cssText = 'height:150px;background:rgba(255,102,0,0.1);display:flex;align-items:center;justify-content:center;border-radius:12px;border:1px solid rgba(255,102,0,0.2);';
+          fb.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(255,102,0,0.1);display:flex;align-items:center;justify-content:center;';
           fb.innerHTML = '<div style="text-align:center;"><div style="font-size:28px;">📌</div><div style="font-size:10px;color:#ff6600;margin-top:4px;">View Recipe</div></div>';
           link.insertBefore(fb, this);
         };
       } else {
         img.style.display = 'none';
         var fb2 = document.createElement('div');
-        fb2.style.cssText = 'height:150px;background:rgba(255,102,0,0.1);display:flex;align-items:center;justify-content:center;border-radius:12px;border:1px solid rgba(255,102,0,0.2);';
+        fb2.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(255,102,0,0.1);display:flex;align-items:center;justify-content:center;';
         fb2.innerHTML = '<div style="text-align:center;"><div style="font-size:28px;">📌</div><div style="font-size:10px;color:#ff6600;margin-top:4px;">View Recipe</div></div>';
         link.appendChild(fb2);
       }
@@ -4422,14 +4422,14 @@ function initWeekMenu() {
     } else if(slot && slot.loading) {
       // Loading state
       var loading = document.createElement('div');
-      loading.style.cssText = 'height:150px;background:rgba(255,102,0,0.06);border:1px dashed rgba(255,102,0,0.3);border-radius:12px;display:flex;align-items:center;justify-content:center;';
+      loading.style.cssText = 'height:100%;background:rgba(255,102,0,0.06);border:1px dashed rgba(255,102,0,0.3);border-radius:10px;display:flex;align-items:center;justify-content:center;';
       loading.innerHTML = '<div style="text-align:center;"><div style="font-size:20px;margin-bottom:4px;">⏳</div><div style="font-family:IBM Plex Mono,monospace;font-size:8px;color:#ff6600;letter-spacing:1px;">LOADING...</div></div>';
       cell.appendChild(loading);
 
     } else {
       // Empty slot
       var empty = document.createElement('button');
-      empty.style.cssText = 'width:100%;height:150px;background:var(--surface);border:1px dashed rgba(255,102,0,0.2);border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;cursor:pointer;';
+      empty.style.cssText = 'width:100%;height:100%;background:var(--surface);border:1px dashed rgba(255,102,0,0.2);border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;cursor:pointer;';
       var plus = document.createElement('div');
       plus.style.cssText = 'font-size:28px;color:rgba(255,102,0,0.4);line-height:1;';
       plus.textContent = '+';
@@ -6091,37 +6091,32 @@ document.addEventListener('DOMContentLoaded',()=>{
   </div>
 
   <!-- ══ THIS WEEK'S MENU ══ -->
-  <div class="page" id="page-menu-week">
-    <div class="page-content">
-      <div class="page-header" style="border-left-color:#ff6600;">
-        <div class="page-icon">🍽️</div>
-        <div><div class="page-title" style="color:#ff6600;">This Weeks Menu</div>
-        <div class="page-sub">6 recipe slots — tap to paste a Pinterest link</div></div>
-      </div>
+  <div class="page" id="page-menu-week" style="height:100vh;display:flex;flex-direction:column;">
 
-      <!-- Pinterest board button -->
-      <a id="pinterest-board-link" href="https://www.pinterest.com/search/pins/?q=hendry+recipes" target="_blank" style="display:flex;align-items:center;justify-content:center;gap:10px;padding:12px;background:rgba(230,0,35,0.08);border:1px solid rgba(230,0,35,0.3);border-radius:10px;text-decoration:none;margin-bottom:16px;">
-        <span style="font-size:20px;">📌</span>
-        <div>
-          <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#e60023;letter-spacing:1px;margin-bottom:1px;">HENDRY RECIPES</div>
-          <div style="font-size:11px;color:#5a6a7a;">Open our Pinterest board → copy a pin link → paste below</div>
-        </div>
-      </a>
-
-      <!-- 6 recipe slots in 2-column grid -->
-      <div id="menu-week-slots" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;"></div>
-
-      <button onclick="clearAllMenuWeek()" style="width:100%;padding:8px;background:transparent;border:1px solid rgba(255,255,255,0.08);border-radius:8px;color:#5a6a7a;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:1px;cursor:pointer;">CLEAR ALL SLOTS</button>
-
-      <!-- Board URL customizer -->
-      <div style="margin-top:12px;padding:10px;background:var(--surface);border:1px solid var(--border2);border-radius:8px;">
-        <div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:#5a6a7a;letter-spacing:1px;margin-bottom:6px;">PINTEREST BOARD URL</div>
-        <div style="display:flex;gap:6px;">
-          <input type="url" id="board-url-input" class="log-input" placeholder="https://www.pinterest.com/yourboard/recipes/" style="flex:1;font-size:11px;">
-          <button onclick="saveBoardUrl()" style="padding:6px 10px;background:rgba(230,0,35,0.1);border:1px solid rgba(230,0,35,0.3);border-radius:6px;color:#e60023;font-family:'IBM Plex Mono',monospace;font-size:9px;cursor:pointer;">SAVE</button>
+      <!-- Compact header -->
+      <div style="padding:12px 16px 8px;flex-shrink:0;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+          <div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px;color:#ff6600;">This Weeks Menu</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:#5a6a7a;letter-spacing:1px;">Tap a slot to add · 📷 to add photo manually</div>
+          </div>
+          <a id="pinterest-board-link" href="https://www.pinterest.com/search/pins/?q=hendry+recipes" target="_blank" style="display:flex;align-items:center;gap:6px;padding:8px 12px;background:rgba(230,0,35,0.1);border:1px solid rgba(230,0,35,0.3);border-radius:8px;text-decoration:none;">
+            <span style="font-size:16px;">📌</span>
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:#e60023;letter-spacing:1px;">RECIPES</span>
+          </a>
         </div>
       </div>
-    </div>
+
+      <!-- Grid fills remaining space -->
+      <div id="menu-week-slots" style="flex:1;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr 1fr;gap:6px;padding:0 8px 8px;min-height:0;"></div>
+
+      <!-- Board URL (collapsed at bottom) -->
+      <div style="padding:6px 16px 10px;flex-shrink:0;display:flex;gap:6px;">
+        <input type="url" id="board-url-input" class="log-input" placeholder="Set Pinterest board URL..." style="flex:1;font-size:10px;padding:5px 8px;">
+        <button onclick="saveBoardUrl()" style="padding:5px 10px;background:rgba(230,0,35,0.1);border:1px solid rgba(230,0,35,0.3);border-radius:6px;color:#e60023;font-family:'IBM Plex Mono',monospace;font-size:9px;cursor:pointer;white-space:nowrap;">SAVE</button>
+        <button onclick="clearAllMenuWeek()" style="padding:5px 10px;background:transparent;border:1px solid rgba(255,255,255,0.1);border-radius:6px;color:#5a6a7a;font-family:'IBM Plex Mono',monospace;font-size:9px;cursor:pointer;white-space:nowrap;">CLEAR</button>
+      </div>
+
   </div>
 
   <!-- ══ HENDRY RECIPES ══ -->
