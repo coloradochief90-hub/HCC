@@ -4398,6 +4398,24 @@ function initWeekMenu() {
       clr.style.cssText = 'position:absolute;top:6px;right:6px;background:rgba(0,0,0,0.6);border:none;border-radius:4px;color:#fff;font-size:11px;width:22px;height:22px;cursor:pointer;line-height:1;';
       clr.onclick = (function(idx){ return function(e){ e.stopPropagation(); clearMenuSlotWeek(idx); }; })(i);
 
+      // Add Photo button (shown when no image loaded)
+      if(!slot.img) {
+        var addPh = document.createElement('button');
+        addPh.textContent = '📷';
+        addPh.title = 'Add photo — right-click Pinterest image > Copy image address';
+        addPh.style.cssText = 'position:absolute;top:6px;right:32px;background:rgba(0,0,0,0.6);border:none;border-radius:4px;color:#fff;font-size:11px;width:22px;height:22px;cursor:pointer;line-height:1;';
+        addPh.onclick = (function(idx){ return function(e){
+          e.stopPropagation();
+          var imgUrl = prompt('Paste image URL:\n(On Pinterest: right-click the photo > Copy image address)');
+          if(!imgUrl || !imgUrl.trim()) return;
+          var s = JSON.parse(localStorage.getItem('hcc_week_menu_v2') || '[]');
+          if(s[idx]) { s[idx].img = imgUrl.trim(); }
+          localStorage.setItem('hcc_week_menu_v2', JSON.stringify(s));
+          initWeekMenu();
+        }; })(i);
+        cell.appendChild(addPh);
+      }
+
       cell.appendChild(link);
       cell.appendChild(clr);
 
@@ -4468,35 +4486,72 @@ function addMenuSlotWeek(index) {
   url = url.trim();
   if(!url.includes('pinterest')) { alert('Please paste a Pinterest URL (pinterest.com/pin/...)'); return; }
 
-  // Set loading state
+  // Save with loading state immediately so user sees feedback
   var slots = JSON.parse(localStorage.getItem('hcc_week_menu_v2') || '[]');
   while(slots.length < WEEK_MENU_SLOTS) slots.push(null);
   slots[index] = {loading: true, url: url, title: '', img: ''};
   localStorage.setItem('hcc_week_menu_v2', JSON.stringify(slots));
   initWeekMenu();
 
-  // Fetch image via Pinterest oEmbed + CORS proxy
-  var oembedUrl = CORS_PROXY + encodeURIComponent('https://www.pinterest.com/oembed/?url=' + encodeURIComponent(url));
-  fetch(oembedUrl)
+  // Try multiple proxy approaches to get the pin image
+  fetchPinData(url, function(title, img) {
+    var slots2 = JSON.parse(localStorage.getItem('hcc_week_menu_v2') || '[]');
+    slots2[index] = {url: url, title: title || 'Pinterest Recipe', img: img || ''};
+    localStorage.setItem('hcc_week_menu_v2', JSON.stringify(slots2));
+    initWeekMenu();
+  });
+}
+
+function fetchPinData(url, callback) {
+  // Strategy 1: allorigins.win proxy with Pinterest oEmbed
+  var oembedTarget = 'https://www.pinterest.com/oembed/?url=' + encodeURIComponent(url);
+  var proxy1 = 'https://api.allorigins.win/get?url=' + encodeURIComponent(oembedTarget);
+
+  fetch(proxy1)
     .then(function(r) { return r.json(); })
     .then(function(data) {
-      slots = JSON.parse(localStorage.getItem('hcc_week_menu_v2') || '[]');
-      slots[index] = {
-        url: url,
-        title: data.title || 'Recipe',
-        img: data.thumbnail_url || ''
-      };
-      localStorage.setItem('hcc_week_menu_v2', JSON.stringify(slots));
-      initWeekMenu();
+      if(!data.contents) throw new Error('No contents');
+      var parsed = JSON.parse(data.contents);
+      if(parsed.thumbnail_url) {
+        callback(parsed.title, parsed.thumbnail_url);
+      } else {
+        throw new Error('No thumbnail');
+      }
     })
     .catch(function() {
-      // oEmbed failed — save without image, still shows as link
-      slots = JSON.parse(localStorage.getItem('hcc_week_menu_v2') || '[]');
-      slots[index] = {url: url, title: 'Pinterest Recipe', img: ''};
-      localStorage.setItem('hcc_week_menu_v2', JSON.stringify(slots));
-      initWeekMenu();
+      // Strategy 2: corsproxy.io
+      var proxy2 = 'https://corsproxy.io/?' + encodeURIComponent(oembedTarget);
+      fetch(proxy2)
+        .then(function(r) { return r.json(); })
+        .then(function(parsed) {
+          if(parsed.thumbnail_url) {
+            callback(parsed.title, parsed.thumbnail_url);
+          } else {
+            throw new Error('No thumbnail');
+          }
+        })
+        .catch(function() {
+          // Strategy 3: Try to scrape Open Graph from the pin page
+          var proxy3 = 'https://api.allorigins.win/get?url=' + encodeURIComponent(url);
+          fetch(proxy3)
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+              if(!data.contents) throw new Error('No page');
+              var html = data.contents;
+              var imgMatch = html.match(/property="og:image"\s+content="([^"]+)"/);
+              var titleMatch = html.match(/property="og:title"\s+content="([^"]+)"/);
+              var img = imgMatch ? imgMatch[1] : '';
+              var title = titleMatch ? titleMatch[1].replace(' | Pinterest','').trim() : 'Pinterest Recipe';
+              callback(title, img);
+            })
+            .catch(function() {
+              // All failed — save with no image, still works as link
+              callback('Pinterest Recipe', '');
+            });
+        });
     });
 }
+
 
 function clearMenuSlotWeek(index) {
   var slots = JSON.parse(localStorage.getItem('hcc_week_menu_v2') || '[]');
